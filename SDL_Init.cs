@@ -26,6 +26,14 @@ namespace SDL3
             Everything = (Timer | Audio | Video | Joystick | Haptic | Gamepad | Events | Sensor)
         }
 
+        /// <summary>Return values for optional main callbacks.</summary>
+        public enum AppResult
+        {
+            Continue,
+            Success,
+            Failure
+        }
+
         /// <summary>Initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
