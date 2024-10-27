@@ -1,10 +1,10 @@
 # SDL3 Sharp - Simplified SDL3 Bindings for C#
 
-A modern, clean, and simplified binding for SDL3 (Simple DirectMedia Layer 3) specifically designed for C# game development. This binding prioritizes developer experience by reducing verbosity while maintaining SDL3 functionality.
+A modern, clean, and simplified binding for [SDL3 (Simple DirectMedia Layer 3)](https://github.com/libsdl-org/SDL) specifically designed for C# game development. This binding prioritizes developer experience by reducing verbosity while maintaining SDL3 functionality.
 
 ## Key Features
 **Hand-Written, Not Generated:** Every binding is manually vrafted and verified, ensuring:
-- Clean, consitent code quality
+- Clean, consistent code quality
 - Deliberate design decisions
 - No auto-generation artifact or inconsistencies (only human error)
 
@@ -73,3 +73,9 @@ class Programm
   }
 }
 ```
+
+## License
+This project is licenense under [MIT license](LICENSE).  
+
+## Acknowledgements
+- SDL3 development team and contributors for the excellent multimedia library
