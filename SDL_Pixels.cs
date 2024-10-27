@@ -157,7 +157,7 @@ namespace SDL3
         /// <summary>Colorspace Color Range</summary>
         public enum ColorRange
         {
-            Unknoqn = 0,
+            Unknown = 0,
             Limited = 1,
             Full = 2
         }
