@@ -290,6 +290,11 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyTexture", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroyTexture(IntPtr texture);
 
+        /// <summary>Destroy the specified texture.</summary>
+        /// <param name="texture">The texture to destroy.</param>
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyTexture", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DestroyTexture(Texture texture);
+
         /// <summary>Destroy the rendering context for a window and free all associated textures.</summary>
         /// <param name="renderer">The rendering context.</param>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyRenderer", CallingConvention = CallingConvention.Cdecl)]
