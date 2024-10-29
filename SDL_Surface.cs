@@ -70,6 +70,11 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface", CallingConvention = CallingConvention.Cdecl)]
         public static extern void DestroySurface(Surface surface);
 
+        /// <summary>Free a surface.</summary>
+        /// <param name="surface">The Surface to free.</param>
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void DestroySurface(IntPtr surface);
+
         // TODO all other functions
 
     }
