@@ -30,7 +30,7 @@ bool isFullscreen => ((SDL.WindowFlags)SDL.GetWindowFlags(windowHandle) & SDL.Wi
 
 ## Current Implementation Status
 This binding is actively being developed alognside a game engine, with features being implemented based on pracitical needs.  
-Currently implemented fgeatures include:
+Currently implemented features include:
 - Core initialization and setup
 - Window management
 - Rendering system
