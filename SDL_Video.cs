@@ -20,8 +20,11 @@ namespace SDL3
             public int w;
             public int h;
             public float pixel_density;
-            float refresh_rate;
-            public IntPtr driverdata;
+            public float refresh_rate;
+            public int refresh_rate_numerator;
+            public int refresh_rate_denominator;
+
+            public IntPtr internal_ptr; // SDL_DIsplayModeData* (opaque)
         }
 
         public enum DisplayOrientation
@@ -34,7 +37,7 @@ namespace SDL3
         }
 
         [Flags]
-        public enum WindowFlags : uint
+        public enum WindowFlags : ulong
         {
             Fullscreen = 0x00000001,
             OpenGL = 0x00000002,
@@ -48,9 +51,11 @@ namespace SDL3
             InputFocus = 0x00000200,
             MouseFocus = 0x00000400,
             External = 0x00000800,
+            Modal = 0x00001000,
             HighPixelDensity = 0x00002000,
             MouseCapture = 0x00004000,
-            AlwaysOnTop = 0x00008000,
+            MouseRelativeMode = 0x00008000,
+            AlwaysOnTop = 0x00010000,
             Utility = 0x00020000,
             Tooltip = 0x00040000,
             PopupMenu = 0x00080000,
@@ -71,6 +76,16 @@ namespace SDL3
             Cancel,
             Briefly,
             UntilFocused
+        }
+
+        public enum ProgressState
+        {
+            Invalid = -1,
+            None,
+            Indeterminate,
+            Normal,
+            Paused,
+            Error
         }
 
         public enum GLAttributes
@@ -150,24 +165,27 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetSystemTheme", CallingConvention = CallingConvention.Cdecl)]
         public static extern SystemTheme GetSystemTheme();
 
-        //TODO SDL_GetDisplays
-        //TODO SDL_GetPrimaryDisplay
+        // TODO SDL_GetDisplays
+        // TODO SDL_GetPrimaryDisplay
+        // TODO SDL_GetDisplayProperties
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetDisplayName", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr Internal_GetDisplayName(int index);
-        public static string GetDisplayName(int index) => Marshal.PtrToStringUTF8(Internal_GetDisplayName(index));
+        static extern IntPtr Internal_GetDisplayName(uint displayID);
+        public static string GetDisplayName(uint displayID) => Marshal.PtrToStringUTF8(Internal_GetDisplayName(displayID));
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetDisplayBounds", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetDisplayBounds(int displayIndex, out Rect rect);
+        public static extern int GetDisplayBounds(uint displayID, out Rect rect);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetDisplayUsableBounds", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetDisplayUsableBounds(int displayIndex, out Rect rect);
+        public static extern int GetDisplayUsableBounds(uint displayID, out Rect rect);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetDesktopDisplayMode", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetDesktopDisplayMode(int displayIndex, out DisplayMode mode);
+        public static extern int GetDesktopDisplayMode(uint displayID, out DisplayMode mode);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentDisplayMode", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetCurrentDisplayMode(int displayIndex, out DisplayMode mode);
+        public static extern int GetCurrentDisplayMode(uint displayID, out DisplayMode mode);
+
+         // TODO so much new stuff
 
         // TODO SDL_GetDisplayForPoint
         // TODO SDL_GetDisplayForRect

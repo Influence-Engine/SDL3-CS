@@ -23,6 +23,7 @@ namespace SDL3
             Gamepad = 0x00002000,
             Events = 0x00004000,
             Sensor = 0x00008000,
+            Camera = 0x00010000,
             Everything = (Timer | Audio | Video | Joystick | Haptic | Gamepad | Events | Sensor)
         }
 
@@ -56,9 +57,14 @@ namespace SDL3
         /// <returns>True on success or false on failure.</returns>
         public static bool InitSubSystem(InitFlags flags) => InitSubSystem((uint)flags);
 
-        /// <summary>Shit down specific SDL subsystems.</summary>
+        /// <summary>Shut down specific SDL subsystems.</summary>
+        /// <param name="flags">Subsystem initialization flags.</param>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void QuitSubSystem();
+        public static extern void QuitSubSystem(uint flags);
+
+        /// <summary>Shut down specific SDL subsystems.</summary>
+        /// <param name="flags">Subsystem initialization flags.</param>
+        public static void QuitSubSystem(InitFlags flags) => QuitSubSystem((uint)flags);
 
         /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
@@ -66,10 +72,23 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_WasInit", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint WasInit(uint flags);
 
+        /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
+        /// <param name="flags">Subsystem initialization flags.</param>
+        /// <returns>A mask of all initialized subsystems if flags is 0, otherwise the init status of the specified subsystems.</returns>
+        public static uint WasInit(InitFlags flags) => WasInit((uint)flags);
+
         /// <summary>Clean up all initialized subsystems.</summary>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_Quit", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Quit();
 
+        /// <summary>Return whether this is the main thread.</summary>
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool IsMainThread();
 
+        // TODO RunOnMainThread
+
+        // TODO SetAppMetadata
+        // TODO SetAppMetadataProperty
+        // TODO Prop_App_Metadata defines
     }
 }

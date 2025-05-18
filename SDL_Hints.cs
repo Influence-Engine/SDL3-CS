@@ -186,7 +186,13 @@ namespace SDL3
             return Internal_GetHintBoolean(Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize), defaultValue);
         }
 
-        // TODO SDL_AddHintCallback
-        // TODO SDL_DelHintsCallback
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void HintCallback(IntPtr userData, string name, string oldValue, string newValue);
+
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_AddHintCallback", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool AddHintCallback(string name, HintCallback callback, IntPtr userData);
+
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_RemoveHintCallback", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void RemoveHintCallback(string name, HintCallback callback, IntPtr userData);
     }
 }

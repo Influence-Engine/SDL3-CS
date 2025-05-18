@@ -17,10 +17,10 @@ namespace SDL3
         public const int majorVersion = 3;
 
         /// <summary>The current minor version of the SDL headers.</summary>
-        public const int minorVersion = 1;
+        public const int minorVersion = 3;
 
         /// <summary>The current patch version of the SDL headers.</summary>
-        public const int patchLevel = 5;
+        public const int patchLevel = 0;
 
         public static void Version(out SDLVersion version)
         {

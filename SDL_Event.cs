@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -114,6 +115,7 @@ namespace SDL3
             FingerDown = 0x700,
             FingerUp,
             FingerMotion,
+            FingerCanceled,
 
             // Clipboard Events
             ClipboardUpdate = 0x900,
@@ -152,6 +154,7 @@ namespace SDL3
             // Render Events
             RenderTargetsReset = 0x2000,
             RenderDeviceReset,
+            RenderDeviceLost,
 
             Private0 = 0x400,
             Private1,
@@ -279,7 +282,6 @@ namespace SDL3
             public EventType type;
             uint reserved;
             public ulong timestamp;
-            public uint windowID;
             public uint which; // The mouse instance ID
         }
 
@@ -330,6 +332,8 @@ namespace SDL3
             public uint direction;
             public float mouseX; // X coordinate, relative to window
             public float mouseY; // Y coordinate, relative to window
+            public int integerX; // The amount scrolled horizontally, accumulated to whole scroll "ticks"
+            public int integerY; // The amount scrolled vertically, accumulated to whole scroll "ticks"
         }
 
         /// <summary>Joystick axis motion event structure.</summary>
@@ -491,21 +495,31 @@ namespace SDL3
             uint reserved;
             public ulong timestamp;
             public uint which; // The Audio Device ID
-            public byte isCapture;
+            public bool recording;
             byte padding1;
             byte padding2;
             byte padding3;
         }
 
         // TODO Look at this again >.<
-        /// <summary>Camera deviuce event structure.</summary>
+        /// <summary>Camera device event structure.</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct CameraDeviceEvent
         {
             public EventType type;
             uint reserved;
             public ulong timestamp;
-            public long cameraID;
+            public long which;
+        }
+
+        /// <summary>Renderer event structure.</summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RenderEvent
+        {
+            public EventType type;
+            uint reserved;
+            public ulong timestamp;
+            public uint windowID;
         }
 
         /// <summary>Touch finger event structure.</summary>
@@ -610,7 +624,6 @@ namespace SDL3
             public EventType type;
             uint reserved;
             public ulong timestamp;
-            public IntPtr file;
             public uint windowID;
             public float x;
             public float y;
@@ -703,6 +716,7 @@ namespace SDL3
             [FieldOffset(0)] public PenMotionEvent pMotion;
             [FieldOffset(0)] public PenButtonEvent pButton;
             [FieldOffset(0)] public PenAxisEvent pAxis;
+            [FieldOffset(0)] public RenderEvent render;
             [FieldOffset(0)] public DropEvent drop;
             [FieldOffset(0)] public ClipboardEvent clipboard;
 
@@ -716,8 +730,13 @@ namespace SDL3
         /// <summary>The type of action to request from "PeepEvents."</summary>
         public enum EventAction
         {
+            /// <summary>Add events to the back of the queue.</summary>
             AddEvent,
+
+            /// <summary>Check but don't remove events from the queue front.</summary>
             PeekEvent,
+
+            /// <summary>Retrieve/remove events from the front of the queue.</summary>
             GetEvent
         }
 
@@ -741,8 +760,19 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_PeepEvents", CallingConvention = CallingConvention.Cdecl)]
         public static extern int PeepEvents([Out] Event[] events, int numEvents, EventAction action, EventType minType, EventType maxType);
 
-        // TODO SDL_HasEvent
-        // TODO SDL_HasEvents
+
+        /// <summary>Check for the existence of a certain event type in the event queue.</summary>
+        /// <param name="type">The type of event to be queried.</param>
+        /// <returns>True if events matching `type` are present, or false if events matching `type` are not present.</returns>
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_HasEvent", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool HasEvent(EventType type);
+
+        /// <summary>Check for the existence of certain event types in the event queue.</summary>
+        /// <param name="minType">The minimum value of the event type to be queried.</param>
+        /// <param name="maxType">The maximum value of the event type to be queried.</param>
+        /// <returns>True if events with type >= to `minType` and Less or Equal to `maxType` are present, or false if not.</returns>
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_HasEvents", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool HasEvents(EventType minType, EventType maxType);
 
         /// <summary>Clear events of a specific type from the event queue.</summary>
         /// <param name="type">The type of event to be cleared.</param>
@@ -802,10 +832,16 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_FilterEvents", CallingConvention = CallingConvention.Cdecl)]
         public static extern void FilterEvents(EventFilter filter, IntPtr userData);
 
-        // TODO SDL_SetEventEnabled
-        // TODO SDL_EventEnabled
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetEventEnabled", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetEventEnabled(EventType type, bool enabled);
+
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_EventEnabled", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool EventEnabled(EventType type);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RegisterEvents", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint RegisterEvents(int numEvents);
+
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFromEvent", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GetWindowFromEvent(ref Event _event);
     }
 }
