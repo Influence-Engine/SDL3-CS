@@ -1,21 +1,21 @@
-# SDL3 Sharp - Simplified SDL3 Bindings for C#
+# SDL3 Sharp - Deliberately Designed SDL3 Bindings for C#
 
-A modern, clean, and simplified binding for [SDL3 (Simple DirectMedia Layer 3)](https://github.com/libsdl-org/SDL) specifically designed for C# game development. This binding prioritizes developer experience by reducing verbosity while maintaining SDL3 functionality.
+A modern, clean, and "simplified" binding for [SDL3 (Simple DirectMedia Layer 3)](https://github.com/libsdl-org/SDL) specifically designed for C# project development. This binding prioritizes developer experience by reducing verbosity while maintaining SDL3 functionality.
 
 ## Key Features
-**Hand-Written, Not Generated:** Every binding is manually vrafted and verified, ensuring:
+**Hand-Written, Not Generated:** Every binding is manually crafted and verified, ensuring:
 - Clean, consistent code quality
 - Deliberate design decisions
-- No auto-generation artifact or inconsistencies (only human error)
+- Human Error (Only human error)
 
 **Development-Driven Implentation:**
-- Functions are implenented based on real game development needs
+- Functions are implenented based on "real" project needs
 - Priorited implementation of most commonly used features
-- Continuous expansion based on engine requirements
+- Continuous expansion based on project requirements
 
 **Simplified Naming Convention:** Eliminates redundant SDL prefixes for cleaner code
 ```cs
-// Traditonal SDL binding
+// Traditional SDL binding
 SDL.SDL_Init(SDL.SDL_InitFlags.SDL_INIT_VIDEO)
 bool isFullscreen => ((SDL.SDL_WindowFlags)SDL.SDL_GetWindowFlags(windowHandle) & SDL.SDL_WindowFlags.SDL_WINDOW_FULLSCREEN) != 0;
 
@@ -24,17 +24,19 @@ SDL.Init(SDL.InitFlags.Video)
 bool isFullscreen => ((SDL.WindowFlags)SDL.GetWindowFlags(windowHandle) & SDL.WindowFlags.Fullscreen) != 0;
 ```
 
-**Up-to-date:** Maintained in sync with the latest SDL3 releases 
-
-**IntelliSense Ready:** Comprehensive XML documentation for most implemented functions and types.
+**Up-to-date:** (Not at all >.<) 
 
 ## Current Implementation Status
-This binding is actively being developed alognside a game engine, with features being implemented based on pracitical needs.  
+This binding is actively being developed alongside some projects, with features being implemented based on pracitical needs.  
 Currently implemented features include:
 - Core initialization and setup
 - Window management
 - Rendering system
-- A lot of sprinkles here and there
+- A lot of sprinkles here and there  
+ 
+Custom implementations include:  
+- RenderCircle (Draw a simple filled circle O.o) uses RenderGeometry "under the hood"
+- Constructors (To make random things like FColor just a little more conveniant) cause I hate doing it over and over again
 
 ***Note:*** *Not all SDL3 functions are currently implemented. Features are being added based on development priorities and engine requirements.*
 
@@ -78,4 +80,8 @@ class Programm
 This project is licenense under [MIT license](LICENSE).  
 
 ## Acknowledgements
-- SDL3 development team and contributors for the excellent multimedia library
+- SDL3 development team and contributors for the excellent multimedia library  
+  
+  
+*Can you find all the spelling mistakes? Cause I still find them...*  
+"Will I do this again if SDL4 drops... yes, yes I will"  

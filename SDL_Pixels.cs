@@ -194,6 +194,24 @@ namespace SDL3
             public byte g; 
             public byte b;
             public byte a;
+
+            public Color(byte r, byte g, byte b, byte a = 255)
+            {
+                this.r = r;
+                this.g = g;
+                this.b = b;
+                this.a = a;
+            }
+
+            public static readonly Color White = new Color(255, 255, 255, 255);
+            public static readonly Color Black = new Color(0, 0, 0, 255);
+            public static readonly Color Clear = new Color(0, 0, 0, 0);
+
+            public static readonly Color Red = new Color(255, 0, 0, 255);
+            public static readonly Color Green = new Color(0, 255, 0, 255);
+            public static readonly Color Blue = new Color(0, 0, 255, 255);
+            public static readonly Color Yellow = new Color(255, 255, 0, 255);
+            public static readonly Color Magenta = new Color(255, 0, 255, 255);
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -203,6 +221,24 @@ namespace SDL3
             public float g;
             public float b;
             public float a;
+
+            public FColor(float r, float g, float b, float a = 1f)
+            {
+                this.r = r;
+                this.g = g;
+                this.b = b;
+                this.a = a;
+            }
+
+            public static readonly FColor White = new FColor(1f, 1f, 1f, 1f);
+            public static readonly FColor Black = new FColor(0f, 0f, 0f, 1f);
+            public static readonly FColor Clear = new FColor(0f, 0f, 0f, 0f);
+
+            public static readonly FColor Red = new FColor(1f, 0f, 0f, 1f);
+            public static readonly FColor Green = new FColor(0f, 1f, 0f, 1f);
+            public static readonly FColor Blue = new FColor(0f, 0f, 1f, 1f);
+            public static readonly FColor Yellow = new FColor(1f, 1f, 0f, 1f);
+            public static readonly FColor Magenta = new FColor(1f, 0f, 1f, 1f);
         }
 
         [StructLayout(LayoutKind.Sequential)]

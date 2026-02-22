@@ -312,6 +312,60 @@ namespace SDL3
             }
         }
 
+        /// <summary>Renders a filled circle using triangles. (Custom Method)</summary>
+        /// <param name="renderer">The renderer which should draw a filled circle.</param>
+        /// <param name="center">Center position</param>
+        /// <param name="radius">Circle radius</param>
+        /// <param name="color">Color of the circle</param>
+        /// <param name="segments">Number of triangles (more = smoother)</param>
+        /// <returns>True if succesful, false otherwise</returns>
+        public static bool RenderCircle(IntPtr renderer, FPoint center, float radius, FColor color, int segments = 16)
+        {
+            if (radius <= 0 || segments < 3)
+                return false;
+
+            // 1 Segment = 1 Triangle = 3 Vertices
+            Vertex[] vertices = new Vertex[segments * 3];
+
+            float angleStep = 2f * MathF.PI / segments;
+
+            for(int i = 0; i < segments; i++)
+            {
+                float angle1 = i * angleStep;
+                float angle2 = (i + 1) * angleStep;
+
+                float x1 = center.x + MathF.Cos(angle1) * radius;
+                float y1 = center.y + MathF.Sin(angle1) * radius;
+                float x2 = center.x + MathF.Cos(angle2) * radius;
+                float y2 = center.y + MathF.Sin(angle2) * radius;
+
+                int idx = i * 3;
+
+                vertices[idx] = new Vertex
+                {
+                    position = new FPoint { x = center.x, y = center.y },
+                    color = color,
+                    text_coord = new FPoint()
+                };
+
+                vertices[idx + 1] = new Vertex
+                {
+                    position = new FPoint { x = x1, y = y1 },
+                    color = color,
+                    text_coord = new FPoint()
+                };
+
+                vertices[idx + 2] = new Vertex
+                {
+                    position = new FPoint { x = x2, y = y2 },
+                    color = color,
+                    text_coord = new FPoint()
+                };
+            }
+
+            return RenderGeometry(renderer, vertices);
+        }
+
         //TODO SDL_RenderGeometryRaw
         //TODO SDL_RenderGeometryRawFloat
 
