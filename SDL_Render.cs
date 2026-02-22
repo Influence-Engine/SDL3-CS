@@ -271,7 +271,47 @@ namespace SDL3
         // TODO SDL_RenderTexture9Grid
         //TODO SDL_RenderTextureRotated
 
-        //TODO SDL_RenderGeometry
+        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderGeometry", CallingConvention = CallingConvention.Cdecl)]
+        static extern unsafe bool Internal_RenderGeometry(IntPtr renderer, IntPtr texture, Vertex* vertices, int numVertices, int* indices, int numIndices);
+
+        public static unsafe bool RenderGeometry(IntPtr renderer, Vertex[] vertices)
+        {
+            fixed (Vertex* verticesPtr = vertices)
+            {
+                return Internal_RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, null, 0);
+            }
+        }
+
+        public static unsafe bool RenderGeometry(IntPtr renderer, Vertex[] vertices, int[] indices)
+        {
+            fixed (Vertex* verticesPtr = vertices)
+            {
+                fixed(int* indicesPtr = indices)
+                {
+                    return Internal_RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, indicesPtr, indices.Length);
+                }
+            }
+        }
+
+        public static unsafe bool RenderGeometry(IntPtr renderer, IntPtr texture, Vertex[] vertices, int[]? indices = null)
+        {
+            fixed (Vertex* verticesPtr = vertices)
+            {
+                if(indices != null)
+                {
+                    fixed (int* indicesPtr = indices)
+                    {
+                        return Internal_RenderGeometry(renderer, texture, verticesPtr, vertices.Length, indicesPtr, indices.Length);
+                    }
+                }
+                else
+                {
+                    return Internal_RenderGeometry(renderer, texture, verticesPtr, vertices.Length, null, 0);
+                }
+
+            }
+        }
+
         //TODO SDL_RenderGeometryRaw
         //TODO SDL_RenderGeometryRawFloat
 
