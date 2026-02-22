@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Xml.Linq;
 
 namespace SDL3
 {
@@ -11,7 +10,7 @@ namespace SDL3
         public struct Vertex
         {
             public FPoint position;
-            public Color color;
+            public FColor color;
             public FPoint text_coord;
         }
 
