@@ -343,21 +343,21 @@ namespace SDL3
 
                 vertices[idx] = new Vertex
                 {
-                    position = new FPoint { x = center.x, y = center.y },
+                    position = new FPoint(center.x, center.y),
                     color = color,
                     text_coord = new FPoint()
                 };
 
                 vertices[idx + 1] = new Vertex
                 {
-                    position = new FPoint { x = x1, y = y1 },
+                    position = new FPoint(x1, y1),
                     color = color,
                     text_coord = new FPoint()
                 };
 
                 vertices[idx + 2] = new Vertex
                 {
-                    position = new FPoint { x = x2, y = y2 },
+                    position = new FPoint(x2, y2),
                     color = color,
                     text_coord = new FPoint()
                 };
