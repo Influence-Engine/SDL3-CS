@@ -238,11 +238,24 @@ namespace SDL3
 
         /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
-        /// <param name="rect">Pointer to an array of destination rectangles.</param>
+        /// <param name="rects">Pointer to an array of destination rectangles.</param>
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderRects", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderRects(IntPtr renderer, ref FRect[] rect, int count);
+        static unsafe extern bool Internal_RenderRects(IntPtr renderer, FRect* rects, int count);
+
+        /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
+        /// <param name="rects">Array of destination rectangles.</param>
+        /// <param name="count">The number of rectangles.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static unsafe bool RenderRects(IntPtr renderer, FRect[] rects, int count)
+        {
+            fixed (FRect* rectsPtr = rects)
+            {
+                return Internal_RenderRects(renderer, rectsPtr, count);
+            }
+        }
 
         /// <summary>Fill a rectangle on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill a rectangle.</param>
@@ -253,11 +266,25 @@ namespace SDL3
 
         /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
-        /// <param name="rect">Pointer to an array of destination rectangles.</param>
+        /// <param name="rects">Pointer to an array of destination rectangles.</param>
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRects", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderFillRects(IntPtr renderer, ref FRect[] rect, int count);
+        static extern unsafe bool Internal_RenderFillRects(IntPtr renderer, FRect* rects, int count);
+
+
+        /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
+        /// <param name="rects">Array of destination rectangles.</param>
+        /// <param name="count">The number of rectangles.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static unsafe bool RenderFillRects(IntPtr renderer, FRect[] rects, int count)
+        {
+            fixed (FRect* rectsPtr = rects)
+            {
+                return Internal_RenderFillRects(renderer, rectsPtr, count);
+            }
+        }
 
         /// <summary>Copy a portion of the texture to the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should copy parts of a texture.</param>
