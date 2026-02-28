@@ -84,8 +84,19 @@ namespace SDL3
 
             // Same same but different
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool operator ==(Point a, Point b) => a.x == b.x && a.y == b.y;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool operator !=(Point a, Point b) => !(a == b);
+
+            // Implicit / Explicit
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator (int x, int y)(Point v) => (v.x, v.y);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator Point((int x, int y) t) => new Point(t.x, t.y);
 
             #endregion
 
@@ -171,8 +182,19 @@ namespace SDL3
 
             // Same same but different
 
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool operator ==(FPoint a, FPoint b) => a.x == b.x && a.y == b.y;
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static bool operator !=(FPoint a, FPoint b) => !(a == b);
+
+            // Implicit / Explicit
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator (float x, float y)(FPoint v) => (v.x, v.y);
+
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static implicit operator FPoint((float x, float y) t) => new FPoint(t.x, t.y);
 
             #endregion
 
