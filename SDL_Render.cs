@@ -67,8 +67,13 @@ namespace SDL3
             return Internal_CreateWindowAndRenderer(Utility.UTF8Encode(title, utf8Title, utf8TitleBufferSize), width, height, flags, window, renderer);
         }
 
+        /// <summary>Create a 2D rendering context for a window.</summary>
+        /// <param name="window">The window where rendering is displayed.</param>
+        /// <param name="name">The name of the rendering driver to initialize, or NULL to let SDL choose one.</param>
+        /// <returns>A valid rendering pointer or 0 on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateRenderer", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe IntPtr Internal_CreateRenderer(IntPtr window, byte* name);
+        public static extern unsafe IntPtr CreateRenderer(IntPtr window, byte* name);
+
         /// <summary>Create a 2D rendering context for a window.</summary>
         /// <param name="window">The window where rendering is displayed.</param>
         /// <param name="name">The name of the rendering driver to initialize, or NULL to let SDL choose one.</param>
@@ -77,7 +82,7 @@ namespace SDL3
         {
             int utf8TitleBufferSize = Utility.UTF8Size(name);
             byte* utf8Title = stackalloc byte[utf8TitleBufferSize];
-            return Internal_CreateRenderer(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize));
+            return CreateRenderer(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize));
 
         }
 
@@ -203,13 +208,31 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderPoint", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool RenderPoint(IntPtr renderer, float x, float y);
 
+        /// <summary>Draw a point on a the current rendering target at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should draw a point.</param>
+        /// <param name="point">The point.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static bool RenderPoint(IntPtr renderer, FPoint point) => RenderPoint(renderer, point.x, point.y);
+
         /// <summary>Draw multiple points on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple points.</param>
         /// <param name="points">The points to draw.</param>
         /// <param name="count">The number of points to draw.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderPoints", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderPoints(IntPtr renderer, [In] FPoint[] points, int count);
+        public static extern unsafe bool RenderPoints(IntPtr renderer, FPoint* points, int count);
+
+        /// <summary>Draw multiple points on the current rendering target at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should draw multiple points.</param>
+        /// <param name="points">The points to draw.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static unsafe bool RenderPoints(IntPtr renderer, FPoint[] points)
+        {
+            fixed (FPoint* ptr = points)
+            {
+                return RenderPoints(renderer, ptr, points.Length);
+            }
+        }
 
         /// <summary>Draw a line on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw a line.</param>
@@ -221,13 +244,32 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderLine", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
 
+        /// <summary>Draw a line on the current rendering target at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should draw a line.</param>
+        /// <param name="a">Point A.</param>
+        /// <param name="b">Point B.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static bool RenderLine(IntPtr renderer, FPoint a, FPoint b) => RenderLine(renderer, a.x, a.y, b.x, b.y);
+
         /// <summary>Draw a series of connected lines on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple lines.</param>
         /// <param name="points">The points along the lines.</param>
         /// <param name="count">The number of points.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderLines", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderLines(IntPtr renderer, [In] FPoint[] points, int count);
+        public static unsafe extern bool RenderLines(IntPtr renderer, FPoint* points, int count);
+
+        /// <summary>Draw a series of connected lines on the current rendering target at subpixel precision.</summary>
+        /// <param name="renderer">The renderer which should draw multiple lines.</param>
+        /// <param name="points">The points along the lines.</param>
+        /// <returns>True on success or false on failure.</returns>
+        public static unsafe bool RenderLines(IntPtr renderer, FPoint[] points)
+        {
+            fixed (FPoint* ptr = points)
+            {
+                return RenderLines(renderer, ptr, points.Length);
+            }
+        }
 
         /// <summary>Draw a rectangle on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw a rectangle.</param>
@@ -242,18 +284,17 @@ namespace SDL3
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderRects", CallingConvention = CallingConvention.Cdecl)]
-        static unsafe extern bool Internal_RenderRects(IntPtr renderer, FRect* rects, int count);
+        public static unsafe extern bool RenderRects(IntPtr renderer, FRect* rects, int count);
 
         /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
         /// <param name="rects">Array of destination rectangles.</param>
-        /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderRects(IntPtr renderer, FRect[] rects, int count)
+        public static unsafe bool RenderRects(IntPtr renderer, FRect[] rects)
         {
             fixed (FRect* rectsPtr = rects)
             {
-                return Internal_RenderRects(renderer, rectsPtr, count);
+                return RenderRects(renderer, rectsPtr, rects.Length);
             }
         }
 
@@ -270,19 +311,17 @@ namespace SDL3
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRects", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_RenderFillRects(IntPtr renderer, FRect* rects, int count);
-
+        public static extern unsafe bool RenderFillRects(IntPtr renderer, FRect* rects, int count);
 
         /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
         /// <param name="rects">Array of destination rectangles.</param>
-        /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderFillRects(IntPtr renderer, FRect[] rects, int count)
+        public static unsafe bool RenderFillRects(IntPtr renderer, FRect[] rects)
         {
             fixed (FRect* rectsPtr = rects)
             {
-                return Internal_RenderFillRects(renderer, rectsPtr, count);
+                return RenderFillRects(renderer, rectsPtr, rects.Length);
             }
         }
 
@@ -299,13 +338,13 @@ namespace SDL3
         //TODO SDL_RenderTextureRotated
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderGeometry", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_RenderGeometry(IntPtr renderer, IntPtr texture, Vertex* vertices, int numVertices, int* indices, int numIndices);
+        public static extern unsafe bool RenderGeometry(IntPtr renderer, IntPtr texture, Vertex* vertices, int numVertices, int* indices, int numIndices);
 
         public static unsafe bool RenderGeometry(IntPtr renderer, Vertex[] vertices)
         {
             fixed (Vertex* verticesPtr = vertices)
             {
-                return Internal_RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, null, 0);
+                return RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, null, 0);
             }
         }
 
@@ -315,7 +354,7 @@ namespace SDL3
             {
                 fixed(int* indicesPtr = indices)
                 {
-                    return Internal_RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, indicesPtr, indices.Length);
+                    return RenderGeometry(renderer, IntPtr.Zero, verticesPtr, vertices.Length, indicesPtr, indices.Length);
                 }
             }
         }
@@ -328,12 +367,12 @@ namespace SDL3
                 {
                     fixed (int* indicesPtr = indices)
                     {
-                        return Internal_RenderGeometry(renderer, texture, verticesPtr, vertices.Length, indicesPtr, indices.Length);
+                        return RenderGeometry(renderer, texture, verticesPtr, vertices.Length, indicesPtr, indices.Length);
                     }
                 }
                 else
                 {
-                    return Internal_RenderGeometry(renderer, texture, verticesPtr, vertices.Length, null, 0);
+                    return RenderGeometry(renderer, texture, verticesPtr, vertices.Length, null, 0);
                 }
 
             }
