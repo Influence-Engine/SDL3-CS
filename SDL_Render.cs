@@ -90,7 +90,7 @@ namespace SDL3
         public static extern IntPtr CreateSoftwareRenderer(IntPtr surface);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateGetRenderer(IntPtr window);
+        public static extern IntPtr GetRenderer(IntPtr window);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderWindow", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetRenderWindow(IntPtr renderer);
