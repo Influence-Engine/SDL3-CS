@@ -36,11 +36,16 @@ namespace SDL3
             Failure
         }
 
+        // To use
+        // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
+        // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+
         /// <summary>Initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_Init", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool Init(uint flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Init"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool Init(uint flags);
 
         /// <inheritdoc cref="Init(uint)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -49,17 +54,19 @@ namespace SDL3
         /// <summary>Compatibility function to initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool InitSubSystem(uint flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool InitSubSystem(uint flags);
 
         /// <inheritdoc cref="InitSubSystem(uint)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool InitSubSystem(InitFlags flags) => InitSubSystem((uint)flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool InitSubSystem(InitFlags flags);
 
         /// <summary>Shut down specific SDL subsystems.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void QuitSubSystem(uint flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void QuitSubSystem(uint flags);
 
         /// <inheritdoc cref="QuitSubSystem(uint)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

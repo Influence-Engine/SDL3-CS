@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>SDL3_CS</RootNamespace>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>SDL3</RootNamespace>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
