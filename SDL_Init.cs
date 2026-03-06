@@ -14,7 +14,7 @@ namespace SDL3
 
         /// <summary>Initialization Flags for "SDL.Init"</summary>
         [Flags]
-        public  enum InitFlags : uint
+        public enum InitFlags : uint
         {
             Timer = 0x00000001,
             Audio = 0x00000010,
@@ -40,6 +40,8 @@ namespace SDL3
         // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
         // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
 
+        #region Init
+
         /// <summary>Initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
@@ -50,6 +52,10 @@ namespace SDL3
         /// <inheritdoc cref="Init(uint)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Init(InitFlags flags) => Init((uint)flags);
+
+        #endregion
+
+        #region InitSubSystem
 
         /// <summary>Compatibility function to initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
@@ -63,32 +69,43 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool InitSubSystem(InitFlags flags);
 
+        #endregion
+
+        #region QuitSubSystem
+
         /// <summary>Shut down specific SDL subsystems.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void QuitSubSystem(uint flags);
 
         /// <inheritdoc cref="QuitSubSystem(uint)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void QuitSubSystem(InitFlags flags) => QuitSubSystem((uint)flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void QuitSubSystem(InitFlags flags);
+
+        #endregion
+
+        #region WasInit
 
         /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>A mask of all initialized subsystems if flags is 0, otherwise the init status of the specified subsystems.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_WasInit", CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint WasInit(uint flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial uint WasInit(uint flags);
 
         /// <inheritdoc cref="WasInit(uint)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint WasInit(InitFlags flags) => WasInit((uint)flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial InitFlags WasInit(InitFlags flags);
+
+        #endregion
 
         /// <summary>Clean up all initialized subsystems.</summary>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_Quit", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Quit();
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Quit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void Quit();
 
         /// <summary>Return whether this is the main thread.</summary>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool IsMainThread();
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool IsMainThread();
 
         // TODO RunOnMainThread
 
