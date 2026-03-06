@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -41,9 +42,8 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_Init", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool Init(uint flags);
 
-        /// <summary>Initialize the SDL library.</summary>
-        /// <param name="flags">Subsystem initialization flags.</param>
-        /// <returns>True on success or false on failure.</returns>
+        /// <inheritdoc cref="Init(uint)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Init(InitFlags flags) => Init((uint)flags);
 
         /// <summary>Compatibility function to initialize the SDL library.</summary>
@@ -52,9 +52,8 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem", CallingConvention = CallingConvention.Cdecl)]
         public static extern bool InitSubSystem(uint flags);
 
-        /// <summary>Compatibility function to initialize the SDL library.</summary>
-        /// <param name="flags">Subsystem initialization flags.</param>
-        /// <returns>True on success or false on failure.</returns>
+        /// <inheritdoc cref="InitSubSystem(uint)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool InitSubSystem(InitFlags flags) => InitSubSystem((uint)flags);
 
         /// <summary>Shut down specific SDL subsystems.</summary>
@@ -62,8 +61,8 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem", CallingConvention = CallingConvention.Cdecl)]
         public static extern void QuitSubSystem(uint flags);
 
-        /// <summary>Shut down specific SDL subsystems.</summary>
-        /// <param name="flags">Subsystem initialization flags.</param>
+        /// <inheritdoc cref="QuitSubSystem(uint)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void QuitSubSystem(InitFlags flags) => QuitSubSystem((uint)flags);
 
         /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
@@ -72,9 +71,8 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_WasInit", CallingConvention = CallingConvention.Cdecl)]
         public static extern uint WasInit(uint flags);
 
-        /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
-        /// <param name="flags">Subsystem initialization flags.</param>
-        /// <returns>A mask of all initialized subsystems if flags is 0, otherwise the init status of the specified subsystems.</returns>
+        /// <inheritdoc cref="WasInit(uint)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint WasInit(InitFlags flags) => WasInit((uint)flags);
 
         /// <summary>Clean up all initialized subsystems.</summary>
