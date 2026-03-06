@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -43,15 +44,32 @@ namespace SDL3
             int refCount;
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetNumRenderDrivers", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetNumRenderDrivers();
+       // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
+       // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDriver", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr Internal_GetRenderDriver(int index);
-        public static string GetRenderDriver(int index) => Marshal.PtrToStringUTF8(Internal_GetRenderDriver(index));
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateWindowAndRenderer", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_CreateWindowAndRenderer(byte* title, int width, int height, WindowFlags flags, IntPtr window, IntPtr renderer);
+        /// <summary>Get the numver of 2D rendering drivers available for the current display. </summary>
+        /// <returns></returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetNumRenderDrivers")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial int GetNumRenderDrivers();
+
+        #region GetRenderDriver
+
+        /// <summary>Get the name of a built-in 2D rendering driver.</summary>
+        /// <param name="index">Index from 0 to (<see cref="GetNumRenderDrivers"/> - 1).</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDriver")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static partial IntPtr Internal_GetRenderDriver(int index);
+
+        /// <inheritdoc cref="Internal_GetRenderDriver(int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string? GetRenderDriver(int index) => Marshal.PtrToStringUTF8(Internal_GetRenderDriver(index));
+
+        #endregion
+
+        #region CreateWindowAndRenderer
+
         /// <summary>Create a window and default renderer.</summary>
         /// <param name="title">Title of the window.</param>
         /// <param name="width">Width of the window.</param>
@@ -60,46 +78,62 @@ namespace SDL3
         /// <param name="window">Pointer filled with the window.</param>
         /// <param name="renderer">Pointer filled with the renderer.</param>
         /// <returns>True on success or false on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateWindowAndRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool CreateWindowAndRenderer(byte* title, int width, int height, WindowFlags flags, IntPtr window, IntPtr renderer);
+
+        /// <inheritdoc cref="CreateWindowAndRenderer(byte*, int, int, WindowFlags, nint, nint)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool CreateWindowAndRenderer(string title, int width, int height, WindowFlags flags, IntPtr window, IntPtr renderer)
         {
             int utf8TitleBufferSize = Utility.UTF8Size(title);
             byte* utf8Title = stackalloc byte[utf8TitleBufferSize];
-            return Internal_CreateWindowAndRenderer(Utility.UTF8Encode(title, utf8Title, utf8TitleBufferSize), width, height, flags, window, renderer);
+            return CreateWindowAndRenderer(Utility.UTF8Encode(title, utf8Title, utf8TitleBufferSize), width, height, flags, window, renderer);
         }
 
-        /// <summary>Create a 2D rendering context for a window.</summary>
-        /// <param name="window">The window where rendering is displayed.</param>
-        /// <param name="name">The name of the rendering driver to initialize, or NULL to let SDL choose one.</param>
-        /// <returns>A valid rendering pointer or 0 on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe IntPtr CreateRenderer(IntPtr window, byte* name);
+        #endregion
+
+        #region CreateRenderer
 
         /// <summary>Create a 2D rendering context for a window.</summary>
         /// <param name="window">The window where rendering is displayed.</param>
         /// <param name="name">The name of the rendering driver to initialize, or NULL to let SDL choose one.</param>
         /// <returns>A valid rendering pointer or 0 on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial IntPtr CreateRenderer(IntPtr window, byte* name);
+
+        /// <inheritdoc cref="CreateRenderer(nint, byte*)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe IntPtr CreateRenderer(IntPtr window, string name)
         {
             int utf8TitleBufferSize = Utility.UTF8Size(name);
             byte* utf8Title = stackalloc byte[utf8TitleBufferSize];
             return CreateRenderer(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize));
-
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateSoftwareRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateSoftwareRenderer(IntPtr surface);
+        #endregion
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetRenderer(IntPtr window);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSoftwareRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr CreateSoftwareRenderer(IntPtr surface);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderWindow", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetRenderWindow(IntPtr renderer);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr GetRenderer(IntPtr window);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderOutputSize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetRenderOutputSize(IntPtr renderer, out int w, out int h);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderWindow")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr GetRenderWindow(IntPtr renderer);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentRenderOutputSize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetCurrentRenderOutputSize(IntPtr renderer, out int w, out int h);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderOutputSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetRenderOutputSize(IntPtr renderer, out int w, out int h);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentRenderOutputSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetCurrentRenderOutputSize(IntPtr renderer, out int w, out int h);
 
         /// <summary>Create a texture for a rendering context.</summary>
         /// <param name="renderer">The rendering context.</param>
@@ -185,54 +219,92 @@ namespace SDL3
         [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderScale", CallingConvention = CallingConvention.Cdecl)]
         public static extern int GetRenderScale(IntPtr renderer, out float scaleX, out float scaleY);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetRenderDrawColor", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
+        #region SetRenderDrawColor
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDrawColor", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetRenderDrawColor(IntPtr renderer, out byte r, out byte g, out byte b, out byte a);
+        /// <summary>Set the color used for drawing operations.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetRenderDrawColor")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int SetRenderDrawColor(IntPtr renderer, byte r, byte g, byte b, byte a);
+
+        /// <inheritdoc cref="SetRenderDrawColor(nint, byte, byte, byte, byte)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int SetRenderDrawColor(IntPtr renderer, Color color) => SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+
+        /// <inheritdoc cref="SetRenderDrawColor(nint, byte, byte, byte, byte)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int SetRenderDrawColor(IntPtr renderer, FColor color) => SetRenderDrawColor(renderer, (byte)(color.r * 255), (byte)(color.g * 255), (byte)(color.b * 255), (byte)(color.a * 255));
+
+        #endregion
+
+        #region GetRenderDrawColor
+
+        /// <summary>Get the color used for drawing operations.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDrawColor")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetRenderDrawColor(IntPtr renderer, out byte r, out byte g, out byte b, out byte a);
+
+        #endregion
 
         //TODO SDL_SetRenderDrawBlendMode
         //TODO SDL_GetRenderDrawBlendMode
 
+        #region Render
+
         /// <summary>Clear the current redering target with the drawing color.</summary>
         /// <param name="renderer">The rendering context.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderClear", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderClear(IntPtr renderer);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderClear")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return:  MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderClear(IntPtr renderer);
+
+        #region Point
 
         /// <summary>Draw a point on a the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw a point.</param>
         /// <param name="x">The X Coordinate of the point.</param>
         /// <param name="y">The Y Coordinate of the point.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderPoint", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderPoint(IntPtr renderer, float x, float y);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderPoint")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderPoint(IntPtr renderer, float x, float y);
 
-        /// <summary>Draw a point on a the current rendering target at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should draw a point.</param>
+        /// <inheritdoc cref="RenderPoint(nint, float, float)"/>
         /// <param name="point">The point.</param>
-        /// <returns>True on success or false on failure.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool RenderPoint(IntPtr renderer, FPoint point) => RenderPoint(renderer, point.x, point.y);
+
+        #endregion
+
+        #region Points
 
         /// <summary>Draw multiple points on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple points.</param>
         /// <param name="points">The points to draw.</param>
         /// <param name="count">The number of points to draw.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderPoints", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe bool RenderPoints(IntPtr renderer, FPoint* points, int count);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderPoints")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderPoints(IntPtr renderer, FPoint* points, int count);
 
-        /// <summary>Draw multiple points on the current rendering target at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should draw multiple points.</param>
-        /// <param name="points">The points to draw.</param>
-        /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderPoints(IntPtr renderer, FPoint[] points)
+        /// <inheritdoc cref="RenderPoints(nint, FPoint*, int)"/>
+        public static unsafe bool RenderPoints(IntPtr renderer, ReadOnlySpan<FPoint> points)
         {
             fixed (FPoint* ptr = points)
             {
                 return RenderPoints(renderer, ptr, points.Length);
             }
         }
+
+        /// <inheritdoc cref="RenderPoints(nint, FPoint*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderPoints(IntPtr renderer, FPoint[] points) => RenderPoints(renderer, (ReadOnlySpan<FPoint>)points);
+
+        #endregion
+
+        #region Line
 
         /// <summary>Draw a line on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw a line.</param>
@@ -241,29 +313,33 @@ namespace SDL3
         /// <param name="x2">The X Coordinate of the end point</param>
         /// <param name="y2">The Y Coordinate of the end point</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderLine", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderLine")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderLine(IntPtr renderer, float x1, float y1, float x2, float y2);
 
-        /// <summary>Draw a line on the current rendering target at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should draw a line.</param>
+        /// <inheritdoc cref="RenderLine(nint, float, float, float, float)"/>
         /// <param name="a">Point A.</param>
         /// <param name="b">Point B.</param>
-        /// <returns>True on success or false on failure.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool RenderLine(IntPtr renderer, FPoint a, FPoint b) => RenderLine(renderer, a.x, a.y, b.x, b.y);
+
+        #endregion
+
+        #region Lines
 
         /// <summary>Draw a series of connected lines on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple lines.</param>
         /// <param name="points">The points along the lines.</param>
         /// <param name="count">The number of points.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderLines", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern bool RenderLines(IntPtr renderer, FPoint* points, int count);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderLines")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderLines(IntPtr renderer, FPoint* points, int count);
 
-        /// <summary>Draw a series of connected lines on the current rendering target at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should draw multiple lines.</param>
-        /// <param name="points">The points along the lines.</param>
-        /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderLines(IntPtr renderer, FPoint[] points)
+        /// <inheritdoc cref="RenderLines(nint, FPoint*, int)"/>
+        public static unsafe bool RenderLines(IntPtr renderer, ReadOnlySpan<FPoint> points)
         {
             fixed (FPoint* ptr = points)
             {
@@ -271,26 +347,39 @@ namespace SDL3
             }
         }
 
+        /// <inheritdoc cref="RenderLines(nint, FPoint*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderLines(IntPtr renderer, FPoint[] points) => RenderLines(renderer, (ReadOnlySpan<FPoint>)points);
+
+        #endregion
+
+        #region Rect
+
         /// <summary>Draw a rectangle on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw a rectangle.</param>
         /// <param name="rect">Pointer to the destination rectangle, or NULL to outline the entire rendering target.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderRect", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderRect(IntPtr renderer, ref FRect rect);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderRect")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderRect(IntPtr renderer, ref FRect rect);
+
+        #endregion
+
+        #region Rects
 
         /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
         /// <param name="rects">Pointer to an array of destination rectangles.</param>
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderRects", CallingConvention = CallingConvention.Cdecl)]
-        public static unsafe extern bool RenderRects(IntPtr renderer, FRect* rects, int count);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderRects")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderRects(IntPtr renderer, FRect* rects, int count);
 
-        /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
-        /// <param name="rects">Array of destination rectangles.</param>
-        /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderRects(IntPtr renderer, FRect[] rects)
+        /// <inheritdoc cref="RenderRects(nint, FRect*, int)"/>
+        public static unsafe bool RenderRects(IntPtr renderer, ReadOnlySpan<FRect> rects)
         {
             fixed (FRect* rectsPtr = rects)
             {
@@ -298,26 +387,39 @@ namespace SDL3
             }
         }
 
+        /// <inheritdoc cref="RenderRects(nint, FRect*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderRects(IntPtr renderer, FRect[] rects) => RenderRects(renderer, (ReadOnlySpan<FRect>)rects);
+
+        #endregion
+
+        #region FillRect
+
         /// <summary>Fill a rectangle on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill a rectangle.</param>
         /// <param name="rect">Pointer to the destination rectangle, or NULL for the entire rendering target.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRect", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderFillRect(IntPtr renderer, ref FRect rect);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRect")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderFillRect(IntPtr renderer, ref FRect rect);
+
+        #endregion
+
+        #region FillRects
 
         /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
         /// <param name="rects">Pointer to an array of destination rectangles.</param>
         /// <param name="count">The number of rectangles.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRects", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe bool RenderFillRects(IntPtr renderer, FRect* rects, int count);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRects")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderFillRects(IntPtr renderer, FRect* rects, int count);
 
-        /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
-        /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
-        /// <param name="rects">Array of destination rectangles.</param>
-        /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool RenderFillRects(IntPtr renderer, FRect[] rects)
+        /// <inheritdoc cref="RenderFillRects(nint, FRect*, int)"/>
+        public static unsafe bool RenderFillRects(IntPtr renderer, ReadOnlySpan<FRect> rects)
         {
             fixed (FRect* rectsPtr = rects)
             {
@@ -325,22 +427,36 @@ namespace SDL3
             }
         }
 
+        /// <inheritdoc cref="RenderFillRects(nint, FRect*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderFillRects(IntPtr renderer, FRect[] rects) => RenderFillRects(renderer, (ReadOnlySpan<FRect>)rects);
+
+        #endregion
+
         /// <summary>Copy a portion of the texture to the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should copy parts of a texture.</param>
         /// <param name="texture">The source texture.</param>
         /// <param name="srcRect">Pointer to the source rectangle, or NULL for the entire texture.</param>
         /// <param name="dstRect">Pointer to the destination rectangle, or NULL for the entire rendering target.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderTexture(IntPtr renderer, IntPtr texture, ref FRect srcRect, ref FRect dstRect);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture(IntPtr renderer, IntPtr texture, ref FRect srcRect, ref FRect dstRect);
 
         // TODO SDL_RenderTexture9Grid
         //TODO SDL_RenderTextureRotated
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderGeometry", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe bool RenderGeometry(IntPtr renderer, IntPtr texture, Vertex* vertices, int numVertices, int* indices, int numIndices);
+        #region Geometry
 
-        public static unsafe bool RenderGeometry(IntPtr renderer, Vertex[] vertices)
+        /// <summary>Render geometry using an optional texture and index buffer.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderGeometry")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderGeometry(IntPtr renderer, IntPtr texture, Vertex* vertices, int numVertices, int* indices, int numIndices);
+
+        /// <inheritdoc cref="RenderGeometry(nint, nint, Vertex*, int, int*, int)"/>
+        public static unsafe bool RenderGeometry(IntPtr renderer, ReadOnlySpan<Vertex> vertices)
         {
             fixed (Vertex* verticesPtr = vertices)
             {
@@ -348,7 +464,8 @@ namespace SDL3
             }
         }
 
-        public static unsafe bool RenderGeometry(IntPtr renderer, Vertex[] vertices, int[] indices)
+        /// <inheritdoc cref="RenderGeometry(nint, nint, Vertex*, int, int*, int)"/>
+        public static unsafe bool RenderGeometry(IntPtr renderer, ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices)
         {
             fixed (Vertex* verticesPtr = vertices)
             {
@@ -359,24 +476,31 @@ namespace SDL3
             }
         }
 
-        public static unsafe bool RenderGeometry(IntPtr renderer, IntPtr texture, Vertex[] vertices, int[]? indices = null)
+        /// <inheritdoc cref="RenderGeometry(nint, nint, Vertex*, int, int*, int)"/>
+        public static unsafe bool RenderGeometry(IntPtr renderer, IntPtr texture, ReadOnlySpan<Vertex> vertices, ReadOnlySpan<int> indices = default)
         {
             fixed (Vertex* verticesPtr = vertices)
             {
-                if(indices != null)
-                {
-                    fixed (int* indicesPtr = indices)
-                    {
-                        return RenderGeometry(renderer, texture, verticesPtr, vertices.Length, indicesPtr, indices.Length);
-                    }
-                }
-                else
-                {
+                if (indices.IsEmpty)
                     return RenderGeometry(renderer, texture, verticesPtr, vertices.Length, null, 0);
+                
+                fixed(int* indicesPtr = indices)
+                {
+                    return RenderGeometry(renderer, texture, verticesPtr, vertices.Length, indicesPtr, indices.Length);
                 }
-
             }
         }
+
+
+        /// <inheritdoc cref="RenderGeometry(nint, nint, Vertex*, int, int*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderGeometry(IntPtr renderer, Vertex[] vertices) => RenderGeometry(renderer, (ReadOnlySpan<Vertex>)vertices);
+
+        /// <inheritdoc cref="RenderGeometry(nint, nint, Vertex*, int, int*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderGeometry(IntPtr renderer, Vertex[] vertices, int[] indices) => RenderGeometry(renderer, (ReadOnlySpan<Vertex>)vertices, (ReadOnlySpan<int>)indices);
+
+        #endregion
 
         /// <summary>Renders a filled circle using triangles. (Custom Method)</summary>
         /// <param name="renderer">The renderer which should draw a filled circle.</param>
@@ -435,35 +559,39 @@ namespace SDL3
         //TODO SDL_RenderGeometryRaw
         //TODO SDL_RenderGeometryRawFloat
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderReadPixels", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr RenderReadPixels(IntPtr renderer, ref Rect rect);
+        #endregion
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderReadPixels")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr RenderReadPixels(IntPtr renderer, ref Rect rect);
 
         /// <summary>Update the screen with any rendering performed since the previous call.</summary>
         /// <param name="renderer">The rendering context.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RenderPresent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RenderPresent(IntPtr renderer);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderPresent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderPresent(IntPtr renderer);
 
         /// <summary>Destroy the specified texture.</summary>
         /// <param name="texture">The texture to destroy.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroyTexture(IntPtr texture);
-
-        /// <summary>Destroy the specified texture.</summary>
-        /// <param name="texture">The texture to destroy.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroyTexture(Texture texture);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroyTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroyTexture(IntPtr texture);
 
         /// <summary>Destroy the rendering context for a window and free all associated textures.</summary>
         /// <param name="renderer">The rendering context.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroyRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroyRenderer(IntPtr renderer);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroyRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroyRenderer(IntPtr renderer);
 
         /// <summary>Force the rendering context to flush any pending commands and state.</summary>
         /// <param name="renderer">The rendering context.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_FlushRenderer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool FlushRenderer(IntPtr renderer);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_FlushRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool FlushRenderer(IntPtr renderer);
 
         // TODO SDL_GetRenderMetalLayer
         // TODO SDL_GetREnderMetalCommandEncoder
@@ -474,14 +602,18 @@ namespace SDL3
         /// <param name="renderer">The renderer to toggle.</param>
         /// <param name="vsync">Vertical refresh sync interval.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetRenderVSync", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool SetRenderVSync(IntPtr renderer, int vsync);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetRenderVSync")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetRenderVSync(IntPtr renderer, int vsync);
 
         /// <summary>Get VSync of the given renderer.</summary>
         /// <param name="renderer">The renderer to toggle.</param>
         /// <param name="vsync">An int filled with the current vertical refresh sync interval.</param>
         /// <returns>True on success or false on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderVSync", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool GetRenderVSync(IntPtr renderer, out int vsync);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderVSync")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetRenderVSync(IntPtr renderer, out int vsync);
     }
 }
