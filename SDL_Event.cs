@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -677,7 +678,7 @@ namespace SDL3
         }
 
         /// <summary>The structure for all events in SDL.</summary>
-        [StructLayout(LayoutKind.Explicit)]
+        [StructLayout(LayoutKind.Explicit, Size = 128)]
         public unsafe struct Event
         {
             [FieldOffset(0)] public EventType type;
@@ -718,13 +719,7 @@ namespace SDL3
             [FieldOffset(0)] public RenderEvent render;
             [FieldOffset(0)] public DropEvent drop;
             [FieldOffset(0)] public ClipboardEvent clipboard;
-
-            [FieldOffset(0)] fixed byte padding[128];
         }
-
-        /// <summary>Pump the event loop, gathering events from the input devices.</summary>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_PumpEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void PumpEvents();
 
         /// <summary>The type of action to request from "PeepEvents."</summary>
         public enum EventAction
@@ -739,15 +734,10 @@ namespace SDL3
             GetEvent
         }
 
-        /// <summary>Check the event queue for messages and optionally return them.</summary>
-        /// <param name="events">Destination buffer for the retieved events.</param>
-        /// <param name="numEvents">The number of events to add back to the event queue, or the maximum number of events to retrieve.</param>
-        /// <param name="action">Action to take.</param>
-        /// <param name="minType">The minimum value of the event type to be considered.</param>
-        /// <param name="maxType">The maximum value of the event type to be considered.</param>
-        /// <returns>The number of events actually stored or -1 on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_PeepEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern unsafe int PeepEvents(Event* events, int numEvents, EventAction action, EventType minType, EventType maxType);
+        /// <summary>Pump the event loop, gathering events from the input devices.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PumpEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial void PumpEvents();
 
         /// <summary>Check the event queue for messages and optionally return them.</summary>
         /// <param name="events">Destination buffer for the retieved events.</param>
@@ -756,65 +746,141 @@ namespace SDL3
         /// <param name="minType">The minimum value of the event type to be considered.</param>
         /// <param name="maxType">The maximum value of the event type to be considered.</param>
         /// <returns>The number of events actually stored or -1 on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_PeepEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int PeepEvents([Out] Event[] events, int numEvents, EventAction action, EventType minType, EventType maxType);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PeepEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static unsafe partial int PeepEvents(Event* events, int numEvents, EventAction action, EventType minType, EventType maxType);
+
+        /// <inheritdoc cref="PeepEvents(Event*, int, EventAction, EventType, EventType)"/>
+        public static unsafe int PeepEvents(Span<Event> events, EventAction action, EventType minType, EventType maxType)
+        {
+            fixed(Event* ptr = events)
+            {
+                return PeepEvents(ptr, events.Length, action, minType, maxType);
+            }
+        }
 
 
         /// <summary>Check for the existence of a certain event type in the event queue.</summary>
         /// <param name="type">The type of event to be queried.</param>
         /// <returns>True if events matching `type` are present, or false if events matching `type` are not present.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_HasEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool HasEvent(EventType type);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_HasEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool HasEvent(EventType type);
 
         /// <summary>Check for the existence of certain event types in the event queue.</summary>
         /// <param name="minType">The minimum value of the event type to be queried.</param>
         /// <param name="maxType">The maximum value of the event type to be queried.</param>
         /// <returns>True if events with type >= to `minType` and Less or Equal to `maxType` are present, or false if not.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_HasEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool HasEvents(EventType minType, EventType maxType);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_HasEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool HasEvents(EventType minType, EventType maxType);
 
         /// <summary>Clear events of a specific type from the event queue.</summary>
         /// <param name="type">The type of event to be cleared.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_FlushEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void FlushEvent(EventType type);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_FlushEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void FlushEvent(EventType type);
 
         /// <summary>Clear events of a range of types from the event queue.</summary>
         /// <param name="minType">The low end of event type to be cleared. (inclusive)</param>
         /// <param name="maxType">The high end of event type to be cleared. (inclusive)</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_FlushEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void FlushEvents(EventType minType, EventType maxType);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_FlushEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void FlushEvents(EventType minType, EventType maxType);
+
+        #region PollEvent
 
         /// <summary>Poll for currently pending events.</summary>
-        /// <param name="_event">The Event structure to be filled with the next event from the queue, or NULL.</param>
+        /// <param name="sdlEvent">The Event structure to be filled with the next event from the queue, or NULL.</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PollEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static unsafe partial byte PollEvent(Event* sdlEvent);
+
+        /// <inheritdoc cref="PollEvent(Event*)"/>
         /// <returns>True if this got an event or false if there are none available.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_PollEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool PollEvent(out Event _event); // grr underscore bad :(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool PollEvent(out Event sdlEvent)
+        {
+            Event e;
+            bool result = PollEvent(&e) != 0;
+            sdlEvent = e;
+            return result;
+        }
+
+        #endregion
+
+        #region WaitEvent
 
         /// <summary>Wait indefinetly for the next available event.</summary>
-        /// <param name="_event">The Event structure to be filled with the next event from the queue, or NULL.</param>
+        /// <param name="sdlEvent">Filled with the next event.</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial byte WaitEvent(Event* sdlEvent);
+
+        /// <inheritdoc cref="WaitEvent(Event*)"/>
         /// <returns>True on success or false if there was an error while waiting for events.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_WaitEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool WaitEvent(out Event _event); // grr underscore bad :(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool WaitEvent(out Event sdlEvent)
+        {
+            Event e;
+            bool result = WaitEvent(&e) != 0;
+            sdlEvent = e;
+            return result;
+        }
+
+        #endregion
+
+        #region WaitEventTimeout
 
         /// <summary>Wait until the specified timeout (in milliseconds) for the next available event.</summary>
-        /// <param name="_event">The Event structure to be fulled with the next event from the queue, or NULL.</param>
-        /// <param name="timeout">The maximum number of milliseconds to wait for the next available event.</param>
+        /// <param name="sdlEvent">The Event structure to be fulled with the next event from the queue, or NULL.</param>
+        /// <param name="timeoutMs">The maximum number of milliseconds to wait for the next available event.</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitEventTimeout")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial byte WaitEventTimeout(Event* sdlEvent, int timeoutMs);
+
+        /// <inheritdoc cref="WaitEventTimeout(Event*, int)"/>
         /// <returns>True if this got an event or false if the timout elapsed without any events availabe.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_WaitEventTimeout", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool WaitEventTimeout(out Event _event, int timeout); // grr underscore bad :(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool WaitEventTimeout(out Event sdlEvent, int timeoutMs)
+        {
+            Event e;
+            bool result = WaitEventTimeout(&e, timeoutMs) != 0;
+            sdlEvent = e;
+            return result;
+        }
+
+        #endregion
+
+        #region PushEvent
 
         /// <summary>Add an event to the event queue.</summary>
-        /// <param name="_event">The Event to be added to the queue.</param>
+        /// <param name="sdlEvent">The Event to be added to the queue.</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial byte PushEvent(Event* sdlEvent);
+
+        /// <inheritdoc cref="PushEvent(Event*)"/>
         /// <returns>True on success, false if the event was filtered or on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_PushEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool PushEvent(ref Event _event); // grr underscore bad :(
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static unsafe bool PushEvent(ref Event sdlEvent)
+        {
+            fixed(Event* ptr = &sdlEvent)
+            {
+                return PushEvent(ptr) != 0;
+            }
+        }
+
+        #endregion
 
         /// <summary>Function pointer used for callbacks that watch the event queue.</summary>
         /// <param name="userdata">What was passed as userdata.</param>
         /// <param name="_event">The Event that triggered the callback.</param>
         /// <returns>True to permit event to be added to the queue, and false to disallow it.</returns>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate bool EventFilter(IntPtr userdata, Event _event);
+        public delegate bool EventFilter(IntPtr userdata, ref Event _event);
 
         [DllImport(nativeLibraryName, EntryPoint = "SDL_SetEventFilter", CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetEventFilter(EventFilter filter, IntPtr userData);
