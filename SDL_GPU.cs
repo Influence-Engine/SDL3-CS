@@ -1003,8 +1003,73 @@ namespace SDL3
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void SetGPUTextureName(IntPtr device, IntPtr texture, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
 
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InsertGPUDebugLabel")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void InsertGPUDebugLabel(IntPtr commandBuffer, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushGPUDebugGroup")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void PushGPUDebugGroup(IntPtr commandBuffer, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PopGPUDebugGroup")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void PopGPUDebugGroup(IntPtr commandBuffer);
 
             #endregion
+
+            #region Disposal
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUTexture(IntPtr device, IntPtr texture);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUSampler")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUSampler(IntPtr device, IntPtr sampler);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUBuffer(IntPtr device, IntPtr buffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUTransferBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUComputePipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUComputePipeline(IntPtr device, IntPtr computePipeline);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUShader")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUShader(IntPtr device, IntPtr shader);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUGraphicsPipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUGraphicsPipeline(IntPtr device, IntPtr graphicsPipeline);
+
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_AcquireGPUCommandBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr AcquireGPUCommandBuffer(IntPtr device);
+
+            #endregion
+
+            #region Uniform Data
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushGPUVertexUniformData")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void PushGPUVertexUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint length);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushGPUFragmentUniformData")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void PushGPUFragmentUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint length);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushGPUComputeUniformData")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void PushGPUComputeUniformData(IntPtr commandBuffer, uint slotIndex, IntPtr data, uint length);
+
+            #endregion
+
         }
     }
 }
