@@ -818,6 +818,100 @@ namespace SDL3
                 public uint offset;
             }
 
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TextureSamplerBinding
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public IntPtr sampler; // SDL_GPUSampler*
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct StorageBufferReadWriteBinding
+            {
+                public IntPtr buffer; // SDL_GPUBuffer*
+                [MarshalAs(UnmanagedType.I1)] public bool cycle;
+
+                byte pad1;
+                byte pad2;
+                byte pad3;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct StorageTextureReadWriteBinding
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public uint mipLevel;
+                public uint layer;
+                [MarshalAs(UnmanagedType.I1)] public bool cycle;
+
+                byte pad1;
+                byte pad2;
+                byte pad3;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct VulkanOptions
+            {
+                public uint vulkanApiVersion;
+                public IntPtr featureList;
+                public IntPtr vulkan10PhysicalDeviceFeatures;
+                public uint deviceExtensionCount;
+                public IntPtr deviceExtensionNames; // const char**
+                public uint instanceExtensionCount;
+                public IntPtr instaceExtensionNames; // const char**
+            }
+
+            #endregion
+
+            #region Constant Strings
+
+            public const string Device_Create_DebugMode_Boolean = "SDL.gpu.device.create.debugmode";
+            public const string Device_Create_PreferLowPower_Boolean = "SDL.gpu.create.preferlowpower";
+            public const string Device_Create_Verbose_Boolean = "SDL.gpu.device.create.verbose";
+            public const string Device_Create_Name_String = "SDL.gpu.device.create.name";
+            public const string Device_Create_Feature_Clip_Distance_Boolean = "SDL.gpu.device.create.feature.clip_distance";
+            public const string Device_Create_Feature_Depth_Clamping_Boolean = "SDL.gpu.device.create.feature.depth_clamping";
+            public const string Device_Create_Feature_Indirect_Draw_First_Instance_Boolean = "SDL.gpu.device.create.feature.indirect_draw_first_instance";
+            public const string Device_Create_Feature_Anisotropy_Boolean = "SDL.gpu.device.create.feature.anisotropy";
+            public const string Device_Create_Shaders_Private_Boolean = "SDL.gpu.device.create.shaders.private";
+            public const string Device_Create_Shaders_Spirv_Boolean = "SDL.gpu.device.create.shaders.spirv";
+            public const string Device_Create_Shaders_Dxbc_Boolean = "SDL.gpu.device.create.shaders.dxbc";
+            public const string Device_Create_Shaders_Dxil_Boolean = "SDL.gpu.device.create.shaders.dxil";
+            public const string Device_Create_Shaders_Msl_Boolean = "SDL.gpu.device.create.shaders.msl";
+            public const string Device_Create_Shaders_Metallib_Boolean = "SDL.gpu.device.create.shaders.metallib";
+            public const string Device_Create_D3D12_Allow_Fewer_Resource_Slots_Boolean = "SDL.gpu.device.create.d3d12.allowtier1resourcebinding";
+            public const string Device_Create_D3D12_Semantic_Name_String = "SDL.gpu.device.create.d3d12.semantic";
+            public const string Device_Create_D3D12_Agility_Sdk_Version_Number = "SDL.gpu.device.create.d3d12.agility_sdk_version";
+            public const string Device_Create_D3D12_Agility_Sdk_Path_String = "SDL.gpu.device.create.d3d12.agility_sdk_path";
+            public const string Device_Create_Vulkan_Require_Hardware_Acceleration_Boolean = "SDL.gpu.device.create.vulkan.requirehardwareacceleration";
+            public const string Device_Create_Vulkan_Options_Pointer = "SDL.gpu.device.create.vulkan.options";
+            public const string Device_Create_Metal_Allow_MacFamily1_Boolean = "SDL.gpu.device.create.metal.allowmacfamily1";
+
+            // To add
+            // XR
+
+            public const string Device_Name_String = "SDL.gpu.device.name";
+            public const string Device_Driver_Name_String = "SDL.gpu.device.driver_name";
+            public const string Device_Driver_Version_String = "SDL.gpu.device.driver_version";
+            public const string Device_Driver_Info_String = "SDL.gpu.device.driver_info";
+
+            public const string ComputerPipeline_Create_Name_String = "SDL.gpu.computepipeline.create.name";
+            public const string GraphicsPipeline_Create_Name_String = "SDL.gpu.graphicspipeline.create.name";
+            public const string Sampler_Create_Name_String = "SDL.gpu.sampler.create.name";
+            public const string Shader_Create_Name_String = "SDL.gpu.shader.create.name";
+            public const string Buffer_Create_Name_String = "SDL.gpu.buffer.create.name";
+            public const string TransferBuffer_Create_Name_String = "SDL.gpu.transferbuffer.create.name";
+
+            public const string Texture_Create_D3D12_Clear_R_Float = "SDL.gpu.texture.create.d3d12.clear.r";
+            public const string Texture_Create_D3D12_Clear_G_Float = "SDL.gpu.texture.create.d3d12.clear.g";
+            public const string Texture_Create_D3D12_Clear_B_Float = "SDL.gpu.texture.create.d3d12.clear.b";
+            public const string Texture_Create_D3D12_Clear_A_Float = "SDL.gpu.texture.create.d3d12.clear.a";
+            public const string Texture_Create_D3D12_Clear_Depth_Float = "SDL.gpu.texture.create.d3d12.clear.depth";
+            public const string Texture_Create_D3D12_Clear_Stencil_Number = "SDL.gpu.texture.create.d3d12.clear.stencil";
+            public const string Texture_Create_Name_String = "SDL.gpu.texture.create.name";
+
+
+
             #endregion
         }
     }
