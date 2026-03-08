@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.InteropServices;
 namespace SDL3
 {
     public static partial class SDL
@@ -429,6 +431,391 @@ namespace SDL3
                 SdrLinear,
                 HdrExtendedLinear,
                 Hdr10St2084
+            }
+
+            #endregion
+
+            #region Structs
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct Viewport
+            {
+                public float x;
+                public float y;
+                public float w;
+                public float h;
+                public float minDepth;
+                public float maxDepth;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TextureTransferInfo
+            {
+                public IntPtr transferBuffer; // SDL_GPUTransferBuffer*
+                public uint offset;
+                public uint pixelsPerRow;
+                public uint rowsPerLayer;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TransferBufferLocation
+            {
+                public IntPtr transferBuffer; // SDL_GPUTransferBuffer*
+                public uint offset;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TextureLocation
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public uint mipLevel;
+                public uint layer;
+                public uint x;
+                public uint y;
+                public uint z;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TextureRegion
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public uint mipLevel;
+                public uint layer;
+                public uint x;
+                public uint y;
+                public uint z;
+                public uint w;
+                public uint h;
+                public uint d;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BlitRegion
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public uint mipLevel;
+                public uint layerOrDepthPlane;
+                public uint x;
+                public uint y;
+                public uint w;
+                public uint h;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BufferLocation
+            {
+                public IntPtr buffer; // SDL_GPUBuffer*
+                public uint offset;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BufferRegion
+            {
+                public IntPtr buffer; // SDL_GPUBuffer*
+                public uint offset;
+                public uint size;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct IndirectDrawCommand
+            {
+                public uint numVertices;
+                public uint numInstances;
+                public uint firstVertex;
+                public uint firstInstance;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct IndexedIndirectDrawCommand
+            {
+                public uint numIndices;
+                public uint numInstances;
+                public uint firstIndex;
+                public int vertexOffset;
+                public uint firstInstance;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct IndirectDispatchCommand
+            {
+                public uint groupcountX;
+                public uint groupcountY;
+                public uint groupcountZ;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct SamplerCreateInfo
+            {
+                public Filter minFilter;
+                public Filter magFilter;
+                public SamplerMipmapMode mipmapMode;
+                public SamplerAddressMode addressModeU;
+                public SamplerAddressMode addressModeV;
+                public SamplerAddressMode addressModeW;
+                public float mipLODBias;
+                public float maxAnisotropy;
+                public CompareOp compareOp;
+                public float minLOD;
+                public float maxLOD;
+                [MarshalAs(UnmanagedType.I1)] public bool enableAnisotropy;
+                [MarshalAs(UnmanagedType.I1)] public bool enableCompare;
+
+                byte _pad1;
+                byte _pad2;
+
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct VertexBufferDescription
+            {
+                public uint slot;
+                public uint pitch;
+                public VertexInputRate inputRate;
+                public uint instanceStepRate;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct VertexAttribute
+            {
+                public uint location;
+                public uint bufferSlot;
+                public VertexElementFormat format;
+                public uint offset;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct VertexInputState
+            {
+                public IntPtr vertexBufferDescription;
+                public uint numVertexBuffers;
+                public IntPtr vertexAttributes;
+                public uint numVertexAttributes;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct StencilIOpState
+            {
+                public StencilOp failOp;
+                public StencilOp passOp;
+                public StencilOp depthFailOp;
+                public CompareOp compareOp;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct ColorTargetBlendState
+            {
+                public BlendFactor srcColorBlendfactor;
+                public BlendFactor dstColorBlendFactor;
+                public BlendOp colorBlendOp;
+                public BlendFactor srcAlphaBlendfactor;
+                public BlendFactor dstAlphaBlendfactor;
+                public BlendOp alphaBlendOp;
+                public ColorComponent colorWriteMask;
+                [MarshalAs(UnmanagedType.I1)] public bool enableBlend;
+                [MarshalAs(UnmanagedType.I1)] public bool enableColorWriteMask;
+
+                byte pad1;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct ShaderCreateInfo
+            {
+                public nuint codeSize;
+                public IntPtr code; // const uint8
+                public IntPtr entrypoint; // const char*
+                public ShaderFormat format;
+                public ShaderStage stage;
+                public uint numSamplers;
+                public uint numStorageTextures;
+                public uint numStorageBuffers;
+                public uint numUniformBuffesr;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TextureCreateInfo
+            {
+                public TextureType type;
+                public TextureFormat format;
+                public TextureUsage usage;
+                public uint width;
+                public uint height;
+                public uint layerCountOrDepth;
+                public uint numLevels;
+                public SampleCount sampleCount;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BufferCreateInfo
+            {
+                public BufferUsage usage;
+                public uint size;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct TransferBufferCreateInfo
+            {
+                public TransferBufferUsage usage;
+                public uint size;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct RasterizerState
+            {
+                public FillMode fillMode;
+                public CullMode cullMode;
+                public FrontFace frontFace;
+                public float depthBiasConstantFactor;
+                public float depthBiasClamp;
+                public float depthBiasSlopeFactor;
+                [MarshalAs(UnmanagedType.I1)] public bool enableDepthBias;
+                [MarshalAs(UnmanagedType.I1)] public bool enableDepthClip;
+
+                byte pad1;
+                byte pad2;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct MultisampleState
+            {
+                public SampleCount sampelCount;
+                public uint sampleMask;
+                [MarshalAs(UnmanagedType.I1)] public bool enableMask;
+                [MarshalAs(UnmanagedType.I1)] public bool enableAlphaToCoverage;
+
+                byte pad1;
+                byte pad2;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct DepthStencilState
+            {
+                public CompareOp compareOp;
+                public StencilIOpState backStencilState;
+                public StencilIOpState frontStencilState;
+                public byte compareMask;
+                public byte writeMask;
+                [MarshalAs(UnmanagedType.I1)] public bool enableDepthTest;
+                [MarshalAs(UnmanagedType.I1)] public bool enableDepthWrite;
+                [MarshalAs(UnmanagedType.I1)] public bool enableStencilTest;
+
+                byte pad1;
+                byte pad2;
+                byte pad3;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct ColorTargetDescription
+            {
+                public TextureFormat format;
+                public ColorTargetBlendState blendState;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct GraphicsPipelineTargetInfo
+            {
+                public IntPtr colorTargetDescription;
+                public uint numColorTargets;
+                public TextureFormat depthStencilFormat;
+                [MarshalAs(UnmanagedType.I1)] public bool hasDepthStencilTarget;
+
+                byte pad1;
+                byte pad2;
+                byte pad3;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct GraphicsPipelineCreateInfo
+            {
+                public IntPtr vertexShader; // SDL_GPUShader*
+                public IntPtr fragmentShader; // SDL_GPUShader*
+                public VertexInputState vertexInputState;
+                public PrimitiveType primitiveType;
+                public RasterizerState rasterizerState;
+                public MultisampleState multisampleState;
+                public DepthStencilState depthStencilState;
+                public GraphicsPipelineTargetInfo targetInfo;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct ComputePipelineCreateInfo
+            {
+                public nuint codeSize;
+                public IntPtr code; // const uint8*
+                public IntPtr entrypoint; // const char*
+                public ShaderFormat format;
+                public uint numSamplers;
+                public uint numReadonlyStorageTextures;
+                public uint numReadonlyStorageBuffers;
+                public uint numReadwriteStorageTextures;
+                public uint numReadwriteStorageBuffers;
+                public uint numUniformBuffers;
+                public uint threadCountX;
+                public uint threadCountY;
+                public uint threadCountZ;
+                public uint props;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct ColorTargetInfo
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public uint mipLevel;
+                public uint layerOrDepthPlane;
+                public FColor clearColor;
+                public LoadOp loadOp;
+                public StoreOp storeOp;
+                public IntPtr resolveTexture; // SDL_GPUTexture*
+                public uint resolveMipLevel;
+                public uint resolveLayer;
+                [MarshalAs(UnmanagedType.I1)] public bool cycle;
+                [MarshalAs(UnmanagedType.I1)] public bool cycleResolveTexture;
+
+                byte pad1;
+                byte pad2;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct DepthStencilTargetInfo
+            {
+                public IntPtr texture; // SDL_GPUTexture*
+                public float clearDepth;
+                public LoadOp loadOp;
+                public StoreOp storeOp;
+                public LoadOp stencilLoadOp;
+                public StoreOp stenctilStoreOp;
+                [MarshalAs(UnmanagedType.I1)] public bool cycle;
+                public byte clearStencil;
+                public byte mipLevel;
+                public byte layer;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BlitInfo
+            {
+                public BlitRegion source;
+                public BlitRegion destination;
+                public LoadOp loadOp;
+                public FColor clearColor;
+                public FlipMode flipMode;
+                public Filter filter;
+                [MarshalAs(UnmanagedType.I1)] public bool cycle;
+
+                byte pad1;
+                byte pad2;
+                byte pad3;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            public struct BufferBinding
+            {
+                public IntPtr buffer; // SDL_GPUBuffer*
+                public uint offset;
             }
 
             #endregion
