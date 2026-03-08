@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -244,11 +245,13 @@ namespace SDL3
         //TODO SDL_GetWindowParent
         // TODO SDL_GetWindowProperties
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFlags", CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint GetWindowFlags(IntPtr window);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFlags")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial uint GetWindowFlags(IntPtr window);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe void Internal_SetWindowTitle(IntPtr window, byte* title);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowTitle")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static unsafe partial void Internal_SetWindowTitle(IntPtr window, byte* title);
         public static unsafe void SetWindowTitle(IntPtr window, string title)
         {
             int utf8TitleBufferSize = Utility.UTF8Size(title);
@@ -256,8 +259,9 @@ namespace SDL3
             Internal_SetWindowTitle(window, Utility.UTF8Encode(title, utf8Title, utf8TitleBufferSize));
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowTitle", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr Internal_GetWindowTitle(IntPtr window);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowTitle")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static partial IntPtr Internal_GetWindowTitle(IntPtr window);
         public static string GetWindowTitle(IntPtr window)
         {
             return Marshal.PtrToStringUTF8(Internal_GetWindowTitle(window));
@@ -265,8 +269,9 @@ namespace SDL3
 
         // TODO SDL_SetWindowIcon
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetWindowData", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe void Internal_SetWindowData(IntPtr window, byte* name, IntPtr userdata);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowData")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static unsafe partial void Internal_SetWindowData(IntPtr window, byte* name, IntPtr userdata);
         public static unsafe void SetWindowData(IntPtr window, string name, IntPtr userdata)
         {
             int utf8TitleBufferSize = Utility.UTF8Size(name);
@@ -274,8 +279,9 @@ namespace SDL3
             Internal_SetWindowData(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize), userdata);
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowData", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe IntPtr Internal_GetWindowData(IntPtr window, byte* name);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowData")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        private static unsafe partial IntPtr Internal_GetWindowData(IntPtr window, byte* name);
         public static unsafe IntPtr GetWindowData(IntPtr window, string name)
         {
             int utf8TitleBufferSize = Utility.UTF8Size(name);
@@ -283,17 +289,21 @@ namespace SDL3
             return Internal_GetWindowData(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize));
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetWindowPosition", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetWindowPosition(IntPtr window, int x, int y);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowPosition")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void SetWindowPosition(IntPtr window, int x, int y);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowPosition", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetWindowPosition(IntPtr window, out int x, out int y);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowPosition")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void GetWindowPosition(IntPtr window, out int x, out int y);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetWindowSize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetWindowSize(IntPtr window, int x, int y);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void SetWindowSize(IntPtr window, int x, int y);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowSize", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void GetWindowSize(IntPtr window, out int x, out int y);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void GetWindowSize(IntPtr window, out int x, out int y);
 
         // TODO SDL_GetWindowSafeArea
 
