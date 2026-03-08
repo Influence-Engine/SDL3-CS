@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -13,7 +14,7 @@ namespace SDL3
             {
                 TriangleList,
                 TriangleStrip,
-                
+
                 LineList,
                 LineStrip,
 
@@ -910,6 +911,97 @@ namespace SDL3
             public const string Texture_Create_D3D12_Clear_Stencil_Number = "SDL.gpu.texture.create.d3d12.clear.stencil";
             public const string Texture_Create_Name_String = "SDL.gpu.texture.create.name";
 
+            #endregion
+
+            #region Device
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GPUSupportsShaderFormats")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool GPUSupportsShaderFormats(ShaderFormat formatFlags, [MarshalAs(UnmanagedType.LPUTF8Str)] string? name);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GPUSupportsProperties")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool GPUSupportsProperties(uint props);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUDevice")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUDevice(ShaderFormat formatFlags, [MarshalAs(UnmanagedType.I1)] bool debugMode, [MarshalAs(UnmanagedType.LPUTF8Str)] string? name);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUDeviceWithProperties")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUDeviceWithProperties(uint props);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroyGPUDevice")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr DestroyGPUDevice(IntPtr device);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetNumGPUDrivers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial int GetNumGPUDrivers();
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUDriver")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+            public static partial string? GetGPUDriver(int index);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUDeviceDriver")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+            public static partial string? GetGPUDeviceDriver(IntPtr device);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUShaderFormats")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial ShaderFormat GetGPUShaderFormats(IntPtr device);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUDeviceProperties")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial uint GetGPUDeviceProperties(IntPtr device);
+
+            #endregion
+
+            #region State Creation
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUComputePipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUComputePipeline(IntPtr device, in ComputePipelineCreateInfo createInfo);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUGraphicsPipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUGraphicsPipeline(IntPtr device, in GraphicsPipelineCreateInfo createInfo); 
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUSampler")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUSampler(IntPtr device, in SamplerCreateInfo createInfo); 
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUShader")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUShader(IntPtr device, in ShaderCreateInfo createInfo);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUTexture(IntPtr device, in TextureCreateInfo createInfo);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUBuffer(IntPtr device, in BufferCreateInfo createInfo);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUTransferBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr CreateGPUTransferBuffer(IntPtr device, in TransferBufferCreateInfo createInfo);
+
+            #endregion
+
+            #region Debug Naming
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUBufferName")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUBufferName(IntPtr device, IntPtr buffer, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUTextureName")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUTextureName(IntPtr device, IntPtr texture, [MarshalAs(UnmanagedType.LPUTF8Str)] string text);
 
 
             #endregion
