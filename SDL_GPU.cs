@@ -1070,7 +1070,6 @@ namespace SDL3
 
             #endregion
 
-
             #region Graphics State
 
             #region BeginGPURenderPass
@@ -1163,6 +1162,8 @@ namespace SDL3
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void SetGPUFragmentStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
 
+            #endregion
+
             #region Drawing
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DrawGPUIndexedPrimitives")]
@@ -1186,6 +1187,13 @@ namespace SDL3
             public static partial void EndGPURenderPass(IntPtr renderPass);
 
             #endregion
+
+            #region Compute Pass
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputePass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr BeginGPUComputePass(IntPtr commandBuffer, in StorageTextureReadWriteBinding storageTextureBindings, uint numStorageTextureBindings, in StorageBufferReadWriteBinding storageBufferBindings, uint numStorageBufferBindings);
+
 
             #endregion
         }
