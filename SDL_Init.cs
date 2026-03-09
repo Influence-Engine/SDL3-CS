@@ -12,11 +12,10 @@ namespace SDL3
         private const string nativeLibraryName = "SDL3.dll";
 #endif
 
-        /// <summary>Initialization Flags for "SDL.Init"</summary>
+        /// <summary>Initialization Flags for <see cref="Init"/> and <see cref="InitSubSystem"/>.</summary>
         [Flags]
         public enum InitFlags : uint
         {
-            Timer = 0x00000001,
             Audio = 0x00000010,
             Video = 0x00000020,
             Joystick = 0x00000200,
@@ -25,7 +24,7 @@ namespace SDL3
             Events = 0x00004000,
             Sensor = 0x00008000,
             Camera = 0x00010000,
-            Everything = (Timer | Audio | Video | Joystick | Haptic | Gamepad | Events | Sensor)
+            Everything = (Audio | Video | Joystick | Haptic | Gamepad | Events | Sensor)
         }
 
         /// <summary>Return values for optional main callbacks.</summary>
