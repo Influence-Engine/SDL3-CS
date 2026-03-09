@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -103,96 +103,60 @@ namespace SDL3
 
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetHintWithPriority", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_SetHintWithPriority(byte* name, byte* value, HintPriority priority);
-        public static unsafe bool SetHintWithPriority(string name, string value, HintPriority priority)
-        {
-            int utf8NameBufferSize = Utility.UTF8Size(name);
-            byte* utf8Name = stackalloc byte[utf8NameBufferSize];
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetHintWithPriority", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetHintWithPriority(string name, string value, HintPriority priority);
 
-            int utf8ValueBufferSize = Utility.UTF8Size(value);
-            byte* utf8Value = stackalloc byte[utf8ValueBufferSize];
-
-            return Internal_SetHintWithPriority(
-                Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize),
-                Utility.UTF8Encode(value, utf8Value, utf8ValueBufferSize),
-                priority);
-        }
-
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetHint", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_SetHint(byte* name, byte* value);
-
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetHint", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
         /// <summary>Set a hint with normal priority.</summary>
         /// <param name="name">The hint to set.</param>
         /// <param name="value">The valur of the hint variable.</param>
         /// <returns>True on success or false on failure.</returns>
-        public static unsafe bool SetHint(string name, string value)
-        {
-            int utf8NameBufferSize = Utility.UTF8Size(name);
-            byte* utf8Name = stackalloc byte[utf8NameBufferSize];
-
-            int utf8ValueBufferSize = Utility.UTF8Size(value);
-            byte* utf8Value = stackalloc byte[utf8ValueBufferSize];
-
-            return Internal_SetHint(
-                Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize),
-                Utility.UTF8Encode(value, utf8Value, utf8ValueBufferSize));
-        }
-
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_ResetHint", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_ResetHint(byte* name);
+        public static partial bool SetHint(string name, string value);
 
         /// <summary>Reset a hint to the default value.</summary>
         /// <param name="name">The hint to reset.</param>
         /// <returns>True on sucess or false on failure.</returns>
-        public static unsafe bool ResetHint(string name)
-        {
-            int utf8NameBufferSize = Utility.UTF8Size(name);
-            byte* utf8Name = stackalloc byte[utf8NameBufferSize];
-
-            return Internal_ResetHint(Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize));
-        }
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ResetHint", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool ResetHint(string name);
 
         /// <summary>Reset all hints to the default values.</summary>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_ResetHints", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void  ResetHints();
-
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetHint", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe IntPtr Internal_GetHint(byte* name);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ResetHints")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void  ResetHints();
 
         /// <summary>Get the value of a hint.</summary>
         /// <param name="name">The hint to query.</param>
         /// <returns>The string value of a hint or NULL if the hint isn't set.</returns>
-        public static unsafe string GetHint(string name)
-        {
-            int utf8NameBufferSize = Utility.UTF8Size(name);
-            byte* utf8Name = stackalloc byte[utf8NameBufferSize];
-
-            return Marshal.PtrToStringUTF8(Internal_GetHint(Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize)));
-        }
-
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetHintBoolean", CallingConvention = CallingConvention.Cdecl)]
-        static extern unsafe bool Internal_GetHintBoolean(byte* name, bool defaultValue);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetHint", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetHint(string name);
 
         /// <summary>Get the boolean value of a hint variable.</summary>
         /// <param name="name">The name of the hint tog et the boolean value from.</param>
         /// <param name="defaultValue">The value to return if the hint does not exist.</param>
         /// <returns>The boolean value of a hint or the given default value if the hint does not exist.</returns>
-        public static unsafe bool GetHintBoolean(string name, bool defaultValue)
-        {
-            int utf8NameBufferSize = Utility.UTF8Size(name);
-            byte* utf8Name = stackalloc byte[utf8NameBufferSize];
-
-            return Internal_GetHintBoolean(Utility.UTF8Encode(name, utf8Name, utf8NameBufferSize), defaultValue);
-        }
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetHintBoolean", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetHintBoolean(string name, [MarshalAs(UnmanagedType.I1)] bool defaultValue);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void HintCallback(IntPtr userData, string name, string oldValue, string newValue);
+        public delegate void HintCallback(nint userData, string name, string oldValue, string newValue);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_AddHintCallback", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool AddHintCallback(string name, HintCallback callback, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_AddHintCallback", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool AddHintCallback(string name, HintCallback callback, nint userData);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RemoveHintCallback", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RemoveHintCallback(string name, HintCallback callback, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RemoveHintCallback", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void RemoveHintCallback(string name, HintCallback callback, nint userData);
     }
 }
