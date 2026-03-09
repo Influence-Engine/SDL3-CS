@@ -969,11 +969,11 @@ namespace SDL3
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUGraphicsPipeline")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial IntPtr CreateGPUGraphicsPipeline(IntPtr device, in GraphicsPipelineCreateInfo createInfo); 
+            public static partial IntPtr CreateGPUGraphicsPipeline(IntPtr device, in GraphicsPipelineCreateInfo createInfo);
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUSampler")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial IntPtr CreateGPUSampler(IntPtr device, in SamplerCreateInfo createInfo); 
+            public static partial IntPtr CreateGPUSampler(IntPtr device, in SamplerCreateInfo createInfo);
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPUShader")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -1099,9 +1099,9 @@ namespace SDL3
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static unsafe IntPtr BeginGPURenderPass(IntPtr commandBuffer, ReadOnlySpan<ColorTargetInfo> colorTargets, in DepthStencilTargetInfo depthStencilTargetInfo)
             {
-                fixed(ColorTargetInfo* cPtr = colorTargets)
+                fixed (ColorTargetInfo* cPtr = colorTargets)
                 {
-                    fixed(DepthStencilTargetInfo* dPtr = &depthStencilTargetInfo)
+                    fixed (DepthStencilTargetInfo* dPtr = &depthStencilTargetInfo)
                     {
                         return BeginGPURenderPassWithDepth(commandBuffer, ref *cPtr, (uint)colorTargets.Length, ref *dPtr);
                     }
@@ -1194,8 +1194,207 @@ namespace SDL3
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial IntPtr BeginGPUComputePass(IntPtr commandBuffer, in StorageTextureReadWriteBinding storageTextureBindings, uint numStorageTextureBindings, in StorageBufferReadWriteBinding storageBufferBindings, uint numStorageBufferBindings);
 
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputePipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BindGPUComputePipeline(IntPtr computePass, IntPtr computePipeline);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeSamplers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BindGPUComputeSamplers(IntPtr computePass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeStorageTextures")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BindGPUComputeStorageTextures(IntPtr computePass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeStorageBuffers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BindGPUComputeStorageBuffers(IntPtr computePass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DispatchGPUCompute")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DispatchGPUCompute(IntPtr computePass, uint groupcountX, uint groupCountY, uint groupCountZ);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DispatchGPUComputeIndirect")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DispatchGPUComputeIndirect(IntPtr computePass, IntPtr buffer, uint offset);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_EndGPUComputePass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void EndGPUComputePass(IntPtr computePass);
 
             #endregion
+
+            #region TransferBuffer Data
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_MapGPUTransferBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr MapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer, [MarshalAs(UnmanagedType.I1)] bool cycle);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UnmapGPUTransferBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void UnmapGPUTransferBuffer(IntPtr device, IntPtr transferBuffer);
+
+            #endregion
+
+            #region Copy Pass
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUCopyPass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr BeginGPUCopyPass(IntPtr commandBuffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UploadToGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void UploadToGPUTexture(IntPtr copyPass, in TextureTransferInfo source, in TextureRegion destination, [MarshalAs(UnmanagedType.I1)] bool cycle);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UploadToGPUBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void UploadToGPUBufer(IntPtr copyPass, in TransferBufferLocation source, in BufferRegion destination, [MarshalAs(UnmanagedType.I1)] bool cycle);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CopyGPUTextureToTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void CopyGPUTextureToTexture(IntPtr copyPass, in TextureLocation source, in TextureLocation destination, uint w, uint h, uint d, [MarshalAs(UnmanagedType.I1)] bool cycle);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CopyGPUBufferToBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void CopyGPUBufferToBuffer(IntPtr copyPass, in BufferLocation source, in BufferLocation destination, uint size, [MarshalAs(UnmanagedType.I1)] bool cycle);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DownloadFromGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DownloadFromGPUTexture(IntPtr copyPass, in TextureRegion source, in TextureTransferInfo destination);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DownloadFromGPUBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DownloadFromGPUBuffer(IntPtr copyPass, in BufferRegion source, in TransferBufferLocation destination);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_EndGPUCopyPass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void EndGPUCopyPass(IntPtr copyPass);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GenerateMipmapsForGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void GenerateMipMapsForGPUTexture(IntPtr commandBuffer, IntPtr texture);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BlitGPUTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BlitGPUTexture(IntPtr commandBuffer, in BlitInfo info);
+
+            #endregion
+
+            #region Submission / Presentation
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WindowSupportsGPUSwapchainComposition")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WindowSupportsGPUSwapchainComposition(IntPtr device, IntPtr window, SwapchainComposition swapchainComposition);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WindowSupportsGPUPresentMode")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WindowSupportsGPUPresentMode(IntPtr device, IntPtr window, PresentMode presentMode);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ClaimWindowForGPUDevice")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool ClaimWindowForGPUDevice(IntPtr device, IntPtr window);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseWindowForGPUDevice")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseWindowFromGPUDevice(IntPtr device, IntPtr window);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUSwapchainParameters")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool SetGPUSwapchainParameters(IntPtr device, IntPtr window, SwapchainComposition swapchainComposition, PresentMode presentMode);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUAllowedFramesInFlight")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool SetGPUAllowedFramesInFlight(IntPtr device, uint allowedFramesInFlight);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUSwapchainTextureFormat")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial TextureFormat GetGPUSwapchainTextureFormat(IntPtr device, IntPtr window);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_AcquireGPUSwapchainTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool AcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, out IntPtr swapchainTexture, out uint swapchainTextureWidth, out uint swapchainTextureHeight);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitForGPUSwapchain")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WaitForGPUSwapchain(IntPtr device, IntPtr window);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitAndAcquireGPUSwapchainTexture")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WaitAndAcquireGPUSwapchainTexture(IntPtr commandBuffer, IntPtr window, out IntPtr swapchainTexture, out uint swapchainTextureWidth, out uint swapchainTextureHeight);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SubmitGPUCommandBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool SubmitGPUCommandBuffer(IntPtr commandBuffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SubmitGPUCommandBufferAndAcquireFence")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr SubmitGPUCommandBufferAndAcquireFence(IntPtr commandBuffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CancelGPUCommandBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool CancelGPUCommandBuffer(IntPtr commandBuffer);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitForGPUIdle")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WaitForGPUIdle(IntPtr device);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitForGPUFences")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool WaitForGPUFences(IntPtr device, [MarshalAs(UnmanagedType.I1)] bool waitAll, in IntPtr fences, uint numFences);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QueryGPUFence")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool QueryGPUFence(IntPtr device, IntPtr fence);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseGPUFence")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void ReleaseGPUFence(IntPtr device, IntPtr fence);
+
+            #endregion
+
+            #region Format Info
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GPUTextureFormatTexelBlockSize")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial uint GPUTextureFormatTexelBlockSize(TextureFormat format);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GPUTextureSupportsFormat")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool GPUTextureSupportsFormat(IntPtr device, TextureFormat format, TextureType type, TextureUsage usage);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GPUTextureSupportsSampleCount")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            [return: MarshalAs(UnmanagedType.I1)]
+            public static partial bool GPUTextureSupportsSampleCount(IntPtr device, TextureFormat format, SampleCount sampelCount);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CalculateGPUTextureFormatSize")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial uint CalculateGPUTextureFormatSize(TextureFormat format, uint width, uint height, uint depthOrLayerCount);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatFromGPUTextureFormat")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial PixelFormat GetPixelFormatFromGPUTextureFormat(TextureFormat format);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUTextureFormatFromPixelFormat")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial TextureFormat GetGPUTextureFormatFromPixelFormat(PixelFormat format);
+
+            #endregion
+
         }
     }
 }
