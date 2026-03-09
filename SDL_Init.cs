@@ -72,13 +72,16 @@ namespace SDL3
         /// <summary>Initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Init"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Init")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool Init(uint flags);
 
         /// <inheritdoc cref="Init(uint)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Init(InitFlags flags) => Init((uint)flags);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Init")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool Init(InitFlags flags);
 
         #endregion
 
@@ -87,12 +90,14 @@ namespace SDL3
         /// <summary>Compatibility function to initialize the SDL library.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>True on success or false on failure.</returns>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool InitSubSystem(uint flags);
 
         /// <inheritdoc cref="InitSubSystem(uint)"/>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_InitSubSystem")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool InitSubSystem(InitFlags flags);
 
@@ -102,11 +107,13 @@ namespace SDL3
 
         /// <summary>Shut down specific SDL subsystems.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void QuitSubSystem(uint flags);
 
         /// <inheritdoc cref="QuitSubSystem(uint)"/>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void QuitSubSystem(InitFlags flags);
 
         #endregion
@@ -116,28 +123,60 @@ namespace SDL3
         /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         /// <returns>A mask of all initialized subsystems if flags is 0, otherwise the init status of the specified subsystems.</returns>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint WasInit(uint flags);
 
         /// <inheritdoc cref="WasInit(uint)"/>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial InitFlags WasInit(InitFlags flags);
 
         #endregion
 
         /// <summary>Clean up all initialized subsystems.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Quit"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Quit")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void Quit();
 
         /// <summary>Return whether this is the main thread.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread"), UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool IsMainThread();
 
-        // TODO RunOnMainThread
+        /// <summary>Callback run on the main thread via <see cref="RunOnMainThread"/>.</summary>
+        /// <param name="userdata">An app-controlled pointer passed to the callback.</param>
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void MainThreadCallback(nint userdata);
 
-        // TODO SetAppMetadata
-        // TODO SetAppMetadataProperty
-        // TODO Prop_App_Metadata defines
+        /// <summary>
+        /// Call a function on the main thread during event processing. <br></br>
+        /// If called on the main thread, the callback executes immediately. <br></br>
+        /// If called from another thread, it is queued for execution on the main thread.
+        /// </summary>
+        /// <param name="callback">The callback to call on the main thread.</param>
+        /// <param name="userdata">A pointer passed to <paramref name="callback"/>.</param>
+        /// <param name="waitComplete">True to block untill the callback completes, false to return immediately.</param>
+        /// <returns>True on success or false on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RunOnMainThread")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RunOnMainThread(MainThreadCallback callback, nint userdata, [MarshalAs(UnmanagedType.I1)] bool waitComplete);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetAppMetadata", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetAppMetadata(string? appname, string? appversion, string? appidentifier);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetAppMetadataProperty(string name, string? value);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetAppMetadataProperty(string name);
     }
 }
