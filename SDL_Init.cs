@@ -105,7 +105,10 @@ namespace SDL3
 
         #region QuitSubSystem
 
-        /// <summary>Shut down specific SDL subsystems.</summary>
+        /// <summary>
+        /// Shut down specific SDL subsystems. <br></br>
+        /// You still need to call <see cref="Quit"/> even if you close all open subsystems.
+        /// </summary>
         /// <param name="flags">Subsystem initialization flags.</param>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_QuitSubSystem")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -121,8 +124,8 @@ namespace SDL3
         #region WasInit
 
         /// <summary>Get a mask of the specified subsystems which are currently initialized.</summary>
-        /// <param name="flags">Subsystem initialization flags.</param>
-        /// <returns>A mask of all initialized subsystems if flags is 0, otherwise the init status of the specified subsystems.</returns>
+        /// <param name="flags">Subsystem flags to query, or 0 to return all intialized subsystems.</param>
+        /// <returns>A mask of all initialized subsystems if <paramref name="flags"/> is 0, otherwise the init status of the specified subsystems.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WasInit")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint WasInit(uint flags);
@@ -134,12 +137,16 @@ namespace SDL3
 
         #endregion
 
-        /// <summary>Clean up all initialized subsystems.</summary>
+        /// <summary>
+        /// Clean up all initialized subsystems. <br></br>
+        /// Should be called even if individual subsystems were already shut down via <see cref="QuitSubSystem"/>.
+        /// </summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_Quit")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void Quit();
 
-        /// <summary>Return whether this is the main thread.</summary>
+        /// <summary>Return whether the calling thread is the main thread.</summary>
+        /// <returns>True if this is the main thread, false otherwise.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_IsMainThread")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -164,16 +171,37 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RunOnMainThread(MainThreadCallback callback, nint userdata, [MarshalAs(UnmanagedType.I1)] bool waitComplete);
 
+        /// <summary>
+        /// Specify basic metadata about your app. Call this before <see cref="Init"/> <br></br>
+        /// Any parameter may be null to leave that field unset (or to clear a previously set value).
+        /// </summary>
+        /// <param name="appname">The human-readable name of the application.</param>
+        /// <param name="appversion">The version string of the application.</param>
+        /// <param name="appidentifier">A unique reverse-domain identifier.</param>
+        /// <returns>True on success or false on failure</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetAppMetadata", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetAppMetadata(string? appname, string? appversion, string? appidentifier);
 
+        /// <summary>
+        /// Specify metadata about your app through a named property. <br></br>
+        /// See <see cref="AppMetadata"/> for available property name constants.
+        /// </summary>
+        /// <param name="name">The metadata property name (see <see cref="AppMetadata"/>).</param>
+        /// <param name="value">The value to set, or null to remove the property.</param>
+        /// <returns>True on success or false on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetAppMetadataProperty(string name, string? value);
 
+        /// <summary>
+        /// Get metadata about your app previously set via <see cref="SetAppMetadata"/> or <see cref="SetAppMetadataProperty"/>. <br></br>
+        /// See <see cref="AppMetadata"/> for available property name constants.
+        /// </summary>
+        /// <param name="name">The metadata property name (see <see cref="AppMetadata"/>).</param>
+        /// <returns>The current value of the property, the default if not set, or null for properties with no default.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.LPUTF8Str)]
