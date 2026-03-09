@@ -60,6 +60,17 @@ namespace SDL3
             public const string ForceRaiseWindow = "SDL_HINT_FORCE_RAISEWINDOW";
             public const string FrameBufferAcceleration = "SDL_FRAMEBUFFER_ACCELERATION";
 
+            // TODO and more
+
+            public const string HIDAPILibUsb= "SDL_HIDAPI_LIBUSB";
+            public const string HIDAPILibUsbGameCube = "SDL_HIDAPI_LIBUSB_GAMECUBE";
+            public const string HIDAPILibUsbWhitelist = "SDL_HIDAPI_LIBUSB_WHITELIST";
+            public const string HIDAPIUDev = "SDL_HIDAPI_UDEV";
+
+            public const string GPUDriver = "SDL_GPU_DRIVER";
+
+            public const string OpenXR_Library = "SDL_OPENXR_LIBRARY";
+
             // TODO even more
 
             public const string OpenGLESDriver = "SDL_OPENGL_ES_DRIVER";
@@ -103,18 +114,23 @@ namespace SDL3
 
         }
 
+        /// <summary>Set a hint with a specific priority.</summary>
+        /// <param name="name">The hint to set.</param>
+        /// <param name="value">The value of the hint variable.</param>
+        /// <param name="priority">The priority level for the hint.</param>
+        /// <returns>True on success or false on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetHintWithPriority", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetHintWithPriority(string name, string value, HintPriority priority);
 
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetHint", StringMarshalling = StringMarshalling.Utf8)]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.I1)]
         /// <summary>Set a hint with normal priority.</summary>
         /// <param name="name">The hint to set.</param>
         /// <param name="value">The valur of the hint variable.</param>
         /// <returns>True on success or false on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetHint", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetHint(string name, string value);
 
         /// <summary>Reset a hint to the default value.</summary>
@@ -147,6 +163,11 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool GetHintBoolean(string name, [MarshalAs(UnmanagedType.I1)] bool defaultValue);
 
+        /// <summary>Function pointer used for hint change callbacks.</summary>
+        /// <param name="userData">What was passed as userData.</param>
+        /// <param name="name">The hint name that changed.</param>
+        /// <param name="oldValue">The previous value of the hint.</param>
+        /// <param name="newValue">The new value of the hint.</param>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void HintCallback(nint userData, string name, string oldValue, string newValue);
 
