@@ -16,28 +16,56 @@ namespace SDL3
         [Flags]
         public enum InitFlags : uint
         {
-            Audio = 0x00000010,
-            Video = 0x00000020,
-            Joystick = 0x00000200,
+            Audio = 0x00000010, // implies Events
+            Video = 0x00000020, // implies Events; should be initialized on the main thread
+            Joystick = 0x00000200, // implies Events
             Haptic = 0x00001000,
-            Gamepad = 0x00002000,
+            Gamepad = 0x00002000, // implies Joystick
             Events = 0x00004000,
-            Sensor = 0x00008000,
-            Camera = 0x00010000,
+            Sensor = 0x00008000, // implies Events
+            Camera = 0x00010000, // implies Events
             Everything = (Audio | Video | Joystick | Haptic | Gamepad | Events | Sensor)
         }
 
         /// <summary>Return values for optional main callbacks.</summary>
         public enum AppResult
         {
+            /// <summary>Request that the app continues running.</summary>
             Continue,
+
+            /// <summary>Request termination with success.</summary>
             Success,
+
+            /// <summary>Request termination with failure.</summary>
             Failure
         }
 
-        // To use
-        // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
-        // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static class AppMetadata
+        {
+            /// <summary>
+            /// The human-readable name of the application, e.g. "My Game 2: Quartzi's Universe" <br></br>
+            /// This will show up anywhere the OS shows the name of the application separately from window titles.
+            /// </summary>
+            public const string Name = "SDL.app.metadata.name";
+
+            /// <summary>The version of the app, e.g "1.0.0beta5" or a git hash.</summary>
+            public const string Version = "SDL.app.metadata.version";
+
+            /// <summary>A unique reverse-domain identifier, e.g. "com.example.mygame2".</summary>
+            public const string Identifier = "SDL.app.metadata.identifier";
+
+            /// <summary>The human-readable name of the creator/developer, e.g. "Quartzi".</summary>
+            public const string Creator = "SDL.app.metadata.creator";
+
+            /// <summary>The human-readable copyright notice, kept to one line.</summary>
+            public const string Copyright = "SDL.app.metadata.copyright";
+
+            /// <summary>A URL to the app on the web (product page, storefront, GitHub, etc.).</summary>
+            public const string Url = "SDL.app.metadata.url";
+
+            /// <summary>The type of application: "game", "mediaplayer", or "application" (default).</summary>
+            public const string Type = "SDL.app.metadata.type";
+        }
 
         #region Init
 
