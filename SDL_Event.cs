@@ -794,17 +794,18 @@ namespace SDL3
 
         /// <summary>Poll for currently pending events.</summary>
         /// <param name="sdlEvent">The Event structure to be filled with the next event from the queue, or NULL.</param>
+        /// <returns>True if this got an event or false if there are none available.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PollEvent")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
-        public static unsafe partial byte PollEvent(Event* sdlEvent);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool PollEvent(Event* sdlEvent);
 
         /// <inheritdoc cref="PollEvent(Event*)"/>
-        /// <returns>True if this got an event or false if there are none available.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool PollEvent(out Event sdlEvent)
         {
             Event e;
-            bool result = PollEvent(&e) != 0;
+            bool result = PollEvent(&e);
             sdlEvent = e;
             return result;
         }
@@ -815,17 +816,18 @@ namespace SDL3
 
         /// <summary>Wait indefinetly for the next available event.</summary>
         /// <param name="sdlEvent">Filled with the next event.</param>
+        /// <returns>True on success or false if there was an error while waiting for events.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitEvent")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial byte WaitEvent(Event* sdlEvent);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool WaitEvent(Event* sdlEvent);
 
         /// <inheritdoc cref="WaitEvent(Event*)"/>
-        /// <returns>True on success or false if there was an error while waiting for events.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool WaitEvent(out Event sdlEvent)
         {
             Event e;
-            bool result = WaitEvent(&e) != 0;
+            bool result = WaitEvent(&e);
             sdlEvent = e;
             return result;
         }
@@ -837,17 +839,18 @@ namespace SDL3
         /// <summary>Wait until the specified timeout (in milliseconds) for the next available event.</summary>
         /// <param name="sdlEvent">The Event structure to be fulled with the next event from the queue, or NULL.</param>
         /// <param name="timeoutMs">The maximum number of milliseconds to wait for the next available event.</param>
+        /// <returns>True if this got an event or false if the timout elapsed without any events availabe.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WaitEventTimeout")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial byte WaitEventTimeout(Event* sdlEvent, int timeoutMs);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool WaitEventTimeout(Event* sdlEvent, int timeoutMs);
 
         /// <inheritdoc cref="WaitEventTimeout(Event*, int)"/>
-        /// <returns>True if this got an event or false if the timout elapsed without any events availabe.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool WaitEventTimeout(out Event sdlEvent, int timeoutMs)
         {
             Event e;
-            bool result = WaitEventTimeout(&e, timeoutMs) != 0;
+            bool result = WaitEventTimeout(&e, timeoutMs);
             sdlEvent = e;
             return result;
         }
@@ -858,18 +861,19 @@ namespace SDL3
 
         /// <summary>Add an event to the event queue.</summary>
         /// <param name="sdlEvent">The Event to be added to the queue.</param>
+        /// <returns>True on success, false if the event was filtered or on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_PushEvent")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial byte PushEvent(Event* sdlEvent);
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool PushEvent(Event* sdlEvent);
 
         /// <inheritdoc cref="PushEvent(Event*)"/>
-        /// <returns>True on success, false if the event was filtered or on failure.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe bool PushEvent(ref Event sdlEvent)
         {
             fixed(Event* ptr = &sdlEvent)
             {
-                return PushEvent(ptr) != 0;
+                return PushEvent(ptr);
             }
         }
 
@@ -882,31 +886,42 @@ namespace SDL3
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate bool EventFilter(IntPtr userdata, ref Event _event);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetEventFilter", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetEventFilter(EventFilter filter, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetEventFilter")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void SetEventFilter(EventFilter filter, IntPtr userData);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetEventFilter", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool GetEventFilter(EventFilter filter, ref IntPtr userData); // void*, Event*
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetEventFilter")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetEventFilter(EventFilter filter, ref IntPtr userData); // void*, Event*
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_AddEventWatch", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void AddEventWatch(EventFilter filter, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_AddEventWatch")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void AddEventWatch(EventFilter filter, IntPtr userData);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RemoveEventWatch", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void RemoveEventWatch(EventFilter filter, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RemoveEventWatch")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void RemoveEventWatch(EventFilter filter, IntPtr userData);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_FilterEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void FilterEvents(EventFilter filter, IntPtr userData);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_FilterEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void FilterEvents(EventFilter filter, IntPtr userData);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetEventEnabled", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void SetEventEnabled(EventType type, bool enabled);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetEventEnabled")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void SetEventEnabled(EventType type, [MarshalAs(UnmanagedType.I1)] bool enabled);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_EventEnabled", CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool EventEnabled(EventType type);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_EventEnabled")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool EventEnabled(EventType type);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_RegisterEvents", CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint RegisterEvents(int numEvents);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RegisterEvents")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial uint RegisterEvents(int numEvents);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFromEvent", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetWindowFromEvent(ref Event _event);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFromEvent")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr GetWindowFromEvent(ref Event _event);
     }
 }
