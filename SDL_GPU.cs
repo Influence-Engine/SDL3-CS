@@ -1070,6 +1070,124 @@ namespace SDL3
 
             #endregion
 
+
+            #region Graphics State
+
+            #region BeginGPURenderPass
+
+            /// <summary>Begins a render pass on a command buffer.</summary>
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPURenderPass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr BeginGPURenderPass(IntPtr commandBuffer, in ColorTargetInfo colorTargetInfos, uint numColorTargets, IntPtr depthStencilTargetInfo);
+
+            /// <inheritdoc cref="BeginGPURenderPass(nint, in ColorTargetInfo, uint, nint)"/>
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPURenderPass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial IntPtr BeginGPURenderPassWithDepth(IntPtr commandBuffer, ref ColorTargetInfo colorTargetInfos, uint numColorTargets, ref DepthStencilTargetInfo depthStencilTargetInfo);
+
+            /// <inheritdoc cref="BeginGPURenderPass(nint, in ColorTargetInfo, uint, nint)"/>
+            /// <remarks>Use this overload when no depth-stencil target is needed.</remarks>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static unsafe IntPtr BeginGPURenderPass(IntPtr commandBuffer, ReadOnlySpan<ColorTargetInfo> colorTargets)
+            {
+                fixed (ColorTargetInfo* ptr = colorTargets)
+                {
+                    return BeginGPURenderPass(commandBuffer, ref *ptr, (uint)colorTargets.Length, IntPtr.Zero);
+                }
+            }
+
+            /// <inheritdoc cref="BeginGPURenderPass(nint, in ColorTargetInfo, uint, nint)"/>
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static unsafe IntPtr BeginGPURenderPass(IntPtr commandBuffer, ReadOnlySpan<ColorTargetInfo> colorTargets, in DepthStencilTargetInfo depthStencilTargetInfo)
+            {
+                fixed(ColorTargetInfo* cPtr = colorTargets)
+                {
+                    fixed(DepthStencilTargetInfo* dPtr = &depthStencilTargetInfo)
+                    {
+                        return BeginGPURenderPassWithDepth(commandBuffer, ref *cPtr, (uint)colorTargets.Length, ref *dPtr);
+                    }
+                }
+            }
+
+            #endregion
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUGraphicsPipeline")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void BindGPUGraphicsPipeline(IntPtr renderPass, IntPtr graphicsPipeline);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUViewport")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUViewport(IntPtr renderPass, in Viewport viewport);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUScissor")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUScissor(IntPtr renderPass, in Rect scissor);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetBlendConstants")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUBlendConstants(IntPtr renderPass, FColor blendConstants);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUStencilReference")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUStencilReference(IntPtr renderPass, byte reference);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexBuffers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUVertexBuffers(IntPtr renderPass, uint firstSlot, in BufferBinding bindings, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUIndexBuffer")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUIndexBuffer(IntPtr renderPass, in BufferBinding binding, IndexElementSize indexElementSize);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexSamplers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUVertexSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexStorageTextures")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUVertexStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertextStorageBuffers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUVertexStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentSamplers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUFragmentSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentStorageTextures")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUFragmentStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentStorageBuffers")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void SetGPUFragmentStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
+
+            #region Drawing
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DrawGPUIndexedPrimitives")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DrawGPUIndexedPrimitives(IntPtr renderPass, uint numIndex, uint numInstances, uint firstIndex, int vertexOffset, uint firstInstance);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DrawGPUPrimitives")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DrawGPUPrimitives(IntPtr renderPass, uint numVertices, uint numInstances, uint firstVertex, uint firstInstance);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DrawGPUPrimitivesIndirect")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DrawGPUPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, uint offset, uint drawCount);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DrawGPUIndexedPrimitivesIndirect")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void DrawGPUIndexedPrimitivesIndirect(IntPtr renderPass, IntPtr buffer, uint offset, uint drawCount);
+
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_EndGPURenderPass")]
+            [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+            public static partial void EndGPURenderPass(IntPtr renderPass);
+
+            #endregion
+
+            #endregion
         }
     }
 }
