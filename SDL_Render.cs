@@ -6,6 +6,17 @@ namespace SDL3
 {
     public static partial class SDL
     {
+
+        #region Constants
+
+        public const string SoftwareRenderer = "software";
+        public const string GPURenderer = "gpu";
+        public const int DebugTextFontCharacterSize = 8;
+        public const int RendererVSyncDisabled = 0;
+        public const int RendererVSyncAdaptive = -1;
+
+        #endregion
+
         /// <summary>Vertex Structure</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct Vertex
@@ -21,6 +32,21 @@ namespace SDL3
             Static,
             Streaming,
             Target
+        }
+
+        /// <summary>The addressing mode for a texture when used in RenderGeometry().</summary>
+        public enum TextureAddressMode
+        {
+            Invalid = -1,
+
+            /// <summary>Default: Wrap if coordinate are outside [0, 1]</summary>
+            Auto,
+
+            /// <summary>Clamp coordinates to [0, 1]</summary>
+            Clamp,
+
+            /// <summary>Tile/Repeat the texture</summary>
+            Wrap
         }
 
         /// <summary>How the logical size is mapped to the output.</summary>
@@ -44,31 +70,23 @@ namespace SDL3
             int refCount;
         }
 
-       // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
-       // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        // [LibraryImport(nativeLibraryName, EntryPoint = "Entry")]
+        // [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
 
+        #region Rendere Creation / Query
 
         /// <summary>Get the numver of 2D rendering drivers available for the current display. </summary>
         /// <returns></returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetNumRenderDrivers")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial int GetNumRenderDrivers();
-
-        #region GetRenderDriver
 
         /// <summary>Get the name of a built-in 2D rendering driver.</summary>
         /// <param name="index">Index from 0 to (<see cref="GetNumRenderDrivers"/> - 1).</param>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDriver")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        private static partial IntPtr Internal_GetRenderDriver(int index);
-
-        /// <inheritdoc cref="Internal_GetRenderDriver(int)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string? GetRenderDriver(int index) => Marshal.PtrToStringUTF8(Internal_GetRenderDriver(index));
-
-        #endregion
-
-        #region CreateWindowAndRenderer
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetRenderDriver(int index);
 
         /// <summary>Create a window and default renderer.</summary>
         /// <param name="title">Title of the window.</param>
@@ -78,62 +96,79 @@ namespace SDL3
         /// <param name="window">Pointer filled with the window.</param>
         /// <param name="renderer">Pointer filled with the renderer.</param>
         /// <returns>True on success or false on failure.</returns>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateWindowAndRenderer")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateWindowAndRenderer", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static unsafe partial bool CreateWindowAndRenderer(byte* title, int width, int height, WindowFlags flags, IntPtr window, IntPtr renderer);
-
-        /// <inheritdoc cref="CreateWindowAndRenderer(byte*, int, int, WindowFlags, nint, nint)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe bool CreateWindowAndRenderer(string title, int width, int height, WindowFlags flags, IntPtr window, IntPtr renderer)
-        {
-            int utf8TitleBufferSize = Utility.UTF8Size(title);
-            byte* utf8Title = stackalloc byte[utf8TitleBufferSize];
-            return CreateWindowAndRenderer(Utility.UTF8Encode(title, utf8Title, utf8TitleBufferSize), width, height, flags, window, renderer);
-        }
-
-        #endregion
-
-        #region CreateRenderer
+        public static partial bool CreateWindowAndRenderer(string title, int width, int height, WindowFlags flags, out nint window, out nint renderer);
 
         /// <summary>Create a 2D rendering context for a window.</summary>
         /// <param name="window">The window where rendering is displayed.</param>
         /// <param name="name">The name of the rendering driver to initialize, or NULL to let SDL choose one.</param>
         /// <returns>A valid rendering pointer or 0 on failure.</returns>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateRenderer")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateRenderer", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial IntPtr CreateRenderer(IntPtr window, byte* name);
+        public static partial nint CreateRenderer(nint window, string? name);
 
-        /// <inheritdoc cref="CreateRenderer(nint, byte*)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static unsafe IntPtr CreateRenderer(IntPtr window, string name)
-        {
-            int utf8TitleBufferSize = Utility.UTF8Size(name);
-            byte* utf8Title = stackalloc byte[utf8TitleBufferSize];
-            return CreateRenderer(window, Utility.UTF8Encode(name, utf8Title, utf8TitleBufferSize));
-        }
+        /// <summary>Create a 2D rendering context for a window, with the specified properties.</summary>
+        /// <param name="props">The properties ID to use.</param>
+        /// <returns>A valid renderer or NULL on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateRendererWithProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateRendererWithProperties(uint props);
+
+        /// <summary>Create a 2D GPU rendering context. If <paramref name="device"/> is NULL, a device will be created internally.</summary>
+        /// <param name="device">The GPU device to use, or NULL to create one.</param>
+        /// <param name="window">The window to render to, or NULL for an offscreen renderer.</param>
+        /// <returns>A valid renderer or NULL on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateGPURenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateGPURenderer(nint device, nint window);
+
+        /// <summary>Return the GPU device used by a renderer, or NULL if not a GPU renderer.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPURendererDevice")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial nint GetGPURendererDevice(nint renderer);
+
+        /// <summary>Create a 2D software rendering context for a surface.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSoftwareRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateSoftwareRenderer(nint surface);
+
+        /// <summary>Get the renderer associated with a window.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial nint GetRenderer(nint window);
+
+        /// <summary>Get the window associated with a renderer.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderWindow")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial nint GetRenderWindow(nint renderer);
+
+        /// <summary>Get the name of a renderer.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRendererName")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetRendererName(nint renderer);
+
+        /// <summary>Get the properties associated with a renderer.</summary>
+        /// <returns>A valid property ID on success or 0 on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRendererProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial uint GetRendererProperties(nint renderer);
+
+        /// <summary>Get the output size in pixels of a rendering context.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderOutputSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetRenderOutputSize(nint renderer, out int w, out int h);
+
+        /// <summary>Get the current output size in pixels of a rendering context.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentRenderOutputSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetCurrentRenderOutputSize(nint renderer, out int w, out int h);
 
         #endregion
 
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSoftwareRenderer")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial IntPtr CreateSoftwareRenderer(IntPtr surface);
-
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderer")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial IntPtr GetRenderer(IntPtr window);
-
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderWindow")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial IntPtr GetRenderWindow(IntPtr renderer);
-
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderOutputSize")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
-        public static partial int GetRenderOutputSize(IntPtr renderer, out int w, out int h);
-
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentRenderOutputSize")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
-        public static partial int GetCurrentRenderOutputSize(IntPtr renderer, out int w, out int h);
+        #region Texture Creation / Query
 
         /// <summary>Create a texture for a rendering context.</summary>
         /// <param name="renderer">The rendering context.</param>
@@ -142,16 +177,48 @@ namespace SDL3
         /// <param name="w">Width of the texture in pixels.</param>
         /// <param name="h">Height of the texture in pixels.</param>
         /// <returns>Pointer to the created texture or NULL on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateTexture(IntPtr renderer, PixelFormat format, TextureAccess access, int w, int h);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateTexture(nint renderer, PixelFormat format, TextureAccess access, int w, int h);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateTextureFromSurface", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr CreateTextureFromSurface(IntPtr renderer, IntPtr surface);
+        /// <summary>Create a texture from an existing surface.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateTextureFromSurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateTextureFromSurface(nint renderer, nint surface);
 
-        // TODO SDL_CreateTextureWithPropertiesß
+        /// <summary>Create a texture with the specified properties.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateTextureWithProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateTextureWithProperties(nint renderer, uint props);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_QueryTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int QueryTexture(IntPtr renderer, out uint format, out int access, out int w, out int h);
+        /// <summary>Get the properties associated with a texture.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetTextureProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial uint GetTextureProperties(nint texture);
+
+        /// <summary>Get the renderer that created a texture.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRendererFromTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial nint GetRendererFromTexture(nint texture);
+
+        /// <summary>Get the renderer that created a texture.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetTextureSize")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetTextureSize(nint texture, out float w, out float h);
+
+        /// <summary>Set the palette used by a texture.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetTexturePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetTexturePalette(nint texture,  nint palette);
+
+        /// <summary>Get the palette used by a texture.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetTexturePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint GetTexturePalette(nint texture);
+
+        #endregion
 
         //TODO SDL_SetTextureColorMod
         //TODO SDL_GetTextureColorMod
@@ -168,26 +235,59 @@ namespace SDL3
         //TODO SDL_SetTextureUserData
         //TODO SDL_GetTextureUserData
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_UpdateTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int UpdateTexture(IntPtr texture, ref Rect rect, IntPtr pixel, int pitch);
+        #region Texture Pixel Update / Lock
 
-        //TODO SDL_UpdateYUVTexture
-        //TODO SDL_UpdateNVTexture
+        /// <summary>Update the given texture rectangle with new pixel data.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UpdateTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool UpdateTexture(nint texture, ref Rect rect, nint pixel, int pitch);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_LockTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int LockTexture(IntPtr texture, ref Rect rect, out IntPtr pixel, out int pitch);
+        /// <summary>Update a planar YV12/IYUV texture with new pixel data.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UpdateYUVTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool UpdateYUVTexture(nint texture, ref Rect rect, byte* Yplane, int Ypitch, byte* Uplane, int Upitch, byte* Vplane, int Vpitch);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_LockTextureToSurface", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int LockTextureToSurface(IntPtr texture, ref Rect rect, out IntPtr surface);
+        /// <summary>Update a planar NV12/NV21 texture with new pixels.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UpdateNVTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool UpdateNVTexture(nint texture, ref Rect rect, byte* Yplane, int Ypitch, byte* UVplane, int UVpitch);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_UnlockTexture", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void UnlockTexture(IntPtr texture);
+        /// <summary>Lock a portion of the texture for write-only pixel access.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_LockTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool LockTexture(nint texture, ref Rect rect, out nint pixel, out int pitch);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_SetRenderTarget", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int SetRenderTarget(IntPtr renderer, IntPtr texture);
+        /// <summary>Lock a portion of the texture for write-only access and expose it as an SDL surface.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_LockTextureToSurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool LockTextureToSurface(nint texture, ref Rect rect, out nint surface);
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRenderTarget", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr GetRenderTarget(IntPtr renderer);
+        /// <summary>Unlock a texture, uploading the changes to video memory.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UnlockTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void UnlockTexture(nint texture);
+
+        #endregion
+
+        #region Render Target
+
+        /// <summary>Set a texture as the current rendering target. Pass NULL to render to the window.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetRenderTarget")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetRenderTarget(nint renderer, nint texture);
+
+        /// <summary>Get the current render target. Returns NULL for the default (window) target.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderTarget")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial nint GetRenderTarget(nint renderer);
+
+        #endregion
 
         //TODO SDL_SetRenderLogicalPresentation
         //TODO SDL_GetRenderLogicalPresentation
