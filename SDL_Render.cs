@@ -730,10 +730,21 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RenderTexture(nint renderer, nint texture, ref FRect srcRect, ref FRect dstRect);
 
+        /// <inheritdoc cref="RenderTexture"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture(nint renderer, nint texture, nint srcRect, ref FRect dstRect);
+
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureRotated")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RenderTextureRotated(nint renderer, nint texture, ref FRect srcRect, ref FRect dstRect, double angle, ref FPoint center, int flip);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureRotated")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTextureRotated(nint renderer, nint texture, nint srcRect, ref FRect dstRect, double angle, ref FPoint center, int flip);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureAffine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

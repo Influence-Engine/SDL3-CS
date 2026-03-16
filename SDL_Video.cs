@@ -221,8 +221,8 @@ namespace SDL3
 
         /// <summary>Create a window with the specified dimensions and flags.</summary>
         /// <param name="title">The title of the window.</param>
-        /// <param name="width">The width of the window.</param>
-        /// <param name="height">The height of the window.</param>
+        /// <param name="w">The width of the window.</param>
+        /// <param name="h">The height of the window.</param>
         /// <param name="flags">WindowFlags OR'd together.</param>
         /// <returns>The window pointer that was created or 0 on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateWindow", StringMarshalling = StringMarshalling.Utf8)]
