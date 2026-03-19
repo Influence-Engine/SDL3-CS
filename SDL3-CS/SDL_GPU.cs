@@ -1297,7 +1297,7 @@ namespace SDL3
             [return: MarshalAs(UnmanagedType.I1)]
             public static partial bool ClaimWindowForGPUDevice(IntPtr device, IntPtr window);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseWindowForGPUDevice")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ReleaseWindowFromGPUDevice")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void ReleaseWindowFromGPUDevice(IntPtr device, IntPtr window);
 
