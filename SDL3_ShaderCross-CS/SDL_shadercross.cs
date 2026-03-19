@@ -179,10 +179,12 @@ namespace SDL3
 
         #region Format Support Queries
 
+        /// <summary>Get the SDL_GPUShaderFormat flags supported by SPIRV cross-compilation.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_GetSPIRVShaderFormats")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetSPIRVShaderFormats();
 
+        /// <summary>Get the SDL_GPUShaderFormat flags supported by HLSL cross-compilation.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_GetHLSLShaderFormats")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetHLSLShaderFormats();
@@ -191,18 +193,22 @@ namespace SDL3
 
         #region SPIRV to text / bytecode Transpilation
 
+        /// <summary>Transpile SPIRV to MSL source code.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_TranspileMSLFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint TranspileMSLFromSPIRV(SPIRV_Info* info);
 
+        /// <summary>Transpile SPIRV to HLSL source code.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_TranspileHLSLFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint TranspileHLSLFromSPIRV(SPIRV_Info* info);
 
+        /// <summary>Compile SPIRV to DXBC bytecode.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXBCFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileDXBCFromSPIRV(SPIRV_Info* info, out nuint size);
 
+        /// <summary>Compile SPIRV to DXIL bytecode.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXILFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileDXILFromSPIRV(SPIRV_Info* info, out nuint size);
@@ -211,10 +217,28 @@ namespace SDL3
 
         #region SPIRV to SDL GPU objects
 
+        /// <summary>
+        /// Compile an SDL_GPUShader directly from SPIRV.<br></br>
+        /// For HLSL source, first obtain SPIRV via <see cref="CompileSPIRVFromHLSL"/>.
+        /// </summary>
+        /// <param name="device">The SDL GPU device.</param>
+        /// <param name="info">Pointer to a <see cref="SPIRV_Info"/> struct.</param>
+        /// <param name="resourceInfo">Pointer to resource binding info. Can be optained from <see cref="ReflectGraphicsSPIRV"/>.</param>
+        /// <param name="props">Properties ID for extra shader metadata, or 0.</param>
+        /// <returns>A compiled SDL_GPUShader, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileGraphicsShaderFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileGraphicsShaderFromSPIRV(nint device, SPIRV_Info* info, GraphicsShaderResourceInfo* resourceInfo, uint props);
 
+        /// <summary>
+        /// Compile an SDL_GPUComputePipeline directly from SPIRV.<br></br>
+        /// For HLSL source, first obtain SPIRV via <see cref="CompileSPIRVFromHLSL"/>.
+        /// </summary>
+        /// <param name="device">The SDL GPU device.</param>
+        /// <param name="info">Pointer to a <see cref="SPIRV_Info"/> struct.</param>
+        /// <param name="metadata">Pointer to compute pipeline metadata. Can be optained from <see cref="ReflectComputeSPIRV"/>.</param>
+        /// <param name="props">Properties ID for extra shader metadata, or 0.</param>
+        /// <returns>A compiled SDL_GPUComputePipeline, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileComputePipelineFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileComputePipelineFromSPIRV(nint device, SPIRV_Info* info, ComputePipelineMetadata* metadata, uint props);
@@ -223,10 +247,26 @@ namespace SDL3
 
         #region SPIRV Reflection
 
+        /// <summary>
+        /// Reflect graphics shader metadata from SPIRV bytecode.<br></br>
+        /// The returned pointer is SDL_malloc'd. Free with <c>SDL.Free()</c> when done.
+        /// </summary>
+        /// <param name="bytecode">Pointer to SPIRV bytecode.</param>
+        /// <param name="bytecodeSize">Length of the bytecode in bytes.</param>
+        /// <param name="props">Properties ID for extra metadata, or 0.</param>
+        /// <returns>A pointer to a <see cref="GraphicsShaderMetadata"/> struct, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_ReflectGraphicsSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial GraphicsShaderMetadata* ReflectGraphicsSPIRV(byte* bytecode, nuint bytecodeSize, uint props);
 
+        /// <summary>
+        /// Reflect compute pipeline metadata from SPIRV bytecode.<br></br>
+        /// The returned pointer is SDL_malloc'd. Free with <c>SDL.Free()</c> when done.
+        /// </summary>
+        /// <param name="bytecode">Pointer to SPIRV bytecode.</param>
+        /// <param name="bytecodeSize">Length of the bytecode in bytes.</param>
+        /// <param name="props">Properties ID for extra metadata, or 0.</param>
+        /// <returns>A pointer to a <see cref="ComputePipelineMetadata"/> struct, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_ReflectComputeSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial ComputePipelineMetadata* ReflectComputeSPIRV(byte* bytecode, nuint bytecodeSize, uint props);
@@ -235,14 +275,35 @@ namespace SDL3
 
         #region HLSL to bytecode
 
+        /// <summary>
+        /// Compile HLSL to DXBC bytecode via a SPIRV-Cross round trip.<br></br>
+        /// The returned pointer is SDL_malloc'd. Free with <c>SDL.Free()</c> when done.
+        /// </summary>
+        /// <param name="info">Pointer to a <see cref="HLSL_Info"/> struct.</param>
+        /// <param name="size">Filled with the size of the returned buffer in bytes.</param>
+        /// <returns>An SDL_malloc'd buffer containing DXBC bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXBCFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileDXBCFromHLSL(HLSL_Info* info, out nuint size);
 
+        /// <summary>
+        /// Compile HLSL to DXIL bytecode via a SPIRV-Cross round trip.<br></br>
+        /// The returned pointer is SDL_malloc'd. Free with <c>SDL.Free()</c> when done.
+        /// </summary>
+        /// <param name="info">Pointer to a <see cref="HLSL_Info"/> struct.</param>
+        /// <param name="size">Filled with the size of the returned buffer in bytes.</param>
+        /// <returns>An SDL_malloc'd buffer containing DXIL bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXILFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileDXILFromHLSL(HLSL_Info* info, out nuint size);
 
+        /// <summary>
+        /// Compile HLSL to SPIRV bytecode.<br></br>
+        /// The returned pointer is SDL_malloc'd. Free with <c>SDL.Free()</c> when done.
+        /// </summary>
+        /// <param name="info">Pointer to a <see cref="HLSL_Info"/> struct.</param>
+        /// <param name="size">Filled with the size of the returned buffer in bytes.</param>
+        /// <returns>An SDL_malloc'd buffer containing SPIRV bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileSPIRVFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial nint CompileSPIRVFromHLSL(HLSL_Info* info, out nuint size);
