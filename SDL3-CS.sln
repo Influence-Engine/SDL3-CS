@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.8.34112.27
+# Visual Studio Version 18
+VisualStudioVersion = 18.4.11605.240
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SDL3-CS", "SDL3-CS.csproj", "{84C6AC7E-B348-4C0E-B090-2849C3E9E41A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL3-CS", "SDL3-CS\SDL3-CS.csproj", "{BA394322-CA77-4D28-8C1A-4BF8BB36F121}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL3_Image-CS", "SDL3_Image-CS\SDL3_Image-CS.csproj", "{8DA074C2-CB73-2E69-0D6D-A0E91D7792C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84C6AC7E-B348-4C0E-B090-2849C3E9E41A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84C6AC7E-B348-4C0E-B090-2849C3E9E41A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84C6AC7E-B348-4C0E-B090-2849C3E9E41A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84C6AC7E-B348-4C0E-B090-2849C3E9E41A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA394322-CA77-4D28-8C1A-4BF8BB36F121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA394322-CA77-4D28-8C1A-4BF8BB36F121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA394322-CA77-4D28-8C1A-4BF8BB36F121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA394322-CA77-4D28-8C1A-4BF8BB36F121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DA074C2-CB73-2E69-0D6D-A0E91D7792C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DA074C2-CB73-2E69-0D6D-A0E91D7792C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DA074C2-CB73-2E69-0D6D-A0E91D7792C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DA074C2-CB73-2E69-0D6D-A0E91D7792C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
