@@ -1248,7 +1248,7 @@ namespace SDL3
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UploadToGPUBuffer")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void UploadToGPUBufer(IntPtr copyPass, in TransferBufferLocation source, in BufferRegion destination, [MarshalAs(UnmanagedType.I1)] bool cycle);
+            public static partial void UploadToGPUBuffer(IntPtr copyPass, in TransferBufferLocation source, in BufferRegion destination, [MarshalAs(UnmanagedType.I1)] bool cycle);
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CopyGPUTextureToTexture")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
