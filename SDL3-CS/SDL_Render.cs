@@ -316,6 +316,12 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UpdateTexture")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
+        public unsafe static partial bool UpdateTexture(nint texture, Rect* rect, nint pixel, int pitch);
+
+        /// <inheritdoc cref="UpdateTexture"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UpdateTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool UpdateTexture(nint texture, ref Rect rect, nint pixel, int pitch);
 
         /// <summary>Update a planar YV12/IYUV texture with new pixel data.</summary>
@@ -725,6 +731,12 @@ namespace SDL3
         /// <param name="srcRect">Pointer to the source rectangle, or NULL for the entire texture.</param>
         /// <param name="dstRect">Pointer to the destination rectangle, or NULL for the entire rendering target.</param>
         /// <returns>True on success or false on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public unsafe static partial bool RenderTexture(nint renderer, nint texture, FRect* srcRect, FRect* dstRect);
+
+        /// <inheritdoc cref="RenderTexture"/>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
