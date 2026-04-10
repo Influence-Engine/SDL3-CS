@@ -221,5 +221,28 @@ namespace SDL3
             public float w;
             public float h;
         }
+
+        /// <summary>Convert <see cref="SDL.Rect"/> to <see cref="SDL.FRect"/>.</summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void RectToFRect(in Rect rect, out FRect fRect)
+        {
+            fRect.x = rect.x;
+            fRect.y = rect.y;
+            fRect.w = rect.w;
+            fRect.h = rect.h;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool PointInRect(in Point p, in Rect rect)
+        {
+            return p.x >= rect.x && p.x < rect.x + rect.w &&
+                p.y >= rect.y && p.y < rect.y + rect.h;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RectEmpty(in Rect rect) => rect.w <= 0 || rect.h <= 0;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RectsEqual(in Rect a, in Rect b) => a.x == b.x && a.y == b.y && a.w == b.w && a.h == b.h;
     }
 }
