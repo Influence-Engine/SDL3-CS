@@ -78,6 +78,7 @@ namespace SDL3
 
         #region Delegates
 
+        /// <summary>A callback used to transform mouse motion delta from raw values.</summary>
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void MouseMotionTransformCallback(nint userdata, ulong timestamp, nint window, uint mouseID, ref float x, ref float y);
 
@@ -104,6 +105,7 @@ namespace SDL3
             return new Span<uint>(ptr.ToPointer(), count);
         }
 
+        /// <summary>Get the name of a mouse.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMouseNameForID", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial string? GetMouseNameForID(uint instanceID);
@@ -115,10 +117,12 @@ namespace SDL3
 
         #region Mouse State
 
+        /// <summary>Get SDL's synchronous mouse button state and position.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMouseState")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetMouseState(out float x, out float y);
 
+        /// <inheritdoc cref="GetMouseState(out float, out float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint GetMouseState(out FPoint position)
         {
@@ -128,14 +132,16 @@ namespace SDL3
             return state;
         }
 
-
+        /// <summary>Get the synchronous mouse button state.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint GetMouseState() => GetMouseState(out float _, out float _);
 
+        /// <summary>Get the platforms asynchronous mouse button state and desktop relative position.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGlobalMouseState")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetGlobalMouseState(out float x, out float y);
 
+        /// <inheritdoc cref="GetGlobalMouseState(out float, out float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint GetGlobalMouseState(out FPoint position)
         {
@@ -145,13 +151,16 @@ namespace SDL3
             return state;
         }
 
+        /// <summary>Get the platforms asynchronous mouse button state.</summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint GetGlobalMouseState() => GetGlobalMouseState(out float _, out float _);
 
+        /// <summary>Get SDL's synchronous mouse button state and accumulated mouse delta.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRelativeMouseState")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetRelativeMouseState(out float x, out float y);
 
+        /// <inheritdoc cref="GetRelativeMouseState(out float, out float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint GetRelativeMouseState(out FPoint position)
         {
@@ -161,28 +170,30 @@ namespace SDL3
             return state;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static uint GetRelativeMouseState() => GetRelativeMouseState(out float _, out float _);
-
         #endregion
 
         #region Mouse Movement
 
+        /// <summary>Move the mouse cursor to the given position within the window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WarpMouseInWindow")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial void WarpMouseInWindow(nint window, float x, float y);
 
+        /// <inheritdoc cref="WarpMouseInWindow(nint, float, float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WarpMouseInWindow(nint window, FPoint position) => WarpMouseInWindow(window, position.x, position.y);
 
+        /// <summary>Move the mouse to the given position in global screen space.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_WarpMouseGlobal")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool WarpMouseGlobal(float x, float y);
 
+        /// <inheritdoc cref="WarpMouseGlobal(float, float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WarpMouseGlobal(FPoint position) => WarpMouseGlobal(position.x, position.y);
 
+        /// <summary>Set a user defined function by which to transform relative mouse inputs..</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetRelativeMouseTransform")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -192,11 +203,13 @@ namespace SDL3
 
         #region Relative Mouse Mode
 
+        /// <summary>Set relative mouse mode for a window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowRelativeMouseMode")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetWindowRelativeMouseMode(nint window, [MarshalAs(UnmanagedType.I1)] bool enabled);
 
+        /// <summary>Query whether relative mouse mode is enabled for a window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowRelativeMouseMode")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -206,6 +219,7 @@ namespace SDL3
 
         #region Mouse Capture
 
+        /// <summary>Capture the mouse to track input outside an SDL window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CaptureMouse")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         [return: MarshalAs(UnmanagedType.I1)]
