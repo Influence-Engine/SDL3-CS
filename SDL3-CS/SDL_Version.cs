@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -37,15 +37,15 @@ namespace SDL3
 
         /// <summary>Get the version of SDL that is linked.</summary>
         /// <returns>The version of the linked library.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetVersion", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int GetVersion();
-
-
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetRevision", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr Internal_GetRevision();
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetVersion")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial int GetVersion();
 
         /// <summary>Get the code revision of SDL that is linked.</summary>
         /// <returns>An arbitrary string, uniquely identifying the exact revision of the SDL library in use.</returns>
-        public static string GetRevision() => Marshal.PtrToStringUTF8(Internal_GetRevision());
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRevision")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetRevision();
     }
 }

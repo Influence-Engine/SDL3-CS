@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -271,9 +272,10 @@ namespace SDL3
             public byte Ashift;
         }
 
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatName", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr Internal_GetPixelFormatName(uint format);
-        public static string GetPixelFormatName(uint format) => Marshal.PtrToStringUTF8(Internal_GetPixelFormatName(format));
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatName")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetPixelFormatName(uint format);
 
         // TODO SDL_GetPixelFormatMasks
         // TODO SDL_GetPixelFormatDetails
