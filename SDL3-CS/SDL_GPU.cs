@@ -1194,19 +1194,19 @@ namespace SDL3
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial IntPtr BeginGPUComputePass(IntPtr commandBuffer, in StorageTextureReadWriteBinding storageTextureBindings, uint numStorageTextureBindings, in StorageBufferReadWriteBinding storageBufferBindings, uint numStorageBufferBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputePipeline")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUComputePipeline")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void BindGPUComputePipeline(IntPtr computePass, IntPtr computePipeline);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeSamplers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUComputeSamplers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void BindGPUComputeSamplers(IntPtr computePass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeStorageTextures")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUComputeStorageTextures")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void BindGPUComputeStorageTextures(IntPtr computePass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BeginGPUComputeStorageBuffers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUComputeStorageBuffers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void BindGPUComputeStorageBuffers(IntPtr computePass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
 
