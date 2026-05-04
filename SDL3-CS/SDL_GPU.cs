@@ -61,7 +61,7 @@ namespace SDL3
                 B5G6R5Unorm,
                 B5G5R5A1Unorm,
                 B4G4R4A4Unorm,
-                R8G8R8A8Unorm,
+                B8G8R8A8Unorm,
 
                 // Compressed Unsigned Normalized Float Color Formats
                 BC1RgbaUnorm,
@@ -606,7 +606,7 @@ namespace SDL3
             [StructLayout(LayoutKind.Sequential)]
             public struct ColorTargetBlendState
             {
-                public BlendFactor srcColorBlendfactor;
+                public BlendFactor srcColorBlendFactor;
                 public BlendFactor dstColorBlendFactor;
                 public BlendOp colorBlendOp;
                 public BlendFactor srcAlphaBlendfactor;
@@ -630,7 +630,7 @@ namespace SDL3
                 public uint numSamplers;
                 public uint numStorageTextures;
                 public uint numStorageBuffers;
-                public uint numUniformBuffesr;
+                public uint numUniformBuffers;
                 public uint props;
             }
 
@@ -1130,37 +1130,37 @@ namespace SDL3
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
             public static partial void SetGPUStencilReference(IntPtr renderPass, byte reference);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexBuffers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUVertexBuffers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUVertexBuffers(IntPtr renderPass, uint firstSlot, in BufferBinding bindings, uint numBindings);
+            public static partial void BindGPUVertexBuffers(IntPtr renderPass, uint firstSlot, in BufferBinding bindings, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUIndexBuffer")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUIndexBuffer")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUIndexBuffer(IntPtr renderPass, in BufferBinding binding, IndexElementSize indexElementSize);
+            public static partial void BindGPUIndexBuffer(IntPtr renderPass, in BufferBinding binding, IndexElementSize indexElementSize);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexSamplers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUVertexSamplers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUVertexSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
+            public static partial void BindGPUVertexSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertexStorageTextures")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUVertexStorageTextures")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUVertexStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
+            public static partial void BindGPUVertexStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUVertextStorageBuffers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUVertextStorageBuffers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUVertexStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
+            public static partial void BindGPUVertexStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentSamplers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUFragmentSamplers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUFragmentSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
+            public static partial void BindGPUFragmentSamplers(IntPtr renderPass, uint firstSlot, in TextureSamplerBinding textureSamplerBinding, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentStorageTextures")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUFragmentStorageTextures")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUFragmentStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
+            public static partial void BindGPUFragmentStorageTextures(IntPtr renderPass, uint firstSlot, in IntPtr storageTextures, uint numBindings);
 
-            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetGPUFragmentStorageBuffers")]
+            [LibraryImport(nativeLibraryName, EntryPoint = "SDL_BindGPUFragmentStorageBuffers")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            public static partial void SetGPUFragmentStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
+            public static partial void BindGPUFragmentStorageBuffers(IntPtr renderPass, uint firstSlot, in IntPtr storageBuffers, uint numBindings);
 
             #endregion
 
