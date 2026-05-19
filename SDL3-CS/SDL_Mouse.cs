@@ -191,7 +191,7 @@ namespace SDL3
 
         /// <inheritdoc cref="WarpMouseGlobal(float, float)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void WarpMouseGlobal(FPoint position) => WarpMouseGlobal(position.x, position.y);
+        public static bool WarpMouseGlobal(FPoint position) => WarpMouseGlobal(position.x, position.y);
 
         /// <summary>Set a user defined function by which to transform relative mouse inputs..</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetRelativeMouseTransform")]

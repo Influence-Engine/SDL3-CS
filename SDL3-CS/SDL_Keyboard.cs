@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -18,6 +19,16 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetKeyboards")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial uint* GetKeyboards(out int count);
+
+        /// <summary>Gets a list of currently connected keyboards.</summary>
+        public static unsafe Span<uint> GetKeyboards()
+        {
+            uint* ptr = GetKeyboards(out int count);
+            if (ptr == null || count == 0)
+                return Span<uint>.Empty;
+
+            return new Span<uint>(ptr, count);
+        }
 
         /// <summary>Get the name of a keyboard.</summary>
         /// <param name="instanceID">The keyboard instance ID.</param>
@@ -67,7 +78,7 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial KeyCode GetKeyFromScanCode(ScanCode scanCode, KeyMod modstate, [MarshalAs(UnmanagedType.I1)] bool keyEvent);
 
-        /// <summary>Get the scancode corresponding to the given key copde according to the current keyboard layout.</summary>
+        /// <summary>Get the scancode corresponding to the given key code according to the current keyboard layout.</summary>
         /// <param name="keyCode">Key the desired KeyCode to query.</param>
         /// <param name="modstate">A pointer to the modifier state that would be used when the scancode generates this key, may be NULL.</param>
         /// <returns>The ScanCode that corresponds to the given KeyCode.</returns>
