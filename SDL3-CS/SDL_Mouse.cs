@@ -90,12 +90,12 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool HasMouse();
 
-        /// <summary>Get a kist of currently connected mice.</summary>
+        /// <summary>Get a list of currently connected mice.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMice")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial nint GetMice(out int count);
 
-        /// <summary>Get a kist of currently connected mice as a span.</summary>
+        /// <summary>Get a list of currently connected mice as a span.</summary>
         public static unsafe Span<uint> GetMice()
         {
             nint ptr = GetMice(out int count);
