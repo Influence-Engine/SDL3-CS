@@ -104,7 +104,7 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.LPUTF8Str)]
         public static partial string? GetAudioDecoder(int index);
 
-        #region Mixer
+        #region Mixer Create Destroy
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_CreateMixerDevice")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -117,6 +117,10 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_DestroyMixer")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroyMixer(nint mixer);
+
+        #endregion
+
+        #region Mixer Properties
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetMixerProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
@@ -134,6 +138,10 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_UnlockMixer")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void UnlockMixer(nint mixer);
+
+        #endregion
+
+        #region Mixer Gain / Frequency
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_SetMixerGain")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -154,5 +162,6 @@ namespace SDL3
         public static partial float GetMixerFrequencyRatio(nint mixer);
 
         #endregion
+
     }
 }
