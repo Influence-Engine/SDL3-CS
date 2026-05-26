@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -563,9 +564,16 @@ namespace SDL3
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool RenderPoint(nint renderer, FPoint point) => RenderPoint(renderer, point.x, point.y);
 
+        /// <inheritdoc cref="RenderPoint(nint, float, float)"/>
+        /// <param name="point">The point.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderPoint(nint renderer, Vector2 point) => RenderPoint(renderer, point.X, point.Y);
+
         #endregion
 
         #region Points
+
+        #region FPoint Type
 
         /// <summary>Draw multiple points on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple points.</param>
@@ -592,6 +600,31 @@ namespace SDL3
 
         #endregion
 
+        #region Vector2 Type
+
+        /// <inheritdoc cref="RenderPoints(nint, FPoint*, int)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderPoints")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderPoints(nint renderer, Vector2* points, int count);
+
+        /// <inheritdoc cref="RenderPoints(nint, FPoint*, int)"/>
+        public static unsafe bool RenderPoints(nint renderer, ReadOnlySpan<Vector2> points)
+        {
+            fixed (Vector2* ptr = points)
+            {
+                return RenderPoints(renderer, ptr, points.Length);
+            }
+        }
+
+        /// <inheritdoc cref="RenderPoints(nint, FPoint*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderPoints(nint renderer, Vector2[] points) => RenderPoints(renderer, (ReadOnlySpan<Vector2>)points);
+
+        #endregion
+
+        #endregion
+
         #region Line
 
         /// <summary>Draw a line on the current rendering target at subpixel precision.</summary>
@@ -612,9 +645,17 @@ namespace SDL3
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool RenderLine(nint renderer, FPoint a, FPoint b) => RenderLine(renderer, a.x, a.y, b.x, b.y);
 
+        /// <inheritdoc cref="RenderLine(nint, float, float, float, float)"/>
+        /// <param name="a">Point A.</param>
+        /// <param name="b">Point B.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderLine(nint renderer, Vector2 a, Vector2 b) => RenderLine(renderer, a.X, a.Y, b.X, b.Y);
+
         #endregion
 
         #region Lines
+
+        #region FPoint Type
 
         /// <summary>Draw a series of connected lines on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple lines.</param>
@@ -641,6 +682,31 @@ namespace SDL3
 
         #endregion
 
+        #region Vector2 Type
+
+        /// <inheritdoc cref="RenderLines(nint, FPoint*, int)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderLines")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderLines(nint renderer, Vector2* points, int count);
+
+        /// <inheritdoc cref="RenderLines(nint, FPoint*, int)"/>
+        public static unsafe bool RenderLines(nint renderer, ReadOnlySpan<Vector2> points)
+        {
+            fixed (Vector2* ptr = points)
+            {
+                return RenderLines(renderer, ptr, points.Length);
+            }
+        }
+
+        /// <inheritdoc cref="RenderLines(nint, FPoint*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderLines(nint renderer, Vector2[] points) => RenderLines(renderer, (ReadOnlySpan<Vector2>)points);
+
+        #endregion
+
+        #endregion
+
         #region Rect
 
         /// <summary>Draw a rectangle on the current rendering target at subpixel precision.</summary>
@@ -652,9 +718,17 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RenderRect(nint renderer, ref FRect rect);
 
+        /// <inheritdoc cref="RenderRect(nint, ref FRect)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderRect")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderRect(nint renderer, ref Vector4 rect);
+
         #endregion
 
         #region Rects
+
+        #region FRect Type
 
         /// <summary>Draw multiple rectangles on the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should draw multiple rectangles.</param>
@@ -681,6 +755,31 @@ namespace SDL3
 
         #endregion
 
+        #region Vector4 Type
+
+        /// <inheritdoc cref="RenderRects(nint, FRect*, int)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderRects")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderRects(nint renderer, Vector4* rects, int count);
+
+        /// <inheritdoc cref="RenderRects(nint, FRect*, int)"/>
+        public static unsafe bool RenderRects(nint renderer, ReadOnlySpan<Vector4> rects)
+        {
+            fixed (Vector4* rectsPtr = rects)
+            {
+                return RenderRects(renderer, rectsPtr, rects.Length);
+            }
+        }
+
+        /// <inheritdoc cref="RenderRects(nint, FRect*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderRects(nint renderer, Vector4[] rects) => RenderRects(renderer, (ReadOnlySpan<Vector4>)rects);
+
+        #endregion
+
+        #endregion
+
         #region FillRect
 
         /// <summary>Fill a rectangle on the current rendering target with the drawing color at subpixel precision.</summary>
@@ -692,9 +791,17 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RenderFillRect(nint renderer, ref FRect rect);
 
+        /// <inheritdoc cref="RenderFillRect(nint, ref FRect)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRect")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderFillRect(nint renderer, ref Vector4 rect);
+
         #endregion
 
         #region FillRects
+
+        #region FRect Type
 
         /// <summary>Fill multiple rectangles on the current rendering target with the drawing color at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should fill multiple rectangles.</param>
@@ -721,9 +828,36 @@ namespace SDL3
 
         #endregion
 
+        #region Vector4 Type
+
+        /// <inheritdoc cref="RenderFillRects(nint, FRect*, int)"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderFillRects")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool RenderFillRects(nint renderer, Vector4* rects, int count);
+
+        /// <inheritdoc cref="RenderFillRects(nint, FRect*, int)"/>
+        public static unsafe bool RenderFillRects(nint renderer, ReadOnlySpan<Vector4> rects)
+        {
+            fixed (Vector4* rectsPtr = rects)
+            {
+                return RenderFillRects(renderer, rectsPtr, rects.Length);
+            }
+        }
+
+        /// <inheritdoc cref="RenderFillRects(nint, FRect*, int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderFillRects(nint renderer, Vector4[] rects) => RenderFillRects(renderer, (ReadOnlySpan<Vector4>)rects);
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region Texture Rendering
+
+        #region SDL Type
 
         /// <summary>Copy a portion of the texture to the current rendering target at subpixel precision.</summary>
         /// <param name="renderer">The renderer which should copy parts of a texture.</param>
@@ -777,6 +911,54 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool RenderTexture9GridTiled(nint renderer, nint texture, ref FRect srcRect, float leftWidth, float rightWidth, float topHeight, float bottomHeight, float scale, ref FRect dstRect, float tileScale);
+
+        #endregion
+
+        #region Numerics Type
+
+        /// <inheritdoc cref="RenderTexture"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture(nint renderer, nint texture, ref Vector4 srcRect, ref Vector4 dstRect);
+
+        /// <inheritdoc cref="RenderTexture"/>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture(nint renderer, nint texture, nint srcRect, ref Vector4 dstRect);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureRotated")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTextureRotated(nint renderer, nint texture, ref Vector4 srcRect, ref Vector4 dstRect, double angle, ref Vector2 center, int flip);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureRotated")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTextureRotated(nint renderer, nint texture, nint srcRect, ref Vector4 dstRect, double angle, ref Vector2 center, int flip);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureAffine")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTextureAffine(nint renderer, nint texture, ref Vector4 srcRect, ref Vector2 origin, ref Vector2 right, ref Vector2 down);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTextureTiled")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTextureTiled(nint renderer, nint texture, ref Vector4 srcRect, float scale, ref Vector4 dstRect);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture9Grid")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture9Grid(nint renderer, nint texture, ref Vector4 srcRect, float leftWidth, float rightWidth, float topHeight, float bottomHeight, float scale, ref Vector4 dstRect);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RenderTexture9GridTiled")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool RenderTexture9GridTiled(nint renderer, nint texture, ref Vector4 srcRect, float leftWidth, float rightWidth, float topHeight, float bottomHeight, float scale, ref Vector4 dstRect, float tileScale);
+
+        #endregion
 
         #endregion
 
@@ -902,6 +1084,9 @@ namespace SDL3
 
             return RenderGeometry(renderer, vertices);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool RenderCircle(nint renderer, Vector2 center, float radius, FColor color, int segments = 16) => RenderCircle(renderer, new FPoint(center.X, center.Y), radius, color, segments);
 
         #endregion
 
