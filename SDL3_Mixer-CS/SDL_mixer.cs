@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace SDL3
 {
@@ -45,7 +46,6 @@ namespace SDL3
 
         #endregion
 
-
         #region Property Names
 
         public static class AudioLoadProps
@@ -76,6 +76,82 @@ namespace SDL3
             public const string AppendSilenceMilliseconds = "SDL_mixer.play.append_silence_milliseconds";
             public const string HaltWhenExhausted = "SDL_mixer.play.halt_when_exhausted";
         }
+
+        #endregion
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_Version")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int Version();
+
+        /// <summary>Initialize Mixer.</summary>
+        /// <returns>True on success, false on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_Init")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool Init();
+
+        /// <summary>De-initialize Mixer.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_Quit")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void Quit();
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetNumAudioDecoders")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial int GetNumAudioDecoders();
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetAudioDecoder")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
+        public static partial string? GetAudioDecoder(int index);
+
+        #region Mixer
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_CreateMixerDevice")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateMixerDevice(uint deviceID, nint spec);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_CreateMixer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateMixer(nint spec);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_DestroyMixer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroyMixer(nint mixer);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetMixerProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial uint GetMixerProperties(nint mixer);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetMixerFormat")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetMixerFormat(nint mixer, nint spec);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_LockMixer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void LockMixer(nint mixer);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_UnlockMixer")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void UnlockMixer(nint mixer);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_SetMixerGain")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetMixerGain(nint mixer, float gain);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetMixerGain")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial float GetMixerGain(nint mixer);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_SetMixerFrequencyRatio")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetMixerFrequencyRatio(nint mixer, float ratio);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetMixerFrequencyRatio")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial float GetMixerFrequencyRatio(nint mixer);
 
         #endregion
     }
