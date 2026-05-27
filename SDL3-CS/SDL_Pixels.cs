@@ -29,7 +29,7 @@ namespace SDL3
         /// <summary>Bitmap pixel order, high bit -> low bit.</summary>
         public enum BitmapOrder
         {
-            OrderNone,
+            None,
             Order4321,
             Order1234,
         }
@@ -37,33 +37,33 @@ namespace SDL3
         /// <summary>Packed component order, high bit -> low bit.</summary>
         public enum PackedOrder
         {
-            OrderNone,
-            OrderXRGB,
-            OrderRGBX,
-            OrderARGB,
-            OrderRGBA,
-            OrderXBGR,
-            OrderBGRX,
-            OrderABGR,
-            OrderBGRA
+            None,
+            XRGB,
+            RGBX,
+            ARGB,
+            RGBA,
+            XBGR,
+            BGRX,
+            ABGR,
+            BGRA
         }
 
         /// <summary>Array component order, low byte -> high byte.</summary>
         public enum ArrayOrder
         {
-            OrderNone,
-            OrderRGB,
-            OrderRGBA,
-            OrderARGB,
-            OrderBGR,
-            OrderBGRA,
-            OrderABGR
+            None,
+            RGB,
+            RGBA,
+            ARGB,
+            BGR,
+            BGRA,
+            ABGR
         }
 
         /// <summary>Packed component layout.</summary>
         public enum PackedLayout
         {
-            LayoutNone,
+            None,
             Layout332,
             Layout4444,
             Layout1555,
@@ -182,6 +182,77 @@ namespace SDL3
             Custom = 31
         }
 
+        /// <summary>Colorspace Transfer Characteristics</summary>
+        public enum TransferCharacterisistics
+        {
+            Unknown = 0,
+            BT709 = 1,
+            Unspecified = 2,
+            Gamma22 = 4,
+            Gamma28 = 5,
+            BT601 = 6,
+            SMPTE240 = 7,
+            Linear = 8,
+            Log100 = 9,
+            Log100Sqrt10 = 10,
+            IEC61966 = 11,
+            BT1361 = 12,
+            SRGB = 13,
+            BT2020_10bit = 14,
+            BT2020_12bit = 15,
+            PQ = 16,
+            SMPTE428 = 17,
+            HLG = 18,
+            Custom = 31
+        }
+
+        /// <summary>Colorspace Matrix Coefficients</summary>
+        public enum MatrixCoefficients
+        {
+            Identity = 0,
+            BT709 = 1,
+            Unspecified = 2,
+            FCC = 4,
+            BT470BG = 5,
+            BT601 = 6,
+            SMPTE240 = 7,
+            YCgCo = 8,
+            BT2020_NCL = 9,
+            BT2020_CL = 10,
+            SMPTE2085 = 11,
+            ChromaDerivedNCL = 12,
+            ChromaDerivedCL = 13,
+            ICTCP = 14,
+            Custom = 31
+        }
+
+        /// <summary>Colorspace Chroma Sample Location</summary>
+        public enum ChromaLocation
+        {
+            None = 0,
+            Left = 1,
+            Center = 2,
+            TopLeft = 3
+        }
+
+        public enum Colorspace : uint
+        {
+            Unknown = 0,
+            SRGB = 0x120005a0u,
+            SRGBLinear = 0x12000500u,
+            HRR10 = 0x12002600u,
+            JPEG = 0x220004c6u,
+            BT601Limited = 0x211018c6u,
+            BT601Full = 0x221018c6u,
+            BT709Limited = 0x21100421u,
+            BT709Full = 0x22100412u,
+            BT2020Limited = 0x21102609u,
+            BT2020Full = 0x22102609u,
+
+            RGBDefault = SRGB,
+            YUVDefault = BT601Limited
+        }
+
         // TODO SDL_TransferCharacteristics
         // TODO SDL_MatrixCoefficients
         // TODO SDL_ChromeLocation
@@ -246,7 +317,7 @@ namespace SDL3
         public struct Palette
         {
             public int ncolors;
-            IntPtr colors;
+            public IntPtr colors; // SDL_Color
             public uint version;
             public int refcount;
         }
@@ -275,18 +346,48 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatName")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetPixelFormatName(uint format);
+        public static partial string? GetPixelFormatName(PixelFormat format);
 
-        // TODO SDL_GetPixelFormatMasks
-        // TODO SDL_GetPixelFormatDetails
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMasksForPixelFormat")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetMasksForPixelFormat(PixelFormat format, out int bpp, out uint Rmask, out uint Gmask, out uint bMask, out uint Amask);
 
-        // TODO SDL_CreatePalette
-        // TODO SDL_SetPaletteColors
-        // TODO SDL_DestroyPalette
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatForMasks")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial PixelFormat GetPixelFormatForMasks(int bpp, uint Rmask, uint Gmask, uint bMask, uint Amask);
 
-        // TODO SDL_MapRGB
-        // TODO SDL_MapRGBA
-        // TODO SDL_GetRGB
-        // TODO SDL_GetRGBA
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatDetails")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial PixelFormatDetails* GetPixelFormatDetails(PixelFormat format);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreatePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreatePalette(int ncolors);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetPaletteColors")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static unsafe partial bool SetPaletteColors(nint palette, in Color* colors, int firstcolor, int ncolors);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroyPalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroyPalette(nint palette);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_MapRGB")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial uint MapRGB(PixelFormatDetails* format, nint palette, byte r, byte g, byte b);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_MapRGBA")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial uint MapRGBA(PixelFormatDetails* format, nint palette, byte r, byte g, byte b, byte a);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRGB")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial void GetRGB(uint pixel, PixelFormatDetails* format, nint palette, out byte r, out byte g, out byte b);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRGBA")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static unsafe partial void GetRGBA(uint pixel, PixelFormatDetails* format, nint palette, out byte r, out byte g, out byte b, out byte a);
     }
 }
