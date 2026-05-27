@@ -61,6 +61,11 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetStringProperty(uint props, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string? value);
 
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetNumberProperty")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetNumberProperty(uint props, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, long value);
+
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetFloatProperty")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
