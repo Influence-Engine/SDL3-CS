@@ -9,15 +9,23 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Update="sdl-lib\LICENSE.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="sdl-lib\SDL3-Debug.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="sdl-lib\SDL3.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
+		<!-- Release (everything except debug) -->
+		<Content Include="runtimes\$(RuntimeIdentifier)\**\*" Exclude="runtimes\$(RuntimeIdentifier)\**\debug\*;runtimes\LICENSE.txt">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+
+		<!-- Debug DLL: only when building in Debug Mode. Links to the same name -->
+		<Content Condition="'$(Configuration)' == 'Debug'" Include="runtimes\$(RuntimeIdentifier)\**\debug\*">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+
+		<!-- License always copied -->
+		<Content Include="runtimes\LICENSE.txt">
+			<Link>LICENSE.SDL3.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>

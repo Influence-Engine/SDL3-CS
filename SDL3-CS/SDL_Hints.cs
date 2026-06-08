@@ -18,7 +18,9 @@ namespace SDL3
 
             public const string AndroidAllowRecreateActivity = "SDL_ANDROID_ALLOW_RECREATE_ACTIVITY";
             public const string AndroidBlockOnPause = "SDL_ANDROID_BLOCK_ON_PAUSE";
+            public static string AndroidLowLatencyAudio = "SDL_ANDROID_LOW_LATENCY_AUDIO";
             public const string AndroidTrapBackButton = "SDL_ANDROID_TRAP_BACK_BUTTON";
+            public const string AndroidAllowPersistentFolderAccess = "SDL_ANDROID_ALLOW_PERSISTENT_FOLDER_ACCESS";
 
             public const string AppID = "SDL_APP_ID";
             public const string AppName = "SDL_APP_NAME";
@@ -27,17 +29,21 @@ namespace SDL3
             public const string AppleTVRemoteAllowRotation = "SDL_APPLE_TV_REMOTE_ALLOW_ROTATION";
 
             public const string AudioAlsaDefaultDevice = "SDL_AUDIO_ALSA_DEFAULT_DEVICE";
+            public const string AudioAlsaDefaultPlaybackDevice = "SDL_AUDIO_ALSA_DEFAULT_PLAYBACK_DEVICE";
+            public const string AudioAlsaDefaultRecordingDevice = "SDL_AUDIO_ALSA_DEFAULT_RECORDING_DEVICE";
             public const string AudioCategory = "SDL_AUDIO_CATEGORY";
             public const string AudioChannels = "SDL_AUDIO_CHANNELS";
-            public const string AudioDeviceIconName = "SDL_AUDIO_DEVICE_APP_ICON_NAME";
+            public const string AudioDeviceAppIconName = "SDL_AUDIO_DEVICE_APP_ICON_NAME";
             public const string AudioDeviceSampleFrames = "SDL_AUDIO_DEVICE_SAMPLE_FRAMES";
             public const string AudioDeviceStreamName = "SDL_AUDIO_DEVICE_STREAM_NAME";
             public const string AudioDeviceStreamRole = "SDL_AUDIO_DEVICE_STREAM_ROLE";
+            public const string AudioDeviceRawStream = "SDL_AUDIO_DEVICE_RAW_STREAM";
             public const string AudioDiskInputFile = "SDL_AUDIO_DISK_INPUT_FILE";
             public const string AudioDiskOutputFile = "SDL_AUDIO_DISK_OUTPUT_FILE";
             public const string AudioDiskTimescale = "SDL_AUDIO_DISK_TIMESCALE";
             public const string AudioDriver = "SDL_AUDIO_DRIVER";
-            public const string AudioDummyTimescale = "SDL_AUDIO_DISK_TIMESCALE";
+            public const string AudioDuckOthers = "SDL_AUDIO_DUCK_OTHERS";
+            public const string AudioDummyTimescale = "SDL_AUDIO_DUMMY_TIMESCALE";
             public const string AudioFormat = "SDL_AUDIO_FORMAT";
             public const string AudioFrequency = "SDL_AUDIO_FREQUENCY";
             public const string AudioIncludeMonitors = "SDL_AUDIO_INCLUDE_MONITORS";
@@ -53,14 +59,40 @@ namespace SDL3
 
             public const string JoystickDirectinput = "SDL_JOYSTICK_DIRECTINPUT";
 
-            // TODO so many missing
+            public const string FileDialogDriver = "SDL_FILE_DIALOG_DRIVER";
+
+            public const string DisplayUsableBounds = "SDL_DISPLAY_USABLE_BOUNDS";
+
+            public const string DOSAllowDirectFramebuffer = "SDL_DOS_ALLOW_DIRECT_FRAMEBUFFER";
+
+            public const string InvalidParamChecks = "SDL_INVALID_PARAM_CHECKS";
+
+            public const string EmscriptenAsyncify = "SDL_EMSCRIPTEN_ASYNCIFY";
+            public const string EmscriptenCanvasSelector = "SDL_EMSCRIPTEN_CANVAS_SELECTOR";
+            public const string EmscriptenKeyboardElement = "SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+
+            public const string EnableScreenKeybaord = "SDL_ENABLE_SCREEN_KEYBOARD";
+
+            public const string EvdevDevices = "SDL_EVDEV_DEVICES";
 
             public const string EventLogging = "SDL_EVENT_LOGGING";
 
-            public const string ForceRaiseWindow = "SDL_HINT_FORCE_RAISEWINDOW";
+            public const string ForceRaiseWindow = "SDL_FORCE_RAISEWINDOW";
             public const string FrameBufferAcceleration = "SDL_FRAMEBUFFER_ACCELERATION";
 
-            // TODO and more
+            public const string GameControllerConfig = "SDL_GAMECONTROLLERCONFIG";
+            public const string GameControllerConfigFile = "SDL_GAMECONTROLLERCONFIG_File";
+            public const string GameControllerType= "SDL_GAMECONTROLLERTYPE";
+            public const string GameControllerIgnoreDevices = "SDL_GAMECONTROLLER_IGNORE_DEVICES";
+            public const string GameControllerIgnoreDevicesExcept = "SDL_GAMECONTROLLER_IGNORE_DEVICES_EXCEPT";
+            public const string GameControllerSensorFusion = "SDL_GAMECONTROLLER_SENSOR_FUSION";
+
+            public const string GDKTextInputDefaultText = "SDL_GDK_TEXTINPUT_DEFAULT_TEXT";
+            public const string GDKTextInputDescription = "SDL_GDK_TEXTINPUT_DESCRIPTION";
+            public const string GDKTextInputMaxLength = "SDL_GDK_TEXTINPUT_DEFAULT_MAX_LENGTH";
+
+            public const string GDKTextInputScope = "SDL_GDK_TEXTINPUT_SCOPE";
+            public const string GDKTextInputTitle = "SDL_GDK_TEXTINPUT_TITLE";
 
             public const string HIDAPILibUsb= "SDL_HIDAPI_LIBUSB";
             public const string HIDAPILibUsbGameCube = "SDL_HIDAPI_LIBUSB_GAMECUBE";
@@ -70,6 +102,25 @@ namespace SDL3
             public const string GPUDriver = "SDL_GPU_DRIVER";
 
             public const string OpenXR_Library = "SDL_OPENXR_LIBRARY";
+
+            public const string HIDAPIEnumerateOnlyControllers = "SDL_HIDAPI_ENUMERATE_ONLY_CONTROLLERS";
+            public const string HIDAPIIgnoreDevices = "SDL_HIDAPI_IGNORE_DEVICES";
+
+            public const string IMEImplementedUI = "SDL_IME_IMPLEMENTED_UI";
+            public const string IOSHideHomeIndicator = "SDL_IOS_HIDE_HOME_INDICATOR";
+
+            public const string JoystickAllowBackgroundEvents = "SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
+            public const string JoystickArcadestickDevices = "SDL_JOYSTICK_ARCADESTICK_DEVICES";
+            public const string JoystickArcadestickDevicesExcluded= "SDL_JOYSTICK_ARCADESTICK_DEVICES_EXCLUDED";
+            public const string JoystickBlacklistDevices = "SDL_JOYSTICK_BLACKLIST_DEVICES";
+            public const string JoystickBlacklistDevicesExcluded = "SDL_JOYSTICK_BLACKLIST_DEVICES_EXCLUDED";
+            public const string JoystickDevice = "SDL_JOYSTICK_DEVICE";
+            public const string JoystickDrumDevices = "SDL_JOYSTICK_DRUM_DEVICES";
+            public const string JoystickEnhancedReports = "SDL_JOYSTICK_ENHANCED_REPORTS";
+            public const string JoystickFlightstickDevices = "SDL_JOYSTICK_FLIGHTSTICK_DEVICES";
+            public const string JoystickFlightstickDevicesExcluded= "SDL_JOYSTICK_FLIGHTSTICK_DEVICES_EXCLUDED";
+            public const string JoystickGameinput= "SDL_JOYSTICK_GAMEINPUT";
+            public const string JoystickGameinputRaw = "SDL_JOYSTICK_GAMEINPUT_RAW";
 
             // TODO even more
 

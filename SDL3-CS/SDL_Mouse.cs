@@ -16,13 +16,16 @@ namespace SDL3
             Wait,
             Crosshair,
             Progress,
+
             NWSE_Resize,
             NESW_Resize,
             EW_Resize,
             NS_Resize,
+
             Move,
             NotAllowed,
             Pointer,
+
             NW_Resize,
             N_Resize,
             NE_Resize,
@@ -32,7 +35,22 @@ namespace SDL3
             SW_Resize,
             W_Resize,
 
-            Count = 20
+            ContextMenu,
+            Help,
+            Cell,
+            VerticalText,
+            Atlas,
+            Copy,
+            NoDrop,
+            Grab,
+            Grabbing,
+            ColResize,
+            RowResize,
+            AllScroll,
+            ZoomIn,
+            ZoomOut,
+
+            Count
         }
 
         /// <summary>Scroll direction types for the Scroll event.</summary>

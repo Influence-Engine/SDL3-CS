@@ -12,6 +12,8 @@ namespace SDL3
             First = 0,
 
             // Application Events
+
+            /// <summary>User-requested quit.</summary>
             Quit = 0x100,
 
             // Android/IOS/WinRT App Events
@@ -64,8 +66,9 @@ namespace SDL3
             WindowDestroyed,
 
             WindowHDRStateChanged,
+            WindowSettingsChanged,
             WindowFirst = WindowShown,
-            WindowLast = WindowHDRStateChanged,
+            WindowLast = WindowSettingsChanged,
 
             // Keyboard Events
             KeyDown = 0x300,
@@ -110,6 +113,8 @@ namespace SDL3
             GamepadSensorUpdate,
             GamepadUpdateComplete,
             GamepadSteamHandleUpdated,
+            GamepadCapsenseTouch,
+            GamepadCapsenseRelease,
 
             // Touch Events
             FingerDown = 0x700,
@@ -485,6 +490,20 @@ namespace SDL3
             public int sensor;
             public fixed float data[3];
             public ulong sensorTimestamp;
+        }
+
+        /// <summary>Gamepad capsense event structure.</summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public struct GamepadCapSenseEvent
+        {
+            public EventType type;
+            uint reserved;
+            public ulong timestamp;
+            public uint which; // The joystick instance ID
+            public byte capsense;
+            public bool down;
+            byte padding1;
+            byte padding2;
         }
 
         /// <summary>Audio device event structure.</summary>

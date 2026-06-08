@@ -101,6 +101,16 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool HasNEON();
 
+        /// <summary>
+        /// Determine whether thr CPU has SVE2 (Scalable Vector Extension 2).<br></br>
+        /// This is only relevant on ARM64 Linux. On other platforms it always returns false.
+        /// </summary>
+        /// <returns>True of the CPU has SVE2 features, false otherwise.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_HasSVE2")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool HasSVE2();
+
         /// <summary>Determine whether thr CPU has LSX (LOONGARCH SIMD) features.</summary>
         /// <returns>True of the CPU has LOONGARCH LSX features, false otherwise.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_HasLSX")]
