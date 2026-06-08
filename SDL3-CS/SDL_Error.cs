@@ -13,7 +13,15 @@ namespace SDL3
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetError(string fmtAndArglist);
 
-        // TODO SDL_SetErrorV
+  
+        /// <summary>Set the SDL error message for the current thread.</summary>
+        /// <param name="fmtAndArglist">The error message</param>
+        /// <param name="ap">A variable argument list</param>
+        /// <returns>False</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetErrorV", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetErrorV(string fmtAndArglist, nint ap);
 
         /// <summary>Set an error indicating that memory allocation failed.</summary>
         /// <returns>False</returns>
