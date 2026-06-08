@@ -9,15 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Update="sdl-lib\LICENSE.txt">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="sdl-lib\SDL3_shadercross-Debug.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-		<None Update="sdl-lib\SDL3_shadercross.dll">
-			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+		<!-- Release (everything except license) -->
+		<Content Include="runtimes\$(RuntimeIdentifier)\**\*" Exclude="runtimes\LICENSE.txt">
+			<Link>%(Filename)%(Extension)</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 
+		<!-- License always copied -->
+		<Content Include="runtimes\LICENSE.txt">
+			<Link>LICENSE.SDL3_shadercross.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	
 </Project>

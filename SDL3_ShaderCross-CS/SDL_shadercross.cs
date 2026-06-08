@@ -26,6 +26,7 @@ namespace SDL3
         public const string PropShaderCullUnusedBindingBoolean = "SDL_shadercross.cull_unused_bindings";
         public const string PropSpirvPsslCompatibilityBoolean = "SDL_shadercross.spirv.pssl.compatibility";
         public const string PropSpirvMslVersionString = "SDL_shadercross.spirv.msl.version";
+        public const string PropHlslSkipSpirvRoundtripBoolean = "SDL_shadercross.hlsl.skip_spirv_roundtrip";
 
         #endregion
 
