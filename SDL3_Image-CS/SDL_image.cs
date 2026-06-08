@@ -5,11 +5,7 @@ namespace SDL3
 {
     public static partial class IMG
     {
-#if DEBUG
-        private const string nativeLibraryName = "SDL3_image-Debug.dll";
-#else
-        private const string nativeLibraryName = "SDL3_image.dll";
-#endif
+        const string nativeLibraryName = "SDL3_image";
 
         public const int MajorVersion = 3;
         public const int MinorVersion = 5;
@@ -478,5 +474,224 @@ namespace SDL3
         #endregion
 
         // TODO Animation
+        #region Load Animation
+
+        /// <summary>Load an animation from a filesystem path.</summary>
+        /// <param name="file">Path on the filesystem containing an animated image..</param>
+        /// <returns>A new IMG_Animation, or NULL on error.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadAnimation", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadAnimation(string file);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadAnimation(nint src, [MarshalAs(UnmanagedType.I1)] bool closeio);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadAnimationTyped_IO", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadAnimationTyped(nint src, [MarshalAs(UnmanagedType.I1)] bool closeio, string? type);
+
+        /// <summary>Load an ANI animation directly from a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadANIAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadANIAnimation(nint src);
+
+        /// <summary>Load an APNG animation directly from a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadAPNGAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadAPNGAnimation(nint src);
+
+        /// <summary>Load an AVIF animation directly from a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadAVIFAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadAVIFAnimation(nint src);
+
+        /// <summary>Load an GIF animation directly from a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadGIFAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadGIFAnimation(nint src);
+
+        /// <summary>Load an WEBP animation directly from a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_LoadWEBPAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint LoadWEBPAnimation(nint src);
+
+        #endregion
+
+        #region Save Animation
+
+        /// <summary>
+        /// Save an animation to a file.<br></br>
+        /// Format determined by extension. Default quality: 90.
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveAnimation", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveAnimation(nint anim, string file);
+
+        /// <summary>Save an animation to a SDL_IOStream usng an explicit type hint.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveAnimationTyped_IO", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveAnimationTyped(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio, string typed);
+
+        /// <summary>Save an animation in ANI format to a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveANIAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveANIAnimation(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio);
+
+        /// <summary>Save an animation in APNG format to a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveAPNGAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveAPNGAnimation(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio);
+
+        /// <summary>
+        /// Save an animation in AVIF format to a SDL_IOStream.<br></br>
+        /// Quality ranges from 0 (lowest) to 100 (highest).
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveAVIFAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveAVIFAnimation(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio, int quality);
+
+        /// <summary>Save an animation in GIF format to a SDL_IOStream.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveGIFAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveGIFAnimation(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio);
+
+        /// <summary>
+        /// Save an animation in WEBP format to a SDL_IOStream.<br></br>
+        /// Quality 0 - 100; For lossy, 0 = smallest; For lossless, 0 = fastest.
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_SaveWEBPAnimation_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SaveWEBPAnimation(nint anim, nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio, int quality);
+
+        #endregion
+
+        /// <summary>Create an animated cursor from an animation.</summary>
+        /// <param name="anim">An animation to use to create an animated cursor.</param>
+        /// <param name="hotX">The x position of the cursor hot spot.</param>
+        /// <param name="hotY">The y position of the cursor hot spot.</param>
+        /// <returns>The new cursor on success or NULL on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimatedCursor")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimatedCursor(nint anim, int hotX, int hotY);
+
+        /// <summary>Dipose of an IMG_Animation and free its resources.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_FreeAnimation")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void FreeAnimation(nint anim);
+
+        #region Animation Encoder
+
+        /// <summary>
+        /// Create an encoder to save a series of images to a file.<br></br>
+        /// Supported types: ANI, APNG, AVIFS, GIF, WEBP. Type determined by file extension.
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationEncoder", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationEncoder(string file);
+
+        /// <summary>
+        /// Create an encoder to save a series of images to a SDL_IOStream.<br></br>
+        /// Supported types: ANI, APNG, AVIFS, GIF, WEBP.
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationEncoder_IO", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationEncoder(nint dst, [MarshalAs(UnmanagedType.I1)] bool closeio, string type);
+
+        /// <summary>Create an animation encoder with the specified properties.</summary>
+        /// <param name="props">SDL_PropertiesID containing encoder configuration. See <see cref="AnimationEncoderProps"/>.</param>
+        /// <returns>A new IMG_AnimatonEncoder, or NULL on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationEncoder", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationEncoderWithProperties(uint props);
+
+        /// <summary>Add a frame to an animation encoder.</summary>
+        /// <param name="encoder">The receiving encoder.</param>
+        /// <param name="surface">The SDL_Surface to add as the next frame.</param>
+        /// <param name="duration">Duration of the frame, in milliseconds by default.</param>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_AddAnimationEncoderFrame")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool AddAnimationEncoderFrame(nint encoder, nint surface, ulong duration);
+
+        /// <summary>Close an animation encoder, finishing any encoding. Frees the encoder.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CloseAnimationEncoder")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool CloseAnimationEncoder(nint encoder);
+
+        #endregion
+
+        #region Animation Decoder
+
+        /// <summary>
+        /// Create a decoder to read a series of images from a file.<br></br>
+        /// Supported types: ANI, APNG, AVIFS, GIF, WEBP. Type determined by file extension.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationDecoder", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationDecoder(string file);
+
+        /// <summary>
+        /// Create a decoder to read a series of images from a SDL_IOStream.<br></br>
+        /// Supported types: ANI, APNG, AVIFS, GIF, WEBP.
+        /// </summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationDecoder_IO", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationDecoder(nint src, [MarshalAs(UnmanagedType.I1)] bool closeio, string type);
+
+        /// <summary>Create an animation decoder with the specified properties.</summary>
+        /// <param name="props">SDL_PropertiesID containing decoder configuration. See <see cref="AnimationDecoderProps"/>.</param>
+        /// <returns>A new IMG_AnimatonDecoder, or NULL on failure.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CreateAnimationDecoderWithProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial nint CreateAnimationDecoderWithProperties(uint props);
+
+        /// <summary>Gets the properties of an animation decoder.</summary>
+        /// <returns>SDL_PropertiesID, holding metadata such as description, copyright and loop count.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_GetAnimationDecoderProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial uint GetAnimationDecoderProperties(nint decoder);
+
+        /// <summary>
+        /// Get the next frame from an animation decoder.<br></br>
+        /// The returend SDL_Surface must be freed with SDL_FreeSurface() when no longer needed.
+        /// </summary>
+        /// <param name="decoder"></param>
+        /// <param name="frame"></param>
+        /// <param name="duration"></param>
+        /// <returns>False when no more frames remain or decoding fails; check SDL_GetError() to distinguish.</returns>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_GetAnimationDecoderFrame")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetAnimationDecoderFrame(nint decoder, out nint frame, out ulong duration);
+
+        /// <summary>Get the current status of an animation decoder.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_GetAnimationDecoderStatus")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial AnimationDecoderStatus GetAnimationDecoderStatus(nint decoder);
+
+        /// <summary>Reset an animation decoder, allowing it to start decoding from the beginning again.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_ResetAnimationDecoder")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool ResetAnimationDecoder(nint decoder);
+
+        /// <summary>Close an animation decoder, finishing any decoding. Frees the decoder.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "IMG_CloseAnimationDecoder")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool CloseAnimationDecoder(nint decoder);
+
+        #endregion
     }
 }
