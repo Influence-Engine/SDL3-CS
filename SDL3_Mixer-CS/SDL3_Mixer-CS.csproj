@@ -10,7 +10,7 @@
 
 	<ItemGroup>
 		<!-- Release (everything except debug) -->
-		<Content Include="runtimes\$(RuntimeIdentifier)\**\*" Exclude="runtimes\$(RuntimeIdentifier)\**\debug\*">
+		<Content Include="runtimes\$(RuntimeIdentifier)\**\*" Exclude="runtimes\$(RuntimeIdentifier)\**\debug\*;runtimes\LICENSE.txt">
 			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
