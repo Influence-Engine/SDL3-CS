@@ -8,26 +8,24 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(Configuration)' != 'Debug'">
-		<None Include="sdl-lib\win-x64\SDL3_mixer.dll">
-			<Link>sdl-lib\SDL3_mixer.dll</Link>
+	<ItemGroup>
+		<!-- Release (everything except debug) -->
+		<Content Include="runtimes\$(RuntimeIdentifier)\**\*" Exclude="runtimes\$(RuntimeIdentifier)\**\debug\*">
+			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<PublishState>Included</PublishState>
-		</None>
-	</ItemGroup>
+		</Content>
 
-	<ItemGroup Condition="'$(Configuration)' == 'Debug'">
-		<None Include="sdl-lib\win-x64\SDL3_mixer-Debug.dll">
-			<Link>sdl-lib\SDL3_mixer.dll</Link>
+		<!-- Debug DLL: only when building in Debug Mode. Links to the same name -->
+		<Content Condition="'$(Configuration)' == 'Debug'" Include="runtimes\$(RuntimeIdentifier)\**\debug\*">
+			<Link>%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<PublishState>Included</PublishState>
-		</None>
+		</Content>
+		
+		<!-- License always copied -->
+		<Content Include="runtimes\LICENSE.txt">
+			<Link>LICENSE.SDL3_mixer.txt</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 	
-	<ItemGroup>
-		<None Update="sdl-lib\LICENSE.txt">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
 </Project>
