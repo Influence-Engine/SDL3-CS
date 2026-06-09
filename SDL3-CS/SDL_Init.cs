@@ -6,11 +6,7 @@ namespace SDL3
 {
     public static partial class SDL
     {
-#if DEBUG
-        private const string nativeLibraryName = "SDL3-Debug.dll";
-#else
-        private const string nativeLibraryName = "SDL3.dll";
-#endif
+        const string nativeLibraryName = "SDL3";
 
         /// <summary>Initialization Flags for <see cref="Init"/> and <see cref="InitSubSystem"/>.</summary>
         [Flags]

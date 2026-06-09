@@ -9,11 +9,7 @@ namespace SDL3
     /// </summary>
     public static partial class ShaderCross
     {
-#if DEBUG
-        private const string nativeLibraryName = "SDL3_shadercross-Debug.dll";
-#else
-        private const string nativeLibraryName = "SDL3_shadercross.dll";
-#endif
+        const string nativeLibraryName = "SDL3_shadercross";
 
         public const int MajorVersion = 3;
         public const int MinorVersion = 0;
