@@ -280,31 +280,73 @@ namespace SDL3
             SoftRight = ScanCode.SoftRight | ScanCodeMask,
             Call = ScanCode.Call | ScanCodeMask,
             EndCall = ScanCode.EndCall | ScanCodeMask,
+
+            LeftTab = 0x20000001,
+            Level5Shift = 0x20000002,
+            MultiKeyCompose = 0x20000003,
+            LMeta = 0x20000004,
+            RMeta = 0x20000005,
+            LHyper = 0x20000006,
+            RHyper = 0x20000007
         }
 
+        /// <summary>Valid key modifiers (possibly OR'd together).</summary>
         [Flags]
         public enum KeyMod : ushort
         {
+            /// <summary>No modifier is applicable.</summary>
             None = 0x0000,
+
+            /// <summary>The left shift key is down.</summary>
             LeftShift = 0x0001,
+
+            /// <summary>The right shift key is down.</summary>
             RightShift = 0x0002,
+
+            /// <summary>The level 5 shift key is down.</summary>
+            Level5 = 0x0004,
+
+            /// <summary>The left ctrl (control) key is down.</summary>
             LeftControl = 0x0040,
+
+            /// <summary>The right ctrl (control) key is down.</summary>
             RightControl = 0x0080,
+
+            /// <summary>The left alt key is down.</summary>
             LeftAlt = 0x0100,
+
+            /// <summary>The right alt key is down.</summary>
             RightAlt = 0x0200,
+
+            /// <summary>The left GUI key (often the Windows key) is down.</summary>
             LeftGUI = 0x0400,
+
+            /// <summary>The right GUI key (often the Windows key) is down.</summary>
             RightGUI = 0x0800,
+
+            /// <summary>The num lock key (may be located on an extended keypad) is down.</summary>
             Num = 0x1000,
-            Caps =0x2000,
-            Mode =0x4000,
+
+            /// <summary>The caps lock key is down.</summary>
+            Caps = 0x2000,
+
+            /// <summary>The !AltGr key is down.</summary>
+            Mode = 0x4000,
+
+            /// <summary>The scroll lock key is down.</summary>
             Scroll = 0x8000,
 
+            /// <summary>Any Ctrl key is down.</summary>
             Control = (LeftControl | RightControl),
-            Shift = (LeftShift | RightShift),
-            Alt = (LeftAlt | RightAlt),
-            GUI = (LeftGUI | RightGUI),
 
-            Reserved = Scroll
+            /// <summary>Any Shift key is down.</summary>
+            Shift = (LeftShift | RightShift),
+
+            /// <summary>Any Alt key is down.</summary>
+            Alt = (LeftAlt | RightAlt),
+
+            /// <summary>Any GUI key is down.</summary>
+            GUI = (LeftGUI | RightGUI)
         }
     }
 }
