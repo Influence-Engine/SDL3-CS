@@ -248,42 +248,39 @@ namespace SDL3
 
             Mode = 257,
 
-            AudioNext = 258,
-            AudioPrevious = 259,
-            AudioStop = 260,
-            AudioPlay = 261,
-            AudioMute = 262,
-            MediaSelect = 263,
+            Sleep = 258,
+            Wake = 259,
 
-            WWW = 264,
-            Mail = 265,
-            Calculator = 266,
-            Computer = 267,
+            ChannelIncrement = 260,
+            ChannelDecrement = 261,
 
-            ACSearch = 268,
-            ACHome = 269,
-            ACBack = 270,
-            ACForward = 271,
-            ACStop = 272,
-            ACRefresh = 273,
-            ACBookmarks = 274,
+            MediaPlay = 262,
+            MediaPause = 263,
+            MediaRecord = 264,
+            MediaFastForward = 265,
+            MediaRewind = 266,
+            MediaNextTrack = 267,
+            MediaPreviousTrack = 268,
+            MediaStop = 269,
+            MediaEject = 270,
+            MediaPlayPause = 271,
+            MediaSelect = 272,
 
-            BrightnessDown = 275,
-            BrightnessUp = 276,
-            DisplaySwitch = 277,
+            ACNew = 273,
+            ACOpen = 274,
+            ACClose = 275,
+            ACExit = 276,
+            ACSave = 277,
+            ACPrint = 278,
+            ACProperties = 279,
 
-            KBDIllumToggle = 278,
-            KBDIllumDown = 279,
-            KBDIllumUp = 280,
-
-            Eject = 281,
-            Sleep = 282,
-
-            App1 = 283,
-            App2 = 284,
-
-            AudioRewind = 285,
-            AudioFastForward = 286,
+            ACSearch = 280,
+            ACHome = 281,
+            ACBack = 282,
+            ACForward = 283,
+            ACStop = 284,
+            ACRefresh = 285,
+            ACBookmarks = 286,
 
             SoftLeft = 287,
             SoftRight = 288,
@@ -291,9 +288,11 @@ namespace SDL3
             Call = 289,
             EndCall = 290,
 
-            // Not a key, just marks the number of scancodes for array bounds
-            NumScancodes = 512
+            /// <summary>400-500 reserved for dynamic keycodes.</summary>
+            Reserved = 400,
 
+            /// <summary>Not a key, just marks the number of scancodes for array bounds.</summary>
+            NumScancodes = 512
         }
     }
 }
