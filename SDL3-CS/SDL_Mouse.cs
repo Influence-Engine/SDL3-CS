@@ -109,18 +109,26 @@ namespace SDL3
         public static partial bool HasMouse();
 
         /// <summary>Get a list of currently connected mice.</summary>
+        /// <param name="count">A pointer filled in with the number of mice returned</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
+        /// <returns>A 0 terminated array of mice instance IDs or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMice")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial nint GetMice(out int count);
+        public static unsafe partial uint* GetMice(out int count);
 
         /// <summary>Get a list of currently connected mice as a span.</summary>
-        public static unsafe Span<uint> GetMice()
+        public static unsafe uint[] GetMice()
         {
-            nint ptr = GetMice(out int count);
-            if (ptr == nint.Zero || count == 0)
-                return Span<uint>.Empty;
+            uint* ptr = GetMice(out int count);
+            if (ptr == null || count == 0)
+                return [];
 
-            return new Span<uint>(ptr.ToPointer(), count);
+            uint[] result = new uint[count];
+            for (int i = 0; i < count; i++)
+                result[i] = ptr[i];
+
+            Free((nint)ptr); // Free the pointer
+            return result;
         }
 
         /// <summary>Get the name of a mouse.</summary>
