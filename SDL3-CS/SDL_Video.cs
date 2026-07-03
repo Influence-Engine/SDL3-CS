@@ -216,14 +216,27 @@ namespace SDL3
 
         #region Display Functions
 
+        /// <summary>Get a list of currently connected displays.</summary>
+        /// <param name="count">A pointer filled in with the number of displays returned.</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
+        /// <returns>A 0 terminated array of display instance IDs or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetDisplays")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial uint* GetDisplays(out int count);
 
-        public static unsafe Span<uint> GetDisplays()
+        /// <summary>Gets a list of currently connected displays.</summary>
+        public static unsafe uint[] GetDisplays()
         {
             uint* ptr = GetDisplays(out int count);
-            return (ptr == null || count == 0) ? Span<uint>.Empty : new Span<uint>(ptr, count);
+            if (ptr == null || count == 0)
+                return [];
+
+            uint[] result = new uint[count];
+            for (int i = 0; i < count; i++)
+                result[i] = ptr[i];
+
+            Free((nint)ptr); // Free the pointer
+            return result;
         }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPrimaryDisplay")]
@@ -259,10 +272,16 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial float GetDisplayContentScale(uint displayID);
 
+        /// <summary>Get a list of fullscreen display modes available on a display.</summary>
+        /// <param name="displayID">The instance ID of the display to query.</param>
+        /// <param name="count">A pointer filled in with the number of display modes returned.</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
+        /// <returns>A NULL terminated array of display mode pointer or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetFullscreenDisplayModes")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial DisplayMode** GetFullscreenDisplayModes(uint displayID, out int count);
 
+        /// <summary>Get a list of fullscreen display modes available on a display.</summary>
         public static unsafe DisplayMode[] GetFullscreenDisplayModes(uint displayID)
         {
             DisplayMode** ptr = GetFullscreenDisplayModes(displayID, out int count);
@@ -273,6 +292,7 @@ namespace SDL3
             for (int i = 0; i < count; i++)
                 result[i] = *ptr[i];
 
+            Free((nint)ptr); // Free the pointer
             return result;
         }
 
@@ -324,24 +344,56 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetWindowFullscreenMode(IntPtr window);
 
+        /// <summary>Gets thr raw ICC profile data for the screen the window is currently on.</summary>
+        /// <param name="window">The window to query.</param>
+        /// <param name="size">The size of the ICC Profile.</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
+        /// <returns>The raw ICC profile data on success or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowICCProfile")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetWindowICCProfile(IntPtr window, out nuint size);
+
+        /// <summary>Gets thr raw ICC profile data for the screen the window is currently on.</summary>
+        public static byte[] GetWindowICCProfile(IntPtr window)
+        {
+            IntPtr ptr = GetWindowICCProfile(window, out nuint size);
+            if(ptr == IntPtr.Zero || size == 0)
+            {
+                size = 0;
+                return [];
+            }
+
+            byte[] result = new byte[size];
+            Marshal.Copy(ptr, result, 0, (int)size);
+            Free(ptr);
+            return result;
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowPixelFormat")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(SuppressGCTransitionAttribute)])]
         public static partial uint GetWindowPixelFormat(IntPtr window);
 
         /// <summary>Gets a list of valid windows.</summary>
+        /// <param name="count">A pointer filled in with the number of windows returned.</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
+        /// <returns>A Null terminated array of SDL_Window pointer or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindows")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial IntPtr* GetWindows(out int count);
 
-        /// <inheritdoc cref="GetWindows"/>
-        public static unsafe Span<IntPtr> GetWindows()
+        /// <summary>Gets a list of valid windows.</summary>
+        public static unsafe IntPtr[] GetWindows()
         {
             IntPtr* ptr = GetWindows(out int count);
-            return (ptr == null || count == 0) ? Span<IntPtr>.Empty : new Span<IntPtr>(ptr, count);
+            if (ptr == null || count == 0)
+                return [];
+
+            IntPtr[] result = new IntPtr[count];
+            for (int i = 0; i < count; i++)
+                result[i] = ptr[i];
+
+            Free((nint)ptr); // Free the pointer
+            return result;
         }
 
         /// <summary>Create a window with the specified dimensions and flags.</summary>
@@ -369,18 +421,22 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(SuppressGCTransitionAttribute)])]
         public static partial uint GetWindowID(IntPtr window);
 
+        /// <summary>Get a window from a stored ID.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFromID")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(SuppressGCTransitionAttribute)])]
         public static partial IntPtr GetWindowFromID(uint id);
 
+        /// <summary>Get parent of a window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowParent")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetWindowParent(IntPtr window);
 
+        /// <summary>Get the properties associated with a window.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial uint GetWindowProperties(IntPtr window);
 
+        /// <summary>Get the window flags.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowFlags")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(SuppressGCTransitionAttribute)])]
         public static partial WindowFlags GetWindowFlags(IntPtr window);
