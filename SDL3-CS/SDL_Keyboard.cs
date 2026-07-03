@@ -41,12 +41,12 @@ namespace SDL3
         /// <returns>The name of the selected keyboard or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetKeyboardNameForID")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial IntPtr GetKeyboardNameFromIDPtr(uint instanceID);
+        public static partial IntPtr GetKeyboardNameForIDPtr(uint instanceID);
 
         /// <summary>Get the name of a keyboard.</summary>
-        public static string? GetKeyboardNameFromID(uint instanceID)
+        public static string? GetKeyboardNameForID(uint instanceID)
         {
-            IntPtr ptr = GetKeyboardNameFromIDPtr(instanceID);
+            IntPtr ptr = GetKeyboardNameForIDPtr(instanceID);
             return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
         }
 
