@@ -14,20 +14,26 @@ namespace SDL3
         public static partial bool HasKeyboard();
 
         /// <summary>Gets a list of currently connected keyboards.</summary>
-        /// <param name="count">A pointer filled in with the number of keyboards returned</param>
+        /// <param name="count">A pointer filled in with the number of keyboards returned.</param>
+        /// <remarks>This should be freed with <see cref="Free(nint)"/> when no longer needed.</remarks>
         /// <returns>A 0 terminated array of keyboard instance IDs or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetKeyboards")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static unsafe partial uint* GetKeyboards(out int count);
 
         /// <summary>Gets a list of currently connected keyboards.</summary>
-        public static unsafe Span<uint> GetKeyboards()
+        public static unsafe uint[] GetKeyboards()
         {
             uint* ptr = GetKeyboards(out int count);
             if (ptr == null || count == 0)
-                return Span<uint>.Empty;
+                return [];
 
-            return new Span<uint>(ptr, count);
+            uint[] result = new uint[count];
+            for (int i = 0; i < count; i++)
+                result[i] = ptr[i];
+
+            Free((nint)ptr); // Free the pointer
+            return result;
         }
 
         /// <summary>Get the name of a keyboard.</summary>
