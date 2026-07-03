@@ -132,9 +132,15 @@ namespace SDL3
         }
 
         /// <summary>Get the name of a mouse.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMouseNameForID", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMouseNameForID")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial string? GetMouseNameForID(uint instanceID);
+        public static partial IntPtr GetMouseNameForIDPtr(uint instanceID);
+
+        public static string? GetMouseNameForID(uint instanceID)
+        {
+            IntPtr ptr = GetMouseNameForIDPtr(instanceID);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Get the window which currently has mouse focus.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMouseFocus")]

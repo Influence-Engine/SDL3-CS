@@ -41,9 +41,14 @@ namespace SDL3
         /// <returns>The name of the selected keyboard or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetKeyboardNameForID")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetKeyboardNameFromID(uint instanceID);
+        public static partial IntPtr GetKeyboardNameFromIDPtr(uint instanceID);
 
+        /// <summary>Get the name of a keyboard.</summary>
+        public static string? GetKeyboardNameFromID(uint instanceID)
+        {
+            IntPtr ptr = GetKeyboardNameFromIDPtr(instanceID);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Query the window which currently has keyboard focus.</summary>
         /// <returns>The window with keyboard focus.</returns>
