@@ -943,13 +943,25 @@ namespace SDL3
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUDriver")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-            public static partial string? GetGPUDriver(int index);
+            public static partial IntPtr GetGPUDriverPtr(int index);
+
+            /// <inheritdoc cref="GetGPUDriverPtr"/>
+            public static string? GetGPUDriver(int index)
+            {
+                IntPtr ptr = GetGPUDriverPtr(index);
+                return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+            }
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUDeviceDriver")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-            [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-            public static partial string? GetGPUDeviceDriver(IntPtr device);
+            public static partial IntPtr GetGPUDeviceDriverPtr(IntPtr device);
+
+            /// <inheritdoc cref="GetGPUDeviceDriverPtr"/>
+            public static string? GetGPUDeviceDriver(IntPtr device)
+            {
+                IntPtr ptr = GetGPUDeviceDriverPtr(device);
+                return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+            }
 
             [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetGPUShaderFormats")]
             [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

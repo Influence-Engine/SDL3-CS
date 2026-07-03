@@ -345,8 +345,14 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetPixelFormatName")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetPixelFormatName(PixelFormat format);
+        public static partial IntPtr GetPixelFormatNamePtr(PixelFormat format);
+
+        /// <inheritdoc cref="GetPixelFormatNamePtr"/>
+        public static string? GetPixelFormatName(PixelFormat format)
+        {
+            IntPtr ptr = GetPixelFormatNamePtr(format);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetMasksForPixelFormat")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

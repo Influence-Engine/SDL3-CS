@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -31,11 +32,17 @@ namespace SDL3
         public static partial bool OutOfMemory();
 
         /// <summary>Retrieve a message about the last error that occurred on the current thread.</summary>
-        /// <returns>The message with information about the specifiic error that occured, or NULL.</returns>
+        /// <returns>The message with information about the specific error that occured, or NULL.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetError")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetError();
+        public static partial IntPtr GetErrorPtr();
+
+        /// <inheritdoc cref="GetErrorPtr"/>
+        public static string? GetError()
+        {
+            IntPtr ptr = GetErrorPtr();
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Clear any previous error message for this thread.</summary>
         /// <returns>True</returns>

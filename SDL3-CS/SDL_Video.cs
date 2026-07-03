@@ -202,13 +202,25 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetVideoDriver")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetVideoDriver(int index);
+        public static partial IntPtr GetVideoDriverPtr(int index);
+
+        /// <inheritdoc cref="GetVideoDriverPtr"/>
+        public static string? GetVideoDriver(int index)
+        {
+            IntPtr ptr = GetVideoDriverPtr(index);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetCurrentVideoDriver")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetCurrentVideoDriver();
+        public static partial IntPtr GetCurrentVideoDriverPtr();
+
+        /// <inheritdoc cref="GetCurrentVideoDriverPtr"/>
+        public static string? GetCurrentVideoDriver()
+        {
+            IntPtr ptr = GetCurrentVideoDriverPtr();
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetSystemTheme")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
@@ -249,8 +261,14 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetDisplayName")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetDisplayName(uint displayID);
+        public static partial IntPtr GetDisplayNamePtr(uint displayID);
+
+        /// <inheritdoc cref="GetDisplayNamePtr"/>
+        public static string? GetDisplayName(uint displayID)
+        {
+            IntPtr ptr = GetDisplayNamePtr(displayID);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetDisplayBounds")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -448,8 +466,14 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetWindowTitle")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetWindowTitle(IntPtr window);
+        public static partial IntPtr GetWindowTitlePtr(IntPtr window);
+
+        /// <inheritdoc cref="GetWindowTitlePtr"/>
+        public static string? GetWindowTitle(IntPtr window)
+        {
+            IntPtr ptr = GetWindowTitlePtr(window);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetWindowIcon")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

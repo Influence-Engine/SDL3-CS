@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -45,7 +46,13 @@ namespace SDL3
         /// <returns>An arbitrary string, uniquely identifying the exact revision of the SDL library in use.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRevision")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetRevision();
+        public static partial IntPtr GetRevisionPtr();
+
+        /// <inheritdoc cref="GetRevisionPtr"/>
+        public static string? GetRevision()
+        {
+            IntPtr ptr = GetRevisionPtr();
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
     }
 }
