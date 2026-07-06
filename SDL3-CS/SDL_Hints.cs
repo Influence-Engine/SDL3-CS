@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -202,8 +203,14 @@ namespace SDL3
         /// <returns>The string value of a hint or NULL if the hint isn't set.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetHint", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetHint(string name);
+        public static partial IntPtr GetHintPtr(string name);
+
+        /// <inheritdoc cref="GetHintPtr"/>
+        public static string? GetHint(string name)
+        {
+            IntPtr ptr = GetHintPtr(name);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Get the boolean value of a hint variable.</summary>
         /// <param name="name">The name of the hint tog et the boolean value from.</param>

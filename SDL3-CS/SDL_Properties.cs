@@ -91,8 +91,14 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetStringProperty")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])] 
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetStringProperty(uint props, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string? defaultValue);
+        public static partial IntPtr GetStringPropertyPtr(uint props, [MarshalAs(UnmanagedType.LPUTF8Str)] string name, [MarshalAs(UnmanagedType.LPUTF8Str)] string? defaultValue);
+
+        /// <inheritdoc cref="GetStringPropertyPtr"/>
+        public static string? GetStringProperty(uint props, string name, string? defaultValue = null)
+        {
+            IntPtr ptr = GetStringPropertyPtr(props, name, defaultValue);
+            return ptr == IntPtr.Zero ? default : Marshal.PtrToStringUTF8(ptr);
+        }
 
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetNumberProperty")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]

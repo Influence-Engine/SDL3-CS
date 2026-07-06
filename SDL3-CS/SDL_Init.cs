@@ -200,7 +200,13 @@ namespace SDL3
         /// <returns>The current value of the property, the default if not set, or null for properties with no default.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetAppMetadataProperty", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetAppMetadataProperty(string name);
+        public static partial IntPtr GetAppMetadataPropertyPtr(string name);
+
+        /// <inheritdoc cref="GetAppMetadataPropertyPtr"/>
+        public static string? GetAppMetadataProperty(string name)
+        {
+            IntPtr ptr = GetAppMetadataPropertyPtr(name);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -102,8 +103,14 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetAudioDecoder")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetAudioDecoder(int index);
+        public static partial IntPtr GetAudioDecoderPtr(int index);
+
+        /// <inheritdoc cref="GetAudioDecoderPtr"/>
+        public static string? GetAudioDecoder(int index)
+        {
+            IntPtr ptr = GetAudioDecoderPtr(index);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         #region Mixer Create / Destroy
 

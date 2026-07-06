@@ -86,8 +86,14 @@ namespace SDL3
         /// <param name="index">Index from 0 to (<see cref="GetNumRenderDrivers"/> - 1).</param>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRenderDriver")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetRenderDriver(int index);
+        public static partial IntPtr GetRenderDriverPtr(int index);
+
+        /// <inheritdoc cref="GetRenderDriverPtr"/>
+        public static string? GetRenderDriver(int index)
+        {
+            IntPtr ptr = GetRenderDriverPtr(index);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Create a window and default renderer.</summary>
         /// <param name="title">Title of the window.</param>
@@ -148,8 +154,14 @@ namespace SDL3
         /// <summary>Get the name of a renderer.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetRendererName")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        [return: MarshalAs(UnmanagedType.LPUTF8Str)]
-        public static partial string? GetRendererName(nint renderer);
+        public static partial IntPtr GetRendererNamePtr(nint renderer);
+
+        /// <inheritdoc cref="GetRendererNamePtr"/>
+        public static string? GetRendererName(nint renderer)
+        {
+            IntPtr ptr = GetRendererNamePtr(renderer);
+            return ptr == IntPtr.Zero ? null : Marshal.PtrToStringUTF8(ptr);
+        }
 
         /// <summary>Get the properties associated with a renderer.</summary>
         /// <returns>A valid property ID on success or 0 on failure.</returns>
