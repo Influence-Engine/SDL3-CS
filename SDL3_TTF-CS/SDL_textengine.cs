@@ -51,6 +51,7 @@ namespace SDL3
             public CopyOperation copy;
         }
 
+        /// <summary>Private data associated with a TTF_Text object.</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct TextData
         {
@@ -77,6 +78,7 @@ namespace SDL3
             public IntPtr engineText;
         }
 
+        /// <summary>A text engine interface.</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct TextEngine
         {
