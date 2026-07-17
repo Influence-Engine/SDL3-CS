@@ -351,7 +351,7 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetFontLineSkip")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
-        public static partial void GetFontLineSkip(IntPtr font);
+        public static partial int GetFontLineSkip(IntPtr font);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetFontKerning")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -573,7 +573,7 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyGPUTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial IntPtr DestroyGPUTextEngine(IntPtr engine);
+        public static partial void DestroyGPUTextEngine(IntPtr engine);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetGPUTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
