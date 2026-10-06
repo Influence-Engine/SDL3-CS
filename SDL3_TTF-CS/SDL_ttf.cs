@@ -549,7 +549,7 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DrawRendererText")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static partial bool DrawRendererText(IntPtr text, int x, int y);
+        public static partial bool DrawRendererText(IntPtr text, float x, float y);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyRendererTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
