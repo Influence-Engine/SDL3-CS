@@ -51,11 +51,16 @@ namespace SDL3
         }
 
         /// <summary>A text engine draw operation.</summary>
-        [StructLayout(LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Explicit)]
         public struct DrawOperation
         {
+            [FieldOffset(0)]
             public DrawCommand cmd;
+
+            [FieldOffset(0)]
             public FillOperation fill;
+
+            [FieldOffset(0)]
             public CopyOperation copy;
         }
 
