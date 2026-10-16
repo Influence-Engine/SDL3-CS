@@ -399,63 +399,126 @@ namespace SDL3
                 Back
             }
 
+            /// <summary>Specifies the vertex winding that will cause a triangle to be determined to be front-facting.</summary>
             public enum FrontFace
             {
+                /// <summary>A triangle with counter-clockwise vertex winding will be considered front-facing.</summary>
                 CounterClockwise,
+
+                /// <summary>A triangle with clockwise vertex winding will be considered front-facing.</summary>
                 Clockwise
             }
 
+            /// <summary>Specifies a comparison operator for depth, stencil and sampler operations.</summary>
             public enum CompareOp
             {
                 Invalid,
+
+                /// <summary>The comparison always evaluates false.</summary>
                 Never,
+
+                /// <summary>The comparison evaluates reference < test.</summary>
                 Less,
+                /// <summary>The comparison evaluates reference == test.</summary>
                 Equal,
+
+                /// <summary>The comparison evaluates reference <= test.</summary>
                 LessOrEqual,
+
+                /// <summary>The comparison evaluates reference > test.</summary>
                 Greater,
+
+                /// <summary>The comparison evaluates reference != test.</summary>
                 NotEqual,
+
+                /// <summary>The comparison evaluates reference >= test.</summary>
                 GreaterOrEqual,
+
+                /// <summary>The comparison always evaluates true.</summary>
                 Always
             }
 
+            /// <summary>Specifies what happens to a stored stencil values if stencil tests fail or pass.</summary>
             public enum StencilOp
             {
                 Invalid,
+
+                /// <summary>Keeps the current value.</summary>
                 Keep,
+
+                /// <summary>Sets the value to 0.</summary>
                 Zero,
+
+                /// <summary>Sets the value to reference.</summary>
                 Replace,
+
+                /// <summary>Increments the current value and clamps to the maximum value.</summary>
                 IncrementAndClamp,
+
+                /// <summary>Decrements the current value and clamps to 0.</summary>
                 DecrementAndClamp,
+
+                /// <summary>Bitwise-inverts the current value.</summary>
                 Invert,
+
+                /// <summary>Increments the current value and wraps back to 0.</summary>
                 IncrementAndWrap,
+
+                /// <summary>Decrements the current value and wraps to the maximum value.</summary>
                 DecrementAndWrap
             }
 
+            /// <summary>Specifies the operator to be used when pixels in a render target are blended with existing pixels in the texture.</summary>
             public enum BlendOp
             {
                 Invalid,
+
+                /// <summary>(source * source_factor) + (destination * destination_factor)</summary>
                 Add,
+
+                /// <summary>(source * source_factor) - (destination * destination_factor)</summary>
                 Subtract,
+
+                /// <summary>(destination * destination_factor) - (source * source_factor)</summary>
                 ReverseSubtract,
+
+                /// <summary>min(source, destination)</summary>
                 Min,
+
+                /// <summary>max(source, destination)</summary>
                 Max
             }
 
+            /// <summary>Specifies a blending factor to be used when pixels in a render target at blended with existing pixels in the texture.</summary>
             public enum BlendFactor
             {
                 Invalid,
+
+                /// <summary>0</summary>
                 Zero,
+                /// <summary>1</summary>
                 One,
+                /// <summary>Source Color</summary>
                 SrcColor,
+                /// <summary>1 - Source Color</summary>
                 OneMinusSrcColor,
+                /// <summary>Destination Color</summary>
                 DstColor,
+                /// <summary>1 - Desination Color</summary>
                 OneMinusDstColor,
+                /// <summary>Source Alpha</summary>
                 SrcAlpha,
+                /// <summary>1 - Source Alpha</summary>
                 OneMinusSrcAlpha,
+                /// <summary>Destination Alpha</summary>
                 DstAlpha,
+                /// <summary>1 - Desination Alpha</summary>
                 OneMinusDstAlpha,
+                /// <summary>Blend Constant</summary>
                 ConstantColor,
+                /// <summary>1 - Blend Constant</summary>
                 OneMinusConstantColor,
+                /// <summary>min(source alpha, 1 - destination alpha)</summary>
                 SrcAlphaSaturate
             }
 
