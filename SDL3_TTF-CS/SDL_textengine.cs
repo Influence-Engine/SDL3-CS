@@ -68,26 +68,44 @@ namespace SDL3
         [StructLayout(LayoutKind.Sequential)]
         public struct TextData
         {
+            /// <summary>The font used by this text, read-only.</summary>
             public IntPtr font;
+            /// <summary>The color of the text, read-only.</summary>
             public SDL.FColor color;
 
+            /// <summary>True if the layout needs to be updated.</summary>
             [MarshalAs(UnmanagedType.I1)]
             public bool needsLayoutUpdate;
+
+            /// <summary>Cached layout information, read-only.</summary>
             public IntPtr layout;
+
+            /// <summary>The x offset of the upper left corner of this text, in pixels, read-only.</summary>
             public int x;
+            /// <summary>The y offset of the upper left corner of this text, in pixels, read-only.</summary>
             public int y;
+            /// <summary>The width of this text, in pixels, read-only.</summary>
             public int w;
+            /// <summary>The height of this text, in pixels, read-only.</summary>
             public int h;
+            /// <summary>The number of drawing operations to render this text, read-only.</summary>
             public int numOps;
+            /// <summary>The drawing operations used to render this text, read-only.</summary>
             public IntPtr ops;
+            /// <summary>The numbers of substrings representing clusters of glyphs in the string, read-only.</summary>
             public int numClusters;
+            /// <summary>Substrings representing clustures of glyphs in the string, read only.</summary>
             public IntPtr clusters;
 
+            /// <summary>Custom properties associated with the text, read-only.</summary>
             public uint props;
 
+            /// <summary>True if the engine text needs to be updated.</summary>
             [MarshalAs(UnmanagedType.I1)]
             public bool needsEngineUpdate;
+            /// <summary>The engine used to render this text, read-only.</summary>
             public IntPtr engine;
+            /// <summary>The implementation-specific representation of this text.</summary>
             public IntPtr engineText;
         }
 
@@ -95,8 +113,10 @@ namespace SDL3
         [StructLayout(LayoutKind.Sequential)]
         public struct TextEngine
         {
+            /// <summary>The version of this interface.</summary>
             public uint version;
 
+            /// <summary>User data pointer passed to callbacks.</summary>
             public IntPtr userdata;
 
             /// <summary><see cref="CreateTextDelegate"/>.</summary>
