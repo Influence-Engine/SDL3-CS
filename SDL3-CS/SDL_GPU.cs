@@ -10,32 +10,54 @@ namespace SDL3
         {
             #region Enums
 
+            /// <summary>Specifies the primitive topology of a graphics pipeline.</summary>
             public enum PrimitiveType
             {
+                /// <summary>A series of seperate triangles.</summary>
                 TriangleList,
+
+                /// <summary>A series of connected triangles.</summary>
                 TriangleStrip,
 
+                /// <summary>A series of seperate lines.</summary>
                 LineList,
+
+                /// <summary>A series of connected lines.</summary>
                 LineStrip,
 
+                /// <summary>A series of seperate points.</summary>
                 PointList
             }
 
+            /// <summary>Specified how the contesnts of a texture attached to a render pass are treated at the beginning of the render pass.</summary>
             public enum LoadOp
             {
+                /// <summary>The previous content of the texture will be preserved.</summary>
                 Load,
+                /// <summary>The contents of the texture will be cleared to a color.</summary>
                 Clear,
+
+                /// <summary>The previous content of the texture need not be preserved. The contents will be undefined.</summary>
                 DontCare
             }
 
+            /// <summary>Specifies how the contents of a texture attachedk to a render pass are treated at the end of the render pass.</summary>
             public enum StoreOp
             {
+                /// <summary>The contents generated during the render pass will be written to memory.</summary>
                 Store,
+
+                /// <summary>The contents generated during the render pass are not needed many may be discarded. The contents will be undefined.</summary>
                 DontCare,
+
+                /// <summary>The multisample contents generated during the render pass will be resolved to a non-multisample texture. The contents in the mulstisample texture may then be discarded and will be undefined.</summary>
                 Resolve,
+
+                /// <summary>The multisample contents generated during the render pass will be resolved to a non-multisample texture. The contents in the multisample texture will be written to memory.</summary>
                 ResolveAndStore
             }
 
+            /// <summary>Specifies the size of elements in an index buffer.</summary>
             public enum IndexElementSize
             {
                 /// <summary>16-bit index elements.</summary>
@@ -45,6 +67,7 @@ namespace SDL3
                 Bit32,
             }
 
+            /// <summary>Specifies the pixel format of a texture.</summary>
             public enum TextureFormat
             {
                 Invalid,
@@ -182,6 +205,7 @@ namespace SDL3
                 Astc12x12Float
             }
 
+            /// <summary>Specifies how a texture is intended to be used by the client.</summary>
             [Flags]
             public enum TextureUsage : uint
             {
