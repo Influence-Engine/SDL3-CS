@@ -20,11 +20,13 @@ namespace SDL3
 
         #region Structs
 
-        /// <summary>A filled rectangle draw operation</summary>
+        /// <summary>A filled rectangle draw operation.</summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct FillOperation
         {
+            /// <summary>TTF DrawCommand Fill.</summary>
             public DrawCommand cmd;
+            /// <summary>The rectangle to fill, in pixels.</summary>
             public SDL.Rect rect;
         }
 
@@ -32,11 +34,17 @@ namespace SDL3
         [StructLayout(LayoutKind.Sequential)]
         public struct CopyOperation
         {
+            /// <summary>TTF DrawCommand Copy.</summary>
             public DrawCommand cmd;
+            /// <summary>The offset in text corresponding to this glyph.</summary>
             public int textOffset;
+            /// <summary>The font containing the glyph to be draw, can be passed to <see cref="GetGlyphImageForIndex"/>.</summary>
             public IntPtr glyphFont;
+            /// <summary>The glyph index of the glyph to be drawn, can be passed to <see cref="GetGlyphImageForIndex"/>.</summary>
             public uint glyphIndex;
+            /// <summary>The area within the glyph to be drawn.</summary>
             public SDL.Rect src;
+            /// <summary>The drawing coordinates of the glyph, in pixels.</summary>
             public SDL.Rect dst;
 
             public IntPtr reserved;
