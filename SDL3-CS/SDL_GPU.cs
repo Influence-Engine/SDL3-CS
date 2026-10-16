@@ -522,34 +522,50 @@ namespace SDL3
                 SrcAlphaSaturate
             }
 
+            /// <summary>Specifies which color components are writtten in a graphics pipeline.</summary>
             [Flags]
             public enum ColorComponent : byte
             {
+                /// <summary>Red</summary>
                 R = 1 << 0,
+                /// <summary>Green</summary>
                 G = 1 << 1,
+                /// <summary>Blue</summary>
                 B = 1 << 2,
+                /// <summary>Alpha</summary>
                 A = 1 << 3
             }
 
+            /// <summary>Specifies a filter operation used by a sampler.</summary>
             public enum Filter
             {
+                /// <summary>Point filtering.</summary>
                 Nearest,
+                /// <summary>Linear filtering.</summary>
                 Linear
             }
 
+            /// <summary>Specifies a mipmap mode used by a sampler.</summary>
             public enum SamplerMipmapMode
             {
+                /// <summary>Pointer filtering.</summary>
                 Nearest,
+                /// <summary>Linear filtering.</summary>
                 Linear
             }
 
+            /// <summary>Specifies behaviour of texture smapling when the coordinates exceed the 0-1 range.</summary>
             public enum SamplerAddressMode
             {
+                /// <summary>The coordinate will wrap around.</summary>
                 Repeat,
+                /// <summary>The coordinate will wrap around mirrored.</summary>
                 MirroredRepeat,
+                /// <summary>The coordinate will clamp to the 0-1 range.</summary>
                 ClampToEdge
             }
 
+            /// <summary>Specifies the timing that will be used to present swapchain textures to the OS.</summary>
             public enum PresentMode
             {
                 VSync,
@@ -557,6 +573,7 @@ namespace SDL3
                 Mailbox
             }
 
+            /// <summary>Specifies the texture format and colorspace of the swapchain textures.</summary>
             public enum SwapchainComposition
             {
                 Sdr,
@@ -569,14 +586,21 @@ namespace SDL3
 
             #region Structs
 
+            /// <summary>A structure specifying a viewport.</summary>
             [StructLayout(LayoutKind.Sequential)]
             public struct Viewport
             {
+                /// <summary>The left offset of the viewport.</summary>
                 public float x;
+                /// <summary>The top offset of the viewport.</summary>
                 public float y;
+                /// <summary>The width of the viewport.</summary>
                 public float w;
+                /// <summary>The height of the viewport.</summary>
                 public float h;
+                /// <summary>The minimum depth of the viewport.</summary>
                 public float minDepth;
+                /// <summary>The maximum depth of the viewport.</summary>
                 public float maxDepth;
             }
 
