@@ -521,15 +521,18 @@ namespace SDL3
 
         #region Surface
 
+        /// <summary>Create a text engine for drawing text on SDL surfaces.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateSurfaceTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateSurfaceTextEngine();
 
+        /// <summary>Draw text to an SDL surface.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DrawSurfaceText")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool DrawSurfaceText(IntPtr text, int x, int y, IntPtr surface);
 
+        /// <summary>Destroy a text engine created for drawing text on SDL surfaces.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroySurfaceTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroySurfaceTextEngine(IntPtr engine);
@@ -538,19 +541,23 @@ namespace SDL3
 
         #region Renderer
 
+        /// <summary>Create a text engine for drawing text on an SDL renderer.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateRendererTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateRendererTextEngine(IntPtr renderer);
 
+        /// <summary>Create a text engine for drawing text on and SDL renderer, with specified properties.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateRendererTextEngineWithProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateRendererTextEngineWithProperties(uint props);
 
+        /// <summary>Draw text on an SDL renderer.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DrawRendererText")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool DrawRendererText(IntPtr text, float x, float y);
 
+        /// <summary>Destroy a text engine created for drawing text on an SDL renderer.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyRendererTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroyRendererTextEngine(IntPtr engine);
@@ -559,26 +566,32 @@ namespace SDL3
 
         #region GPU
 
+        /// <summary>Create a text engine for drawing text with the SDL GPU API.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGPUTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateGPUTextEngine(IntPtr device);
 
+        /// <summary>Create a text engine for drawing text with the SDL GPU API, with the specified properties.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGPUTextEngineWithProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateGPUTextEngineWithProperties(uint props);
 
+        /// <summary>Get the geometry data needed for drawing the text.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetGPUTextDrawData")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetGPUTextDrawData(IntPtr text); // returns TTF_GPUAtlasDrawSequence*
 
+        /// <summary>Destroy a text engine created for drawing text with the SDL GPU API.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyGPUTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroyGPUTextEngine(IntPtr engine);
 
+        /// <summary>Sets the winding order of the vertices by <see cref="GetGPUTextDrawData"/> for a particular GPU text engine.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetGPUTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void SetGPUTextEngineWinding(IntPtr engine, GPUTextEngineWinding winding);
 
+        /// <summary>Get the winding order of the vertices returned by <see cref="GetGPUTextDrawData"/> for a particular GPU text engine.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetGPUTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial GPUTextEngineWinding GetGPUTextEngineWinding(IntPtr engine);
@@ -587,26 +600,32 @@ namespace SDL3
 
         #region OpenGL
 
+        /// <summary>Create a text engine for drawing text with OpenGL.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateGLTextEngine();
 
+        /// <summary>Create a text engine for drawing with OpenGL, with extra properties.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateGLTextEngineWithProperties(uint props);
 
+        /// <summary>Get the geometry data needed for drawing the text.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetGLTextDrawData(IntPtr text); // returns TTF_GLAtlasDrawSequence*
 
+        /// <summary>Destroy a text engine created for drawing text with OpenGL.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyGLTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroyGLTextEngine(IntPtr engine);
 
+        /// <summary>Sets the winding order of the vertices returned by <see cref="GetGLTextDrawData"/> for a particular GL text engine.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr SetGLTextEngineWinding(IntPtr engine, GLTextEngineWinding winding);
 
+        /// <summary>Gets the winding order of the vertices returned by <see cref="GetGLTextDrawData"/> for a particular GL text engine.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetGLTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial GLTextEngineWinding GetGLTextEngineWinding(IntPtr engine);
@@ -617,28 +636,39 @@ namespace SDL3
 
         #region Text Object Functions
 
+        /// <summary>Create a text object from a string and a text engine.</summary>
+        /// <param name="engine">The text engine to use when creating the text object, may be NULL.</param>
+        /// <param name="font">The font to render with.</param>
+        /// <param name="text">The text to use.</param>
+        /// <param name="length">The length of the text, in bytes, or 0 for null terminated text.</param>
+        /// <returns>A <see cref="Text"/> object or NULL or failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateText", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateText(IntPtr engine, IntPtr font, string text, UIntPtr length);
 
+        /// <summary>Get the properties associated with a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetTextProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial uint GetTextProperties(IntPtr text);
 
+        /// <summary>Set the text engine used by a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetTextEngine(IntPtr text, IntPtr engine);
 
+        /// <summary>Get the text engine used by a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetTextEngine")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial IntPtr GetTextEngine(IntPtr text);
 
+        /// <summary>Set the font used by a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetTextFont")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool SetTextFont(IntPtr text, IntPtr font);
 
+        /// <summary>Get the font used by a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetTextFont")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial IntPtr GetTextFont(IntPtr text);
@@ -788,23 +818,29 @@ namespace SDL3
 
         #endregion
 
+        /// <summary>Update the layout of a text object.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_UpdateText")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool UpdateText(IntPtr text);
 
+        /// <summary>DEstroy a text object created by a text engine.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_DestroyText")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroyText(IntPtr text);
 
+        /// <summary>Dispose of a previously-created font-</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CloseFont")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void CloseFont(IntPtr font);
 
+        /// <summary>Deinitialize TTF.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_Quit")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void Quit();
 
+        /// <summary>Check if TTF is initialized.</summary>
+        /// <returns>The current number of initialization calls, that need to eventually be paired with this many calls to <see cref="Quit"/>.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_WasInit")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial int WasInit();
