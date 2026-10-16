@@ -209,15 +209,30 @@ namespace SDL3
             [Flags]
             public enum TextureUsage : uint
             {
+                /// <summary>Texture supports sampling.</summary>
                 Sampler = 1u << 0,
+
+                /// <summary>Texture is a color render target..</summary>
                 ColorTarget = 1u << 1,
+
+                /// <summary>Texture is a depth stencil target.</summary>
                 DepthStencilTarget = 1u << 2,
+
+                /// <summary>Texture supports storage reads in graphics stages.</summary>
                 GraphicsStorageRead = 1u << 3,
+
+                /// <summary>Texture supports storage reads in compute stage.</summary>
                 ComputeStorageRead = 1u << 4,
+
+                /// <summary>Texture supports storage writes in the compute stage.</summary>
                 ComputeStorageWrite = 1u << 5,
+
+                /// <summary>Texture supports reads and writes in the same compute shader.</summary>
+                /// <remarks>This is NOT equivalent to READ | WRITE.</remarks>
                 ComputeStorageSimultaneousRW = 1u << 6
             }
 
+            /// <summary>Specifies the type of a texture.</summary>
             public enum TextureType
             {
                 /// <summary>2D image.</summary>
@@ -232,6 +247,7 @@ namespace SDL3
                 CubeArray
             }
 
+            /// <summary>Specifies the sample count of a texture.</summary>
             public enum SampleCount
             {
                 /// <summary>No Mutlisampling</summary>
@@ -244,6 +260,7 @@ namespace SDL3
                 Eight
             }
 
+            /// <summary>Specifies the face of a cube map.</summary>
             public enum CubeMapFace
             {
                 PositiveX,
@@ -254,29 +271,42 @@ namespace SDL3
                 NegativeZ
             }
 
+            /// <summary>Specifies how a buffer is intended to be used by the client.</summary>
             [Flags]
             public enum BufferUsage : uint
             {
+                /// <summary>Vertex Buffer.</summary>
                 Vertex = 1u << 0,
+
+                /// <summary>Index Buffer.</summary>
                 Index = 1u << 1,
+
+                /// <summary>Indirect Buffer.</summary>
                 Indirect = 1u << 2,
+
+                /// <summary>Supports storage reads in graphics stages.</summary>
                 GraphicsStorageRead = 1u << 3,
+                /// <summary>Supports storage reads in compute stage.</summary>
                 ComputeStorageRead = 1u << 4,
-                ComputerStorageWrite = 1u << 5
+                /// <summary>Supports storage writes in graphics stages.</summary>
+                ComputeStorageWrite = 1u << 5
             }
 
+            /// <summary>Specifies how a transfer buffer is intended to be used by the client.</summary>
             public enum TransferBufferUsage
             {
                 Upload,
                 Download
             }
 
+            /// <summary>Specifies which stage a shader program corresponds to.</summary>
             public enum ShaderStage
             {
                 Vertex,
                 Fragment
             }
 
+            /// <summary>Specifies the format of shader code.</summary>
             [Flags]
             public enum ShaderFormat : uint
             {
@@ -295,6 +325,7 @@ namespace SDL3
                 Metallib = 1u << 5
             }
 
+            /// <summary>Specifies the format of a vertex attribute.</summary>
             public enum VertexElementFormat
             {
                 Invalid,
@@ -336,22 +367,35 @@ namespace SDL3
                 Half2, Half4
             }
 
+            /// <summary>Specifies the rate at which vertex attributes are pulled from buffers.</summary>
             public enum VertexInputRate
             {
+                /// <summary>Attribute addressing is a function of the vertex index.</summary>
                 Vertex,
+
+                /// <summary>Attribute addressing is a function of the instance index.</summary>
                 Instance
             }
 
+            /// <summary>Specifies the fill mode of the graphics pipeline.</summary>
             public enum FillMode
             {
+                /// <summary>Polygons will be rendered via resterization.</summary>
                 Fill,
+                /// <summary>Polygon edges will be drawn as line segments.</summary>
                 Line
             }
 
+            /// <summary>Specifies the facing direction in which triangle faces will be culled..</summary>
             public enum CullMode
             {
+                /// <summary>No triangles are culled.</summary>
                 None,
+
+                /// <summary>Front-facing triangles are culled.</summary>
                 Front,
+
+                /// <summary>Back-facing triangles are culled.</summary>
                 Back
             }
 
