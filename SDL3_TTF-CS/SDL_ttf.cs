@@ -46,7 +46,7 @@ namespace SDL3
             public const string AtlasTextureSize = "SDL_ttf.gpu_text_engine.create.atlas_texture_size";
         }
 
-        public static class GLTextEngienProps
+        public static class GLTextEngineProps
         {
             public const string AtlasTextureSize = "SDL_ttf.gl_text_engine.create.atlas_texture_size";
         }
@@ -349,6 +349,10 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial int GetFontDescent(IntPtr font);
 
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetFontLineSkip")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial void SetFontLineSkip(IntPtr font, int lineSkip);
+
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetFontLineSkip")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial int GetFontLineSkip(IntPtr font);
@@ -458,6 +462,11 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
         public static partial bool GetGlyphKerning(IntPtr font, uint previousCh, uint ch, out int kerning);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetStringSize", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool GetStringSize(IntPtr font, string text, UIntPtr length, out int w, out int h);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetStringSizeWrapped", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
@@ -592,7 +601,7 @@ namespace SDL3
         public static partial void SetGPUTextEngineWinding(IntPtr engine, GPUTextEngineWinding winding);
 
         /// <summary>Get the winding order of the vertices returned by <see cref="GetGPUTextDrawData"/> for a particular GPU text engine.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetGPUTextEngineWinding")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetGPUTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial GPUTextEngineWinding GetGPUTextEngineWinding(IntPtr engine);
 
@@ -606,12 +615,12 @@ namespace SDL3
         public static partial IntPtr CreateGLTextEngine();
 
         /// <summary>Create a text engine for drawing with OpenGL, with extra properties.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngineWithProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr CreateGLTextEngineWithProperties(uint props);
 
         /// <summary>Get the geometry data needed for drawing the text.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_GetGLTextDrawData")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr GetGLTextDrawData(IntPtr text); // returns TTF_GLAtlasDrawSequence*
 
@@ -621,7 +630,7 @@ namespace SDL3
         public static partial void DestroyGLTextEngine(IntPtr engine);
 
         /// <summary>Sets the winding order of the vertices returned by <see cref="GetGLTextDrawData"/> for a particular GL text engine.</summary>
-        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_CreateGLTextEngine")]
+        [LibraryImport(nativeLibraryName, EntryPoint = "TTF_SetGLTextEngineWinding")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial IntPtr SetGLTextEngineWinding(IntPtr engine, GLTextEngineWinding winding);
 
