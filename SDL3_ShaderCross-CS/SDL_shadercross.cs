@@ -193,22 +193,22 @@ namespace SDL3
         /// <summary>Transpile SPIRV to MSL source code.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_TranspileMSLFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void TranspileMSLFromSPIRV(SPIRV_Info* info);
+        public static unsafe partial nint TranspileMSLFromSPIRV(SPIRV_Info* info);
 
         /// <summary>Transpile SPIRV to HLSL source code.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_TranspileHLSLFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void TranspileHLSLFromSPIRV(SPIRV_Info* info);
+        public static unsafe partial nint TranspileHLSLFromSPIRV(SPIRV_Info* info);
 
         /// <summary>Compile SPIRV to DXBC bytecode.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXBCFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void CompileDXBCFromSPIRV(SPIRV_Info* info, out nuint size);
+        public static unsafe partial nint CompileDXBCFromSPIRV(SPIRV_Info* info, out nuint size);
 
         /// <summary>Compile SPIRV to DXIL bytecode.</summary>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXILFromSPIRV")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void CompileDXILFromSPIRV(SPIRV_Info* info, out nuint size);
+        public static unsafe partial nint CompileDXILFromSPIRV(SPIRV_Info* info, out nuint size);
 
         #endregion
 
@@ -281,7 +281,7 @@ namespace SDL3
         /// <returns>An SDL_malloc'd buffer containing DXBC bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXBCFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void CompileDXBCFromHLSL(HLSL_Info* info, out nuint size);
+        public static unsafe partial nint CompileDXBCFromHLSL(HLSL_Info* info, out nuint size);
 
         /// <summary>
         /// Compile HLSL to DXIL bytecode via a SPIRV-Cross round trip.<br></br>
@@ -292,7 +292,7 @@ namespace SDL3
         /// <returns>An SDL_malloc'd buffer containing DXIL bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileDXILFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void CompileDXILFromHLSL(HLSL_Info* info, out nuint size);
+        public static unsafe partial nint CompileDXILFromHLSL(HLSL_Info* info, out nuint size);
 
         /// <summary>
         /// Compile HLSL to SPIRV bytecode.<br></br>
@@ -303,7 +303,7 @@ namespace SDL3
         /// <returns>An SDL_malloc'd buffer containing SPIRV bytecode, or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_ShaderCross_CompileSPIRVFromHLSL")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static unsafe partial void CompileSPIRVFromHLSL(HLSL_Info* info, out nuint size);
+        public static unsafe partial nint CompileSPIRVFromHLSL(HLSL_Info* info, out nuint size);
 
         #endregion
     }
