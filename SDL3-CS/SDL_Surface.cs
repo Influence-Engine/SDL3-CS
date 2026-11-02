@@ -92,7 +92,7 @@ namespace SDL3
         /// <returns>The new Surface structure that is created or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSurface")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial Surface CreateSurface(int width, int height, PixelFormat format);
+        public static partial IntPtr CreateSurface(int width, int height, PixelFormat format);
 
         /// <summary>Allocate a new surface with a specified pixel format and existing pixel data.</summary>
         /// <param name="width">The width of the surface.</param>
@@ -103,19 +103,18 @@ namespace SDL3
         /// <returns>The new Surface structure that is created or NULL on failure.</returns>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSurfaceFrom")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial Surface CreateSurfaceFrom(int width, int height, PixelFormat format, IntPtr pixels, int pitch);
-
-        /// <summary>Free a surface.</summary>
-        /// <param name="surface">The Surface to free.</param>
-        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface")]
-        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial void DestroySurface(Surface surface);
+        public static partial IntPtr CreateSurfaceFrom(int width, int height, PixelFormat format, IntPtr pixels, int pitch);
 
         /// <summary>Free a surface.</summary>
         /// <param name="surface">The Surface to free.</param>
         [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial void DestroySurface(IntPtr surface);
+
+        /// <summary>Get the properties associated with a surface.</summary>
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetSurfaceProperties")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial uint GetSurfaceProperties(IntPtr surface);
 
         // TODO all other functions
 
