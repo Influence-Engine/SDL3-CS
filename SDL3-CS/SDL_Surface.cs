@@ -116,6 +116,63 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial uint GetSurfaceProperties(IntPtr surface);
 
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetSurfaceColorspace")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetSurfaceColorspace(IntPtr surface, Colorspace colorspace);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetSurfaceColorspace")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial Colorspace GetSurfaceColorspace(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSurfacePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr CreateSurfacePalette(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SetSurfacePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SetSurfacePalette(IntPtr surface, IntPtr palette);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetSurfacePalette")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr GetSurfacePalette(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_AddSurfaceAlternateImage")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool AddSurfaceAlternateImage(IntPtr surface, IntPtr image);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_SurfaceHasAlternateImages")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool SurfaceHasAlternateImages(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_GetSurfaceImages")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr GetSurfaceImages(IntPtr surface, IntPtr count);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_RemoveSurfaceAlternateImages")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void RemoveSurfaceAlternateImages(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_LockSurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        [return: MarshalAs(UnmanagedType.I1)]
+        public static partial bool LockSurface(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_UnlockSurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void UnlockSurface(IntPtr surface);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_LoadSurface_IO")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr LoadSurface_IO(IntPtr src, [MarshalAs(UnmanagedType.I1)] bool closeio);
+
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_LoadSurface", StringMarshalling = StringMarshalling.Utf8)]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial IntPtr LoadSurface(string file);
+
         // TODO all other functions
 
     }
