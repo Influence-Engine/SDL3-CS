@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace SDL3
@@ -52,8 +53,9 @@ namespace SDL3
         /// <param name="height">The height of the surface.</param>
         /// <param name="format">The PixelFormat for the new surface's pixe format.</param>
         /// <returns>The new Surface structure that is created or NULL on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateSurfance", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Surface CreateSurface(int width, int height, PixelFormat format);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial Surface CreateSurface(int width, int height, PixelFormat format);
 
         /// <summary>Allocate a new surface with a specified pixel format and existing pixel data.</summary>
         /// <param name="width">The width of the surface.</param>
@@ -62,18 +64,21 @@ namespace SDL3
         /// <param name="pixels">A pointer to existing pixel data.</param>
         /// <param name="pitch">The number of bytes between each row, including padding.</param>
         /// <returns>The new Surface structure that is created or NULL on failure.</returns>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_CreateSurfanceFrom", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Surface CreateSurfaceFrom(int width, int height, PixelFormat format, IntPtr pixels, int pitch);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_CreateSurfaceFrom")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial Surface CreateSurfaceFrom(int width, int height, PixelFormat format, IntPtr pixels, int pitch);
 
         /// <summary>Free a surface.</summary>
         /// <param name="surface">The Surface to free.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroySurface(Surface surface);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroySurface(Surface surface);
 
         /// <summary>Free a surface.</summary>
         /// <param name="surface">The Surface to free.</param>
-        [DllImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void DestroySurface(IntPtr surface);
+        [LibraryImport(nativeLibraryName, EntryPoint = "SDL_DestroySurface")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+        public static partial void DestroySurface(IntPtr surface);
 
         // TODO all other functions
 
