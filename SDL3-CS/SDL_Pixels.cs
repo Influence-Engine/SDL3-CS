@@ -188,7 +188,7 @@ namespace SDL3
         }
 
         /// <summary>Colorspace Transfer Characteristics</summary>
-        public enum TransferCharacterisistics
+        public enum TransferCharacteristics
         {
             Unknown = 0,
             BT709 = 1,
