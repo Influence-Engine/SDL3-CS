@@ -7,32 +7,52 @@ namespace SDL3
     public static partial class SDL
     {
 
-        /// <summary>The flags on a Surface.</summary>
+        /// <summary>The flags on a <see cref="Surface"/>.</summary>
         [Flags]
         public enum SurfaceFlags : uint
         {
+            /// <summary>Surface uses preallocated pixel memory.</summary>
             Preallocated = 0x00000001u,
+
+            /// <summary>Surface needs to be locked to access pixels.</summary>
             LockNeeded = 0x00000002u,
+
+            /// <summary>Surface is currently locked.</summary>
             Locked = 0x00000004u,
+
+            /// <summary>Surface uses pixel memory allocated with <see cref="AlignedAlloc"/></summary>
             SIMDAligned = 0x00000008u
         }
 
         /// <summary>The scaling mode.</summary>
         public enum ScaleMode
         {
+            /// <summary>Not valid.</summary>
             Invalid = -1,
+
+            /// <summary>Nearest pixel sampling.</summary>
             Nearest,
+
+            /// <summary>Linear filtering.</summary>
             Linear,
+
+            /// <summary>Nearest pixel sampling with improved scaling for pixel art.</summary>
             PixelArt,
         }
 
         /// <summary>The flip mode.</summary>
         public enum FlipMode
         {
+            /// <summary>Do not flip.</summary>
             None,
+
+            /// <summary>Flip horizontally.</summary>
             Horizontal,
-            Vertical
+
+            /// <summary>Flip vertically.</summary>
             Vertical,
+
+            /// <summary>Flip horizontally and vertically (not a diagonal flip).</summary>
             HorizontalAndVertical = Horizontal | Vertical
         }
 
@@ -40,15 +60,28 @@ namespace SDL3
         [StructLayout(LayoutKind.Sequential)]
         public struct Surface
         {
+            /// <summary>The flags of the surface, read-only.</summary>
             public SurfaceFlags flags;
+
+            /// <summary>The forat of the surface, read-only.</summary>
             public PixelFormat format;
+
+            /// <summary>The width of the surface, read-only.</summary>
             public int w;
+
+            /// <summary>The height of the surface, read-only.</summary>
             public int h;
+
+            /// <summary>The distance in bytes between roys of pixels, read-only.</summary>
             public int pitch;
+
+            /// <summary>A pointer to the pixels of the surface, the pixels are writable if non-null.</summary>
             public IntPtr pixels;
 
+            /// <summary>Application reference count, used when freeing surface.</summary>
             public int refCount;
 
+            /// <summary>Reserved for internal use.</summary>
             IntPtr reserved;
         }
 
