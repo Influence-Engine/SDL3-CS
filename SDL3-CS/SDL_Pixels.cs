@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 
 namespace SDL3
 {
-    // TODO fix this entire class
     public static partial class SDL
     {
         /// <summary>Pixel Type</summary>
