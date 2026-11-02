@@ -396,7 +396,7 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_ResumeTag", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static partial bool ResumeTag(nint mixer, string tag, uint options);
+        public static partial bool ResumeTag(nint mixer, string tag);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_TrackPlaying")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
@@ -493,7 +493,7 @@ namespace SDL3
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetGroupProperties")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
-        public static partial nint GetGroupProperties(nint group);
+        public static partial uint GetGroupProperties(nint group);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetGroupMixer")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
@@ -502,7 +502,7 @@ namespace SDL3
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_SetTrackGroup")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         [return: MarshalAs(UnmanagedType.I1)]
-        public static partial bool SetTrackGroup(nint group);
+        public static partial bool SetTrackGroup(nint track, nint group);
 
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_SetTrackStoppedCallback")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
