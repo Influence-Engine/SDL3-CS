@@ -20,8 +20,10 @@ namespace SDL3
         /// <summary>The scaling mode.</summary>
         public enum ScaleMode
         {
+            Invalid = -1,
             Nearest,
             Linear,
+            PixelArt,
         }
 
         /// <summary>The flip mode.</summary>
@@ -30,6 +32,8 @@ namespace SDL3
             None,
             Horizontal,
             Vertical
+            Vertical,
+            HorizontalAndVertical = Horizontal | Vertical
         }
 
         /// <summary>A collection of pixels used in software blitting.</summary>
