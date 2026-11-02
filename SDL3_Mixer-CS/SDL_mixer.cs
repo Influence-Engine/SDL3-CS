@@ -324,6 +324,10 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial long AudioMSToFrames(nint track, long ms);
 
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_AudioFramesToMS")]
+        [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
+        public static partial long AudioFramesToMS(nint track, long frames);
+
         [LibraryImport(nativeLibraryName, EntryPoint = "MIX_MSToFrames")]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl), typeof(CallConvSuppressGCTransition)])]
         public static partial long MSToFrames(int sampleRate, long ms);
