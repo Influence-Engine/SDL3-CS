@@ -266,9 +266,9 @@ namespace SDL3
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
         public static partial nint GetTrackTags(nint track, out int count);
 
-        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetTraggedTracks", StringMarshalling = StringMarshalling.Utf8)]
+        [LibraryImport(nativeLibraryName, EntryPoint = "MIX_GetTaggedTracks", StringMarshalling = StringMarshalling.Utf8)]
         [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
-        public static partial nint GetTraggedTracks(nint mixer, string tag, out int count);
+        public static partial nint GetTaggedTracks(nint mixer, string tag, out int count);
 
         #endregion
 
