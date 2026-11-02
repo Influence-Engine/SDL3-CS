@@ -39,7 +39,7 @@ namespace SDL3
             Help,
             Cell,
             VerticalText,
-            Atlas,
+            Alias,
             Copy,
             NoDrop,
             Grab,
