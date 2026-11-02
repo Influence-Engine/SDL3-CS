@@ -142,9 +142,14 @@ namespace SDL3
             YVYU = 0x55595659u,
             NV12 = 0x3231564eu,
             NV21 = 0x3132564eu,
+            I444 = 0x34343449u,
             P010 = 0x30313050u,
+            I0FL = 0x4c463049u,
+            I4FL = 0x4c463449u,
 
-            ExternalOES= 0x2053454fu
+            ExternalOES= 0x2053454fu,
+
+            MJPG = 0x47504a4du,
         }
 
         /// <summary>Colorspace Color Type</summary>
